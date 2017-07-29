@@ -21,10 +21,10 @@ class LoginForm extends Component {
     render() {
         return (
             <Row style={{ marginTop: '150px' }}>
-                <Col xs={0} sm={2}>
+                <Col xs={0} sm={4}>
                 </Col>
 
-                <Col xs={12} sm={8}>
+                <Col xs={12} sm={4}>
                     <Panel>
                         <h3 style={{textAlign: 'center'}}>Welcome to Practice Integrator</h3>
                         <br />
@@ -44,7 +44,7 @@ class LoginForm extends Component {
                         </Button>
                     </Panel>
                 </Col>
-                <Col xs={0} sm={2}>
+                <Col xs={0} sm={4}>
                 </Col>
             </Row>
         )

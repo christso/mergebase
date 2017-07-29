@@ -20,6 +20,12 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch XPLAN Server",
+            "program": "${workspaceRoot}/mock_servers/xplanServer.js"
+        },        
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Selected",
             "program": "${file}"
         }            

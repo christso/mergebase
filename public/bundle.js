@@ -46607,10 +46607,10 @@ var LoginForm = function (_Component) {
             return _react2.default.createElement(
                 _reactBootstrap.Row,
                 { style: { marginTop: '150px' } },
-                _react2.default.createElement(_reactBootstrap.Col, { xs: 0, sm: 2 }),
+                _react2.default.createElement(_reactBootstrap.Col, { xs: 0, sm: 4 }),
                 _react2.default.createElement(
                     _reactBootstrap.Col,
-                    { xs: 12, sm: 8 },
+                    { xs: 12, sm: 4 },
                     _react2.default.createElement(
                         _reactBootstrap.Panel,
                         null,
@@ -46638,7 +46638,7 @@ var LoginForm = function (_Component) {
                         )
                     )
                 ),
-                _react2.default.createElement(_reactBootstrap.Col, { xs: 0, sm: 2 })
+                _react2.default.createElement(_reactBootstrap.Col, { xs: 0, sm: 4 })
             );
         }
     }]);

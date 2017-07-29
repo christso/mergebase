@@ -10,7 +10,7 @@ class Menu extends React.Component {
            <Navbar inverse fixedTop>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/">Practice Integration platform</a>
+                        <a href="/">PIP</a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>

@@ -46431,8 +46431,8 @@ var ClientList = function (_Component) {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                { id: 'content' },
+                _reactBootstrap.Col,
+                { xs: 12, sm: 6 },
                 _react2.default.createElement(
                     _reactBootstrap.Table,
                     { hover: true },
@@ -46649,7 +46649,7 @@ var Menu = function (_React$Component) {
                         _react2.default.createElement(
                             'a',
                             { href: '/' },
-                            'Practice Integration platform'
+                            'PIP'
                         )
                     ),
                     _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)

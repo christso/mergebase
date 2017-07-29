@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux'
 class ClientList extends Component {
     render() {
         return (
-            <div id="content">
+            <Col xs={12} sm={6}>
             <Table hover>
                 <thead>
                     <tr>
@@ -34,7 +34,7 @@ class ClientList extends Component {
                     </tr>
                 </tbody>
             </Table>
-            </div>
+            </Col>
         )
     }
 }

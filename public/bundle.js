@@ -35446,6 +35446,10 @@ var _menu = __webpack_require__(519);
 
 var _menu2 = _interopRequireDefault(_menu);
 
+var _adminForm = __webpack_require__(520);
+
+var _adminForm2 = _interopRequireDefault(_adminForm);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // RETRIVES COMPONENTS BASED ON STATUS
@@ -35488,6 +35492,7 @@ var routes = _react2.default.createElement(
     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _loginForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _loginForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/clients', component: _clientList2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/admin', component: _adminForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/client/edit', component: _clientEdit2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { component: NotFound })
   )
@@ -46707,6 +46712,29 @@ var Menu = function (_React$Component) {
                         )
                     ),
                     _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.Navbar.Collapse,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Nav,
+                        { pullRight: true },
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 1, href: '/admin' },
+                            'Admin'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 1, href: '/clients' },
+                            'Clients'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 1, href: '/login' },
+                            'Login'
+                        )
+                    )
                 )
             );
         }
@@ -46716,6 +46744,66 @@ var Menu = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Menu;
+
+/***/ }),
+/* 520 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(75);
+
+var _reactRedux = __webpack_require__(42);
+
+var _redux = __webpack_require__(54);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AdminForm = function (_Component) {
+    _inherits(AdminForm, _Component);
+
+    function AdminForm() {
+        _classCallCheck(this, AdminForm);
+
+        return _possibleConstructorReturn(this, (AdminForm.__proto__ || Object.getPrototypeOf(AdminForm)).apply(this, arguments));
+    }
+
+    _createClass(AdminForm, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactBootstrap.Well,
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    'Admin Form'
+                )
+            );
+        }
+    }]);
+
+    return AdminForm;
+}(_react.Component);
+
+exports.default = AdminForm;
 
 /***/ })
 /******/ ]);

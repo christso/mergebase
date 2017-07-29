@@ -9,14 +9,12 @@ const CLIENT_LIST_URL = `https://api.workflowmax.com/client.api/list?apiKey=${AP
 function getClients(dispatch) {
     axios.default.get(CLIENT_LIST_URL)
     .then(function(response) {
-        //console.log("GET_CLIENTS", response.data);
         xml2js.parseString(response.data, function(err, jsResult) {
-            dispatch(jsResult.Response.Clients[0].Client);
+            dispatch(jsResult.Response.Clients[0].Client, undefined);
         })
     })
     .catch(function(err) {
-        console.log("GET_CLIENTS_ERROR", err);
-        dispatch(err);
+        dispatch("GET_CLIENTS_ERROR", err);
     });
 }
 

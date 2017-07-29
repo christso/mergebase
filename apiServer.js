@@ -4,8 +4,10 @@ var wfmApi = require('./api/workflowmax')
 
 //----->>>> GET CLIENTS <<<---------
 app.get('/clients', function (req, res) {
-    wfmApi.getClients(function(apiRes) {
-        res.send(apiRes); 
+    wfmApi.getClients(function(apiRes, err) {
+        if (err)
+            throw err;
+        res.json(apiRes); 
     });
 });
 

@@ -35,6 +35,7 @@ const routes = (
     <Menu />
     <Switch>
       <Route exact={true} path="/" component={LoginForm} />
+      <Route path="/login" component={LoginForm} />
       <Route path="/clients" component={ClientList} />
       <Route path="/client/edit" component={ClientEdit} />
       <Route component={NotFound}/>

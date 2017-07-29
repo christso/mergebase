@@ -3,32 +3,43 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, Switch } from 'react-router-dom';
 
+import ClientEdit from './components/clientEdit';
+import ClientList from './components/clientList';
+import LoginForm from './components/loginForm';
+import Menu from './menu';
+
 // RETRIVES COMPONENTS BASED ON STATUS
-const Status = function ({ code, children }){
+const Status = function ({ code, children }) {
   return (
-        <Route render={function({ staticContext }) {
-          if (staticContext)
-            staticContext.status = code
-          return children
-        }}/>
-    )
+    <Route render={function ({ staticContext }) {
+      if (staticContext)
+        staticContext.status = code
+      return children
+    }} />
+  )
 }
 
 //NOT-FOUND COMPONENT
-const NotFound = function(){
-    return (
-      <Status code={404}>
-        <div>
-          <h2> Sorry, can’t find this page</h2>
-        </div>
-      </Status>
-    )
+const NotFound = function () {
+  return (
+    <Status code={404}>
+      <div>
+        <h2> Sorry, can’t find this page</h2>
+      </div>
+    </Status>
+  )
 }
 
 const routes = (
-        <div>
-            <h2>Client Form</h2>
-        </div>
+  <div>
+    <Menu />
+    <Switch>
+      <Route exact={true} path="/" component={LoginForm} />
+      <Route path="/clients" component={ClientList} />
+      <Route path="/client/edit" component={ClientEdit} />
+      <Route component={NotFound}/>
+    </Switch>
+  </div>
 );
 
 export default routes;

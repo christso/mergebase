@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, Switch } from 'react-router-dom';
 
-import ClientEdit from './components/clientEdit';
-import ClientList from './components/clientList';
-import LoginForm from './components/loginForm';
-import Menu from './menu';
+import ClientEdit from './components/pages/clientEdit';
+import ClientList from './components/pages/clientList';
+import LoginForm from './components/pages/loginForm';
+import Menu from './components/menu';
 
 // RETRIVES COMPONENTS BASED ON STATUS
 const Status = function ({ code, children }) {

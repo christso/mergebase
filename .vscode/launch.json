@@ -10,13 +10,18 @@
             "request": "launch",
             "name": "Launch Proxy Server",
             "program": "${workspaceRoot}\\app.js"
-        }
-
+        },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch API Server",
             "program": "${workspaceRoot}\\apiServer.js"
-        }        
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Selected",
+            "program": "${file}"
+        }            
     ]
 }

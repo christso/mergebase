@@ -8,14 +8,27 @@ const CLIENT_LIST_URL = `https://api.workflowmax.com/client.api/list?apiKey=${AP
 
 function getClients(dispatch) {
     axios.default.get(CLIENT_LIST_URL)
-    .then(function(response) {
-        xml2js.parseString(response.data, function(err, jsResult) {
-            dispatch(jsResult.Response.Clients[0].Client, undefined);
+        .then(function (response) {
+            xml2js.parseString(response.data, function (err, jsResult) {
+
+                let mappedClients = jsResult.Response.Clients[0].Client.map(function (client) {
+                    return {
+                        name: client.Name[0],
+                        address: client.Address[0].replace('\n', ''),
+                        website: client.Website[0],
+                        firstName: client.FirstName ? client.FirstName[0] : undefined,
+                        lastName: client.LastName ? client.LastName[0] : undefined,
+                        phone: client.Phone[0],
+                        wfmID: client.ID[0]
+                    };
+                });
+
+                dispatch(mappedClients, undefined);
+            })
         })
-    })
-    .catch(function(err) {
-        dispatch("GET_CLIENTS_ERROR", err);
-    });
+        .catch(function (err) {
+            dispatch("GET_CLIENTS_ERROR", err);
+        });
 }
 
 module.exports = {

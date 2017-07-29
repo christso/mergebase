@@ -1,3 +1,5 @@
+var Client = require('./clientModel');
+
 var data = [
     {
         name: 'Gates, Bill',
@@ -29,3 +31,23 @@ var data = [
     }
 ];
 
+
+function seedDB() {
+    Client.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log("removed clients!");
+
+        // add a few clients
+        Client.create(data, function (err, res) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("added a client!");
+            }
+        });
+    });
+}
+
+module.exports = seedDB;

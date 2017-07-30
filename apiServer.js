@@ -1,14 +1,34 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-var wfmApi = require('./api/workflowmax')
+var wfmApi = require('./api/workflowmax/clientActions')
 
 mongoose.connect('mongodb://localhost:27017/practice_integrator_demo');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
-var seedDB = require('./seeds');
-seedDB();
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
+// var seedDB = require('./seeds');
+// seedDB();
 
 var Clients = require('./models/clients.js');
 
@@ -16,20 +36,18 @@ var Clients = require('./models/clients.js');
 app.get('/clients', function (req, res) {
     Clients.find(function(err, clients) {
         if (err)
-            throw err;
+            console.log(err);
         res.json(clients);         
     });
 });
 
-app.get('/clients/wfm', function (req, res) {
+app.get('/clients-wfm', function (req, res) {
     wfmApi.getClients(function(apiRes, err) {
         if (err)
-            throw err;
+            console.log(err);
         res.json(apiRes); 
     });
 });
-
-
 
 app.listen(3001, function (err) {
     if (err) {

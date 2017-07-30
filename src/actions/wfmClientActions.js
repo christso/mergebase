@@ -1,16 +1,16 @@
+
 import axios from "axios";
 import {ROOT_URL} from '../locator';
 
-// GET CLIENTS
-export function getClients() {
+export function getWfmClients() {
   return function (dispatch) {
-    axios.get(`${ROOT_URL}/clients`)
+    axios.get(`${ROOT_URL}/clients-wfm`)
       .then(function (response) {
         console.log(response.data);
-        dispatch({ type: "GET_CLIENTS", payload: response.data })
+        dispatch({ type: "GET_CLIENTS_WFM", payload: response.data })
       })
       .catch(function (err) {
-        dispatch({ type: "GET_CLIENTS_REJECTED", payload: err })
+        dispatch({ type: "GET_CLIENTS_WFM_REJECTED", payload: err })
       });
   }
 }

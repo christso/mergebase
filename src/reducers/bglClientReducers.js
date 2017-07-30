@@ -1,12 +1,12 @@
-export function clientReducers(state = {
+export function bglClientReducers(state = {
     clients: []
 }, action) {
     switch (action.type) {
-        case "GET_CLIENTS":
+        case "GET_CLIENTS_BGL":
             return { clients: [...action.payload] };      
         default:
             return state;
     }
 }
 
-export default clientReducers;
+export default bglClientReducers;

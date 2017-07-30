@@ -4,10 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { getClients } from '../../actions/clientActions'
-import InternalClientList from './intClientList';
-import WfmClientList from './wfmClientList';
-import XplanClientList from './xplanClientList';
-import BglClientList from './bglClientList';
 
 class ClientList extends Component {
     componentDidMount() {
@@ -42,36 +38,21 @@ class ClientList extends Component {
         };
         const clients = this.props.clients;
         return (
-            <Grid>
-                <Row>
-                    <h2 className="page-header">DPM Core</h2>
-                </Row>
-                <Row style={{ marginBottom: '15px' }}>
-                    <Button bsStyle="primary">New</Button>
-                </Row>
-                <Row>
-                    <InternalClientList />
-                </Row>
-                <Row>
-                    <h2 className="page-header">Xero Practice Manager</h2>
-                    <WfmClientList />
-                </Row>
-                <Row>
-                    <h2 className="page-header">IRESS XPLAN</h2>
-                    <XplanClientList />
-                </Row>    
-                <Row>
-                    <h2 className="page-header">BGL Simple Fund 360</h2>
-                    <BglClientList />
-                </Row>                              
-            </Grid>
+            <BootstrapTable data={clients} striped hover cellEdit={cellEditProp}>
+                <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+                <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
+                <TableHeaderColumn dataField='wfmId'>WFM ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='xplanId'>XPLAN ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='clsupId'>Class ID</TableHeaderColumn>
+            </BootstrapTable>
         )
     }
 }
 
 
 function mapStateToProps(state) {
-    return { clients: state.wfmClients.clients };
+    return { clients: state.clients.clients };
 }
 
 function mapDispatchToProps(dispatch) {

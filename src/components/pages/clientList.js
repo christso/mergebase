@@ -38,12 +38,6 @@ class ClientList extends Component {
     }
 
     render() {
-        const cellEditProp = {
-            mode: 'click',
-            blurToSave: false,
-            beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-            afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
-        };
         const clients = this.props.clients;
         return (
             <Grid>
@@ -63,11 +57,11 @@ class ClientList extends Component {
                 <Row>
                     <h2 className="page-header">IRESS XPLAN</h2>
                     <XplanClientList />
-                </Row>    
+                </Row>
                 <Row>
                     <h2 className="page-header">BGL Simple Fund 360</h2>
                     <BglClientList />
-                </Row>                              
+                </Row>
             </Grid>
         )
     }
@@ -75,7 +69,12 @@ class ClientList extends Component {
 
 
 function mapStateToProps(state) {
-    return { clients: state.wfmClients.clients };
+    return {
+        clients: state.clients.clients,
+        selectedClientId: state.clients.selectedClientId,
+        wfmClients: state.wfmClients.clients,
+        xplanClients: state.xplanClients.clients
+    };
 }
 
 function mapDispatchToProps(dispatch) {

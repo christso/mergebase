@@ -16,11 +16,11 @@ export function getClients() {
 }
 
 export function getSelectedClients() {
-  
+
 }
 
-export function selectClients(clients) {
+export function selectClient(id) {
   return function (dispatch) {
-    dispatch({type: "SELECT_CLIENTS", payload: clients});
+    dispatch({type: "SELECT_CLIENT", payload: id});
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid } from 'react-bootstrap';
+import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, Glyphicon, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -9,40 +9,32 @@ class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
-    onAfterSaveCell(row, cellName, cellValue) {
-        console.log(`Save cell ${cellName} with value ${cellValue}`);
 
-        let rowStr = '';
-        for (const prop in row) {
-            rowStr += prop + ': ' + row[prop] + '\n';
-        }
-
-        console.log('update', {
-            [cellName]: cellValue
-        });
-        console.log('Thw whole row :\n' + rowStr);
-    }
-
-    onBeforeSaveCell(row, cellName, cellValue) {
-        // You can do any validation on here for editing value,
-        // return false for reject the editing
-        return true;
+    createCustomButtonGroup = (props) => {
+        return (
+            <ButtonGroup style={{ marginBottom: '10px' }} className='my-custom-class'>
+                <Button bsStyle="default">
+                    <Glyphicon glyph="plus"></Glyphicon> New</Button>
+                <Button bsStyle="default">
+                    <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
+            </ButtonGroup>
+        );
     }
 
     render() {
         const selectRow = {
-            mode: 'checkbox'
-        };        
-        const cellEditProp = {
-            mode: 'click',
-            blurToSave: true,
-            beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-            afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
+            mode: 'checkbox',
         };
+        const options = {
+            btnGroup: this.createCustomButtonGroup
+        };
+
         const clients = this.props.clients;
         return (
-            <BootstrapTable data={clients} 
-                selectRow={selectRow} striped hover cellEdit={cellEditProp}>
+            <BootstrapTable striped hover
+                selectRow={selectRow}
+                options={options}
+                data={clients}>
                 <TableHeaderColumn isKey dataField='wfmID' hidden>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>

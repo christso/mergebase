@@ -1,97 +1,67 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, ButtonGroup } from 'react-bootstrap';
+import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getClients, selectClients } from '../../actions/clientActions'
+import { getClients, selectClient } from '../../actions/clientActions'
+
 
 class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
-    onAfterSaveCell(row, cellName, cellValue) {
-        console.log(`Save cell ${cellName} with value ${cellValue}`);
 
-        let rowStr = '';
-        for (const prop in row) {
-            rowStr += prop + ': ' + row[prop] + '\n';
-        }
+    createCustomButtonGroup() {
 
-        console.log('update', {
-            [cellName]: cellValue
-        });
-        // console.log('Thw whole row :\n' + rowStr);
-    }
-    
-
-    onBeforeSaveCell(row, cellName, cellValue) {
-        // You can do any validation on here for editing value,
-        // return false for reject the editing
-        // console.log("before save", {
-        //     [cellName]: cellValue
-        // });        
-        return true;
-    }
-
-    onRowSelect(row, isSelected) {
-        // console.log("select", {
-        //     row: row,
-        //     isSelected: isSelected
-        // });
-        this.props.selectClients(row);
-    }
-    
-    createCustomButtonGroup = props => {
         return (
-            <ButtonGroup className='my-custom-class' sizeClass='btn-group-md'>
-                {props.insertBtn}
-                {props.deleteBtn}
-                <button type='button'
-                    className={`btn btn-primary`}>
-                    Bind
-                </button>
+            <ButtonGroup style={{ marginBottom: '10px' }} className='my-custom-class'>
+                <Button bsStyle="default">
+                    <Glyphicon glyph="plus"></Glyphicon> New</Button>
+                <Button bsStyle="default" href={'/client/edit/' + this.props.selectedClientId}>
+                    <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
+                <Button bsStyle="default">
+                    <Glyphicon glyph="flash"></Glyphicon> Bind</Button>
             </ButtonGroup>
         );
     }
 
+    onRowClick(row, columnIndex, rowIndex) {
+        //console.log(`You click row ID: ${row._id}, column index: ${columnIndex}, row index: ${rowIndex}`);
+        this.props.selectClient(row._id);
+    }
+
+    trClassNameFormat(rowData, rIndex) {
+        // this.props.selectClientId || rowData._id == this.props.selectClientId
+        //console.log("selectedClientId", this.props.selectedClientId);
+        if (this.props.selectedClientId === rowData._id) {
+            return 'info'
+        } else {
+            return '';
+        }
+    }
+
     render() {
         const selectRow = {
-            mode: 'checkbox',
-            onSelect: this.onRowSelect.bind(this)
+
         };
         const options = {
-            btnGroup: this.createCustomButtonGroup
+            btnGroup: this.createCustomButtonGroup.bind(this),
+            onRowClick: this.onRowClick.bind(this),
         };
-        const cellEditProp = {
-            mode: 'click',
-            blurToSave: true,
-            beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-            afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
-        };
+
         const clients = this.props.clients;
         return (
             <div>
-            <ButtonGroup style={{ marginBottom: '15px' }} className='my-custom-class'>
-                <Button bsStyle="primary">
-                    New
-                </Button>
-                <Button bsStyle="primary">
-                    Edit
-                </Button>                                
-                <Button bsStyle="primary">
-                    Bind
-                </Button>
-                <Button bsStyle="primary">
-                    Commit
-                </Button>                
-            </ButtonGroup>
-            <BootstrapTable selectRow={selectRow} striped hover
-                data={clients} cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
-            </BootstrapTable>
+                <BootstrapTable striped hover
+                    trClassName={this.trClassNameFormat.bind(this)}
+                    selectRow={selectRow}
+                    options={options}
+                    data={clients}>
+                    <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
+                </BootstrapTable>
             </div>
         )
     }
@@ -101,6 +71,7 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
+        selectedClientId: state.clients.selectedClientId,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients
     };
@@ -109,7 +80,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getClients: getClients,
-        selectClients: selectClients
+        selectClient: selectClient,
     }, dispatch)
 }
 

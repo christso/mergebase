@@ -26,7 +26,7 @@ class LoginForm extends Component {
 
                 <Col xs={12} sm={4}>
                     <Panel>
-                        <h3 style={{textAlign: 'center'}}>Welcome to Practice Integrator</h3>
+                        <h3 style={{textAlign: 'center'}}>Welcome to Diversified Practice Manager</h3>
                         <br />
                         <FieldGroup
                             id="formControlsEmail"

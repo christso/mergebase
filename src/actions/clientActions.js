@@ -14,3 +14,13 @@ export function getClients() {
       });
   }
 }
+
+export function getSelectedClients() {
+  
+}
+
+export function selectClients(clients) {
+  return function (dispatch) {
+    dispatch({type: "SELECT_CLIENTS", payload: clients});
+  }
+}

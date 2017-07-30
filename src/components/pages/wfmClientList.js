@@ -20,7 +20,7 @@ class ClientList extends Component {
         console.log('update', {
             [cellName]: cellValue
         });
-        // console.log('Thw whole row :\n' + rowStr);
+        console.log('Thw whole row :\n' + rowStr);
     }
 
     onBeforeSaveCell(row, cellName, cellValue) {
@@ -30,6 +30,9 @@ class ClientList extends Component {
     }
 
     render() {
+        const selectRow = {
+            mode: 'checkbox'
+        };        
         const cellEditProp = {
             mode: 'click',
             blurToSave: true,
@@ -38,10 +41,12 @@ class ClientList extends Component {
         };
         const clients = this.props.clients;
         return (
-            <BootstrapTable data={clients} striped hover cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
+            <BootstrapTable data={clients} 
+                selectRow={selectRow} striped hover cellEdit={cellEditProp}>
+                <TableHeaderColumn isKey dataField='wfmID' hidden>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
+                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
             </BootstrapTable>
         )
     }

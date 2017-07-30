@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid } from 'react-bootstrap';
+import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -27,16 +27,20 @@ class ClientList extends Component {
         // console.log('Thw whole row :\n' + rowStr);
     }
 
+
     onBeforeSaveCell(row, cellName, cellValue) {
         // You can do any validation on here for editing value,
         // return false for reject the editing
-        return true;
+        console.log("before save", {
+            [cellName]: cellValue
+        });
+        return false;
     }
 
     render() {
         const cellEditProp = {
             mode: 'click',
-            blurToSave: true,
+            blurToSave: false,
             beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
             afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
         };
@@ -46,9 +50,9 @@ class ClientList extends Component {
                 <Row>
                     <h2 className="page-header">DPM Core</h2>
                 </Row>
-                <Row style={{ marginBottom: '15px' }}>
-                    <Button bsStyle="primary">New</Button>
-                </Row>
+                {/* <Row style={{ marginBottom: '15px' }}>
+                    <Button bsStyle="primary">Bind</Button>
+                </Row> */}
                 <Row>
                     <InternalClientList />
                 </Row>

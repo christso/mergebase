@@ -30,6 +30,9 @@ class ClientList extends Component {
     }
 
     render() {
+        const selectRow = {
+            mode: 'checkbox'
+        };        
         const cellEditProp = {
             mode: 'click',
             blurToSave: true,
@@ -38,13 +41,12 @@ class ClientList extends Component {
         };
         const clients = this.props.clients;
         return (
-            <BootstrapTable data={clients} striped hover cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
+            <BootstrapTable data={clients} selectRow={selectRow}
+                striped hover cellEdit={cellEditProp}>
+                <TableHeaderColumn isKey dataField='bglID' hidden>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='wfmId'>WFM ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='xplanId'>XPLAN ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='clsupId'>Class ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
             </BootstrapTable>
         )
     }

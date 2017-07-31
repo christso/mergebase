@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
+import reducers from './src/reducers/index';
 import routes from './src/routes';
 import { renderToString } from 'react-dom/server';
 

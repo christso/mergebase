@@ -19,7 +19,8 @@ function getClients(dispatch) {
                         firstName: client.FirstName ? client.FirstName[0] : undefined,
                         lastName: client.LastName ? client.LastName[0] : undefined,
                         phone: client.Phone[0],
-                        wfmID: client.ID[0]
+                        email: client.Email ? client.Email[0] : undefined,
+                        wfmId: client.ID[0]
                     };
                 });
 

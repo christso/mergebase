@@ -14,3 +14,10 @@ export function getXplanClients() {
       });
   }
 }
+
+
+export function selectXplanClient(id) {
+  return function (dispatch) {
+    dispatch({type: "SELECT_CLIENT_XPLAN", payload: id});
+  }
+}

@@ -3,39 +3,42 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getWfmClients } from '../../actions/wfmClientActions'
+import { getWfmClients, selectWfmClient } from '../../actions/wfmClientActions'
 
 class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
 
-    createCustomButtonGroup = (props) => {
-        return (
-            <ButtonGroup style={{ marginBottom: '10px' }} className='my-custom-class'>
-                <Button bsStyle="default">
-                    <Glyphicon glyph="plus"></Glyphicon> New</Button>
-                <Button bsStyle="default">
-                    <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
-            </ButtonGroup>
-        );
+    onRowClick(row, columnIndex, rowIndex) {
+        console.log(`You click row ID: ${row.wfmId}, column index: ${columnIndex}, row index: ${rowIndex}`);
+        this.props.selectClient(row.wfmId);
+    }
+
+    trClassNameFormat(rowData, rIndex) {
+        console.log("Selected Check", this.props.selectedClientId, rowData.wfmId);
+        if (this.props.selectedClientId === rowData.wfmId) {
+            return 'info'
+        } else {
+            return '';
+        }
     }
 
     render() {
         const selectRow = {
-            mode: 'checkbox',
         };
         const options = {
-            btnGroup: this.createCustomButtonGroup
+            onRowClick: this.onRowClick.bind(this)
         };
 
         const clients = this.props.clients;
         return (
             <BootstrapTable striped hover
+                trClassName={this.trClassNameFormat.bind(this)}
                 selectRow={selectRow}
                 options={options}
                 data={clients}>
-                <TableHeaderColumn isKey dataField='wfmID' hidden>ID</TableHeaderColumn>
+                <TableHeaderColumn isKey dataField='wfmId'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
                 <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
@@ -46,12 +49,16 @@ class ClientList extends Component {
 
 
 function mapStateToProps(state) {
-    return { clients: state.wfmClients.clients };
+    return { 
+        clients: state.wfmClients.clients,
+        selectedClientId: state.wfmClients.selectedClientId,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getWfmClients
+        getClients: getWfmClients,
+        selectClient: selectWfmClient
     }, dispatch)
 }
 

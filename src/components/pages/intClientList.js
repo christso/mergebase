@@ -19,7 +19,7 @@ class ClientList extends Component {
                     <Glyphicon glyph="plus"></Glyphicon> New</Button>
                 <Button bsStyle="default" href={'/client/edit/' + this.props.selectedClientId}>
                     <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
-                <Button bsStyle="default">
+                <Button bsStyle="default" href={'/client/bind/' + this.props.selectedClientId}>
                     <Glyphicon glyph="flash"></Glyphicon> Bind</Button>
             </ButtonGroup>
         );

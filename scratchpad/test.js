@@ -294,7 +294,7 @@ var mappedData = data.map(function(client) {
         firstName: client.FirstName ? client.FirstName[0] : undefined,
         lastName: client.LastName ? client.LastName[0] : undefined,
         phone: client.Phone[0],
-        wfmID: client.ID[0]
+        wfmId: client.ID[0]
     };
     return mappedClient;
 })

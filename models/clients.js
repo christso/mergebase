@@ -10,7 +10,10 @@ var clientSchema = new mongoose.Schema({
     businessStructure: String,
     address: String,
     city: String,
-    website: String
+    website: String,
+    wfmId: String,
+    xplanId: String,
+    clsupId: String
 });
 
 module.exports = mongoose.model("Client", clientSchema);

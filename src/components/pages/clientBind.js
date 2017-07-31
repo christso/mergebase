@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getClients, selectClient } from '../../actions/clientActions'
+import { Field, reduxForm } from 'redux-form'
 
-
-class ClientEdit extends Component {
+class ClientBind extends Component {
     componentDidMount() {
         this.props.getClients();
         console.log("1: Clients = ", this.props.clients);
@@ -13,19 +14,21 @@ class ClientEdit extends Component {
         console.log("2: Select Client = ", this.props.clients);
     }
 
+
     handleTemplateChange(arg) {
         console.log("handleTemplateChange", arg);
     }
 
+
     render() {
+        const { handleSubmit, pristine, reset, submitting } = this.props;
         const clientId = this.props.match.params.id;
-        const client = this.props.clients.filter(function(el) {
-                    return el._id == clientId;
-                })[0];      
+        const client = this.props.clients.filter(function (el) {
+            return el._id == clientId;
+        })[0];
         console.log("3: Selected Client = ", client ? client.name : undefined);
-        //console.log("3: Clients = ", this.props.clients);
         return (
-            <Well>
+           <Well>
                 <h2>{client ? client.name : undefined}</h2>
 
                 <FormGroup controlId="id">
@@ -33,58 +36,44 @@ class ClientEdit extends Component {
                     <FormControl
                         type="text"
                         placeholder="Enter ID"
-                        ref=")id"
+                        ref="id"
                         defaultValue={clientId}
                         readOnly />
                     <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup controlId="name">
-                    <ControlLabel>Name</ControlLabel>
+                <FormGroup controlId="wfmId">
+                    <ControlLabel>WFM ID</ControlLabel>
                     <FormControl
                         type="text"
-                        placeholder="Enter Name"
+                        placeholder="Enter ID"
+                        ref="_id"
+                        value={client ? client.wfmId : undefined}/>
+                    <FormControl.Feedback />
+                </FormGroup>
+                <FormGroup controlId="xplanId">
+                    <ControlLabel>XPLAN ID</ControlLabel>
+                    <FormControl
+                        type="text"
+                        placeholder="Enter ID"
+                        ref="id"
+                        value={client ? client.xplanId : undefined}/>
+                    <FormControl.Feedback />
+                </FormGroup>                                
+                <FormGroup controlId="bglId">
+                    <ControlLabel>BGL ID</ControlLabel>
+                    <FormControl
+                        type="text"
+                        placeholder="Enter ID"
                         ref="name"
-                        value={client ? client.name : undefined}
+                        value={client ? client.bglId : undefined}
                         onChange={this.handleTemplateChange} />
                     <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup controlId="email">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
-                        type="text"
-                        placeholder="Enter Email"
-                        ref="email"
-                        value={client ? client.email : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>         
-                <FormGroup controlId="phone">
-                    <ControlLabel>Phone</ControlLabel>
-                    <FormControl
-                        type="text"
-                        placeholder="Enter Phone"
-                        ref="phone"
-                        value={client ? client.phone : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>                                             
-                <FormGroup controlId="address">
-                    <ControlLabel>Address</ControlLabel>
-                    <FormControl
-                        type="text"
-                        placeholder="Enter Address"
-                        ref="address"
-                        value={client ? client.address : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>  
-                <Button bsStyle="primary">Save</Button>              
+                <Button bsStyle="primary">Bind</Button>      
             </Well>
         )
     }
 }
-
-
 function mapStateToProps(state, props) {
     return {
         clients: state.clients.clients,
@@ -101,4 +90,6 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClientEdit);
+export default reduxForm({
+    form: 'simple' // a unique identifier for this form
+})(connect(mapStateToProps, mapDispatchToProps)(ClientBind))

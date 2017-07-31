@@ -14,3 +14,10 @@ export function getWfmClients() {
       });
   }
 }
+
+
+export function selectWfmClient(id) {
+  return function (dispatch) {
+    dispatch({type: "SELECT_CLIENT_WFM", payload: id});
+  }
+}

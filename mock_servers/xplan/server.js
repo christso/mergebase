@@ -9,7 +9,7 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 var Clients = require('./clientModel');
 var seedDB = require('./seed');
 
-seedDB();
+// seedDB();
 
 //----->>>> GET CLIENTS <<<---------
 app.get('/clients', function (req, res) {

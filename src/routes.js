@@ -8,6 +8,11 @@ import ClientList from './components/pages/clientList';
 import LoginForm from './components/pages/loginForm';
 import Menu from './components/menu';
 import AdminForm from './components/pages/adminForm';
+import ClientBind from './components/pages/clientBind';
+
+const ReactRouter = require('react-router');
+const Router = ReactRouter.Router;
+const hashHistory = ReactRouter.hashHistory;
 
 // RETRIVES COMPONENTS BASED ON STATUS
 const Status = function ({ code, children }) {
@@ -39,7 +44,12 @@ const routes = (
       <Route path="/login" component={LoginForm} />
       <Route path="/clients" component={ClientList} />
       <Route path="/admin" component={AdminForm} />
-      <Route path="/client/edit" component={ClientEdit} />
+      <Switch>
+        <Route exact={true} path="/client/edit" component={ClientEdit} />
+        <Route path="/client/edit/:id" component={ClientEdit} />
+        <Route exact={true} path="/client/bind" component={ClientBind} />
+        <Route path="/client/bind/:id" component={ClientBind} />        
+      </Switch>         
       <Route component={NotFound}/>
     </Switch>
   </div>

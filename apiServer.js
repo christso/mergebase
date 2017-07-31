@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var wfmApi = require('./api/workflowmax/clientActions')
+var xplanApi = require('./api/xplan/clientActions');
 
 mongoose.connect('mongodb://localhost:27017/practice_integrator_demo');
 var db = mongoose.connection;
@@ -27,8 +28,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-// var seedDB = require('./seeds');
-// seedDB();
+var seedDB = require('./seeds');
+seedDB();
 
 var Clients = require('./models/clients.js');
 
@@ -43,6 +44,16 @@ app.get('/clients', function (req, res) {
 
 app.get('/clients-wfm', function (req, res) {
     wfmApi.getClients(function(apiRes, err) {
+        if (err)
+            console.log(err);
+        res.json(apiRes); 
+    });
+});
+
+
+
+app.get('/clients-xplan', function (req, res) {
+    xplanApi.getClients(function(apiRes, err) {
         if (err)
             console.log(err);
         res.json(apiRes); 

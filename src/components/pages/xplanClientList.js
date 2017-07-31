@@ -3,47 +3,40 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getXplanClients } from '../../actions/xplanClientActions';
+import { getXplanClients, selectXplanClient } from '../../actions/xplanClientActions';
 
 class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
-    onAfterSaveCell(row, cellName, cellValue) {
-        console.log(`Save cell ${cellName} with value ${cellValue}`);
+    onRowClick(row, columnIndex, rowIndex) {
+        //console.log(`You click row ID: ${row.xplanId}, column index: ${columnIndex}, row index: ${rowIndex}`);
+        this.props.selectClient(row._id);
+    }
 
-        let rowStr = '';
-        for (const prop in row) {
-            rowStr += prop + ': ' + row[prop] + '\n';
+    trClassNameFormat(rowData, rIndex) {
+        console.log("Selected Check", this.props.selectedClientId, rowData._id);
+        if (this.props.selectedClientId === rowData._id) {
+            return 'info'
+        } else {
+            return '';
         }
-
-        console.log('update', {
-            [cellName]: cellValue
-        });
-        // console.log('Thw whole row :\n' + rowStr);
     }
-
-    onBeforeSaveCell(row, cellName, cellValue) {
-        // You can do any validation on here for editing value,
-        // return false for reject the editing
-        return true;
-    }
-
     render() {
         const selectRow = {
-            mode: 'checkbox'
-        };        
-        const cellEditProp = {
-            mode: 'click',
-            blurToSave: true,
-            beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-            afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
         };
+        const options = {
+            onRowClick: this.onRowClick.bind(this)
+        };
+
         const clients = this.props.clients;
         return (
-            <BootstrapTable data={clients} 
-                selectRow={selectRow} striped hover cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='xplanID' hidden>ID</TableHeaderColumn>
+            <BootstrapTable 
+                options={options}
+                data={clients}
+                trClassName={this.trClassNameFormat.bind(this)}
+                selectRow={selectRow} striped hover>
+                <TableHeaderColumn isKey dataField='_id'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
                 <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
@@ -52,14 +45,17 @@ class ClientList extends Component {
     }
 }
 
-
 function mapStateToProps(state) {
-    return { clients: state.xplanClients.clients };
+    return {
+        clients: state.xplanClients.clients,
+        selectedClientId: state.xplanClients.selectedClientId,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getXplanClients
+        getClients: getXplanClients,
+        selectClient: selectXplanClient
     }, dispatch)
 }
 

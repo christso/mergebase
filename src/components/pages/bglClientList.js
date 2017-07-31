@@ -43,7 +43,7 @@ class ClientList extends Component {
         return (
             <BootstrapTable data={clients} selectRow={selectRow}
                 striped hover cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='bglID' hidden>ID</TableHeaderColumn>
+                <TableHeaderColumn isKey dataField='bglId' hidden>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
                 <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>

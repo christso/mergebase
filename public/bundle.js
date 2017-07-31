@@ -41373,12 +41373,19 @@ var _bglClientReducers = __webpack_require__(461);
 
 var _reduxForm = __webpack_require__(985);
 
+var _account = __webpack_require__(1152);
+
+var _account2 = _interopRequireDefault(_account);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = (0, _redux.combineReducers)({
   clients: _clientReducers.clientReducers,
   wfmClients: _wfmClientReducers.wfmClientReducers,
   xplanClients: _xplanClientReducers.xplanClientReducers,
   bglClients: _bglClientReducers.bglClientReducers,
-  form: _reduxForm.reducer
+  form: _reduxForm.reducer,
+  account: _account2.default
 });
 
 /***/ }),
@@ -51368,13 +51375,15 @@ var _adminForm = __webpack_require__(922);
 
 var _adminForm2 = _interopRequireDefault(_adminForm);
 
-var _clientBind = __webpack_require__(923);
+var _clientBind = __webpack_require__(1151);
 
 var _clientBind2 = _interopRequireDefault(_clientBind);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ReactRouter = __webpack_require__(25);
+// import ClientBind from './components/pages/clientBind';
+
 var Router = ReactRouter.Router;
 var hashHistory = ReactRouter.hashHistory;
 
@@ -51419,14 +51428,10 @@ var routes = _react2.default.createElement(
     _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _loginForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/clients', component: _clientList2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/admin', component: _adminForm2.default }),
-    _react2.default.createElement(
-      _reactRouterDom.Switch,
-      null,
-      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/client/edit', component: _clientEdit2.default }),
-      _react2.default.createElement(_reactRouterDom.Route, { path: '/client/edit/:id', component: _clientEdit2.default }),
-      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/client/bind', component: _clientBind2.default }),
-      _react2.default.createElement(_reactRouterDom.Route, { path: '/client/bind/:id', component: _clientBind2.default })
-    ),
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/client/edit', component: _clientEdit2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/client/edit/:id', component: _clientEdit2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/client/bind', component: _clientBind2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/client/bind/:id', component: _clientBind2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { component: NotFound })
   )
 );
@@ -87127,181 +87132,7 @@ var AdminForm = function (_Component) {
 exports.default = AdminForm;
 
 /***/ }),
-/* 923 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(44);
-
-var _reactRouterDom = __webpack_require__(238);
-
-var _reactRedux = __webpack_require__(32);
-
-var _redux = __webpack_require__(28);
-
-var _clientActions = __webpack_require__(386);
-
-var _reduxForm = __webpack_require__(985);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ClientBind = function (_Component) {
-    _inherits(ClientBind, _Component);
-
-    function ClientBind() {
-        _classCallCheck(this, ClientBind);
-
-        return _possibleConstructorReturn(this, (ClientBind.__proto__ || Object.getPrototypeOf(ClientBind)).apply(this, arguments));
-    }
-
-    _createClass(ClientBind, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.getClients();
-            console.log("1: Clients = ", this.props.clients);
-            this.props.selectClient(this.props.match.params.id);
-            console.log("2: Select Client = ", this.props.clients);
-        }
-    }, {
-        key: 'handleTemplateChange',
-        value: function handleTemplateChange(arg) {
-            console.log("handleTemplateChange", arg);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                handleSubmit = _props.handleSubmit,
-                pristine = _props.pristine,
-                reset = _props.reset,
-                submitting = _props.submitting;
-
-            var clientId = this.props.match.params.id;
-            var client = this.props.clients.filter(function (el) {
-                return el._id == clientId;
-            })[0];
-            console.log("3: Selected Client = ", client ? client.name : undefined);
-            return _react2.default.createElement(
-                _reactBootstrap.Well,
-                null,
-                _react2.default.createElement(
-                    'h2',
-                    null,
-                    client ? client.name : undefined
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'id' },
-                    _react2.default.createElement(
-                        _reactBootstrap.ControlLabel,
-                        null,
-                        'ID'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                        type: 'text',
-                        placeholder: 'Enter ID',
-                        ref: 'id',
-                        defaultValue: clientId,
-                        readOnly: true }),
-                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'wfmId' },
-                    _react2.default.createElement(
-                        _reactBootstrap.ControlLabel,
-                        null,
-                        'WFM ID'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                        type: 'text',
-                        placeholder: 'Enter ID',
-                        ref: '_id',
-                        value: client ? client.wfmId : undefined }),
-                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'xplanId' },
-                    _react2.default.createElement(
-                        _reactBootstrap.ControlLabel,
-                        null,
-                        'XPLAN ID'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                        type: 'text',
-                        placeholder: 'Enter ID',
-                        ref: 'id',
-                        value: client ? client.xplanId : undefined }),
-                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'bglId' },
-                    _react2.default.createElement(
-                        _reactBootstrap.ControlLabel,
-                        null,
-                        'BGL ID'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                        type: 'text',
-                        placeholder: 'Enter ID',
-                        ref: 'name',
-                        value: client ? client.bglId : undefined,
-                        onChange: this.handleTemplateChange }),
-                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { bsStyle: 'primary' },
-                    'Bind'
-                )
-            );
-        }
-    }]);
-
-    return ClientBind;
-}(_react.Component);
-
-function mapStateToProps(state, props) {
-    return {
-        clients: state.clients.clients,
-        wfmClients: state.wfmClients.clients,
-        xplanClients: state.xplanClients.clients,
-        selectedClientId: state.clients.selectedClientId
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({
-        getClients: _clientActions.getClients,
-        selectClient: _clientActions.selectClient
-    }, dispatch);
-}
-
-exports.default = (0, _reduxForm.reduxForm)({
-    form: 'simple' // a unique identifier for this form
-})((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ClientBind));
-
-/***/ }),
+/* 923 */,
 /* 924 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -97962,6 +97793,199 @@ var createValues = function createValues(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (createValues);
+
+/***/ }),
+/* 1150 */,
+/* 1151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reduxForm = __webpack_require__(985);
+
+var _account = __webpack_require__(1152);
+
+var _reactRedux = __webpack_require__(32);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = {
+    // used to populate "account" reducer when "Load" is clicked
+    firstName: 'Jane',
+    lastName: 'Doe',
+    email: 'jane@gmail.com'
+};
+
+var ClientBind2 = function (_Component) {
+    _inherits(ClientBind2, _Component);
+
+    function ClientBind2() {
+        _classCallCheck(this, ClientBind2);
+
+        return _possibleConstructorReturn(this, (ClientBind2.__proto__ || Object.getPrototypeOf(ClientBind2)).apply(this, arguments));
+    }
+
+    _createClass(ClientBind2, [{
+        key: 'render',
+        value: function render() {
+            var _props = this.props,
+                handleSubmit = _props.handleSubmit,
+                pristine = _props.pristine,
+                reset = _props.reset,
+                submitting = _props.submitting,
+                load = _props.load;
+
+            console.log("ClientBind2", this.props);
+            return _react2.default.createElement(
+                'form',
+                { onSubmit: handleSubmit },
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'button',
+                        { type: 'button', onClick: function onClick() {
+                                return load(data);
+                            } },
+                        'Load'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'label',
+                        null,
+                        'First Name'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(_reduxForm.Field, {
+                            name: 'firstName',
+                            component: 'input',
+                            type: 'text',
+                            placeholder: 'First Name'
+                        })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'label',
+                        null,
+                        'Last Name'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(_reduxForm.Field, {
+                            name: 'lastName',
+                            component: 'input',
+                            type: 'text',
+                            placeholder: 'Last Name'
+                        })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'label',
+                        null,
+                        'Email'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(_reduxForm.Field, {
+                            name: 'email',
+                            component: 'input',
+                            type: 'email',
+                            placeholder: 'Email'
+                        })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'button',
+                        { type: 'submit', disabled: pristine || submitting },
+                        'Submit'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ClientBind2;
+}(_react.Component);
+
+ClientBind2 = (0, _reduxForm.reduxForm)({
+    form: 'simple' // a unique identifier for this form
+})(ClientBind2);
+
+// You have to connect() to any reducers that you wish to connect to yourself
+ClientBind2 = (0, _reactRedux.connect)(function (state) {
+    return {
+        initialValues: state.account.data // pull initial values from account reducer
+    };
+}, { load: _account.load // bind account loading action creator
+})(ClientBind2);
+
+exports.default = ClientBind2;
+
+/***/ }),
+/* 1152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var reducer = function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case "LOAD_ACCOUNT":
+      return {
+        data: action.data
+      };
+    default:
+      return state;
+  }
+};
+
+/**
+ * Simulates data loaded into this reducer from somewhere
+ */
+var load = exports.load = function load(data) {
+  return { type: "LOAD_ACCOUNT", data: data };
+};
+
+exports.default = reducer;
 
 /***/ })
 /******/ ]);

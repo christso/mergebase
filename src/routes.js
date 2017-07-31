@@ -8,7 +8,8 @@ import ClientList from './components/pages/clientList';
 import LoginForm from './components/pages/loginForm';
 import Menu from './components/menu';
 import AdminForm from './components/pages/adminForm';
-import ClientBind from './components/pages/clientBind';
+// import ClientBind from './components/pages/clientBind';
+import ClientBind from './components/pages/clientBind2';
 
 const ReactRouter = require('react-router');
 const Router = ReactRouter.Router;
@@ -44,12 +45,10 @@ const routes = (
       <Route path="/login" component={LoginForm} />
       <Route path="/clients" component={ClientList} />
       <Route path="/admin" component={AdminForm} />
-      <Switch>
-        <Route exact={true} path="/client/edit" component={ClientEdit} />
-        <Route path="/client/edit/:id" component={ClientEdit} />
-        <Route exact={true} path="/client/bind" component={ClientBind} />
-        <Route path="/client/bind/:id" component={ClientBind} />        
-      </Switch>         
+      <Route exact={true} path="/client/edit" component={ClientEdit} />
+      <Route path="/client/edit/:id" component={ClientEdit} />
+      <Route exact={true} path="/client/bind" component={ClientBind} />
+      <Route path="/client/bind/:id" component={ClientBind} /> 
       <Route component={NotFound}/>
     </Switch>
   </div>

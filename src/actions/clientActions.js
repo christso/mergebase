@@ -20,6 +20,13 @@ export function selectClient(id) {
   }
 }
 
+export function selectClient2(data) {
+    return function (dispatch) {
+        dispatch({type: "FIND_CLIENT", payload: data });
+    }
+};
+
+
 // // GET AND SELECT CLIENTS
 // export function getAndSelectClient(id) {
 //   return function (dispatch) {

@@ -36499,6 +36499,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getClients = getClients;
 exports.selectClient = selectClient;
+exports.selectClient2 = selectClient2;
 
 var _axios = __webpack_require__(137);
 
@@ -36524,6 +36525,12 @@ function selectClient(id) {
     dispatch({ type: "SELECT_CLIENT", payload: id });
   };
 }
+
+function selectClient2(data) {
+  return function (dispatch) {
+    dispatch({ type: "FIND_CLIENT", payload: data });
+  };
+};
 
 // // GET AND SELECT CLIENTS
 // export function getAndSelectClient(id) {
@@ -97824,13 +97831,13 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reduxForm = __webpack_require__(985);
 
-var _account = __webpack_require__(1152);
-
 var _reactRedux = __webpack_require__(32);
 
-var _clientActions = __webpack_require__(386);
-
 var _redux = __webpack_require__(28);
+
+var _reactBootstrap = __webpack_require__(44);
+
+var _clientActions = __webpack_require__(386);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -97840,12 +97847,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = {
-    // used to populate "account" reducer when "Load" is clicked
-    firstName: 'Jane',
-    lastName: 'Doe',
-    email: 'jane@gmail.com'
-};
+// const data = {
+//         // used to populate "account" reducer when "Load" is clicked
+//         firstName: 'Jane',
+//         lastName: 'Doe',
+//         email: 'jane@gmail.com'
+// }
 
 var ClientBind2 = function (_Component) {
     _inherits(ClientBind2, _Component);
@@ -97859,96 +97866,125 @@ var ClientBind2 = function (_Component) {
     _createClass(ClientBind2, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            // this.props.getClients();
-            // this.props.selectClient(this.props.match.params.id);        
-            var _props = this.props,
-                handleSubmit = _props.handleSubmit,
-                pristine = _props.pristine,
-                reset = _props.reset,
-                submitting = _props.submitting,
-                load = _props.load;
+            this.props.getClients();
+            this.props.selectClient(this.props.match.params.id);
+            // const { clientId, client } = this.handleLoad();
+            // this.props.loadClient(client);
+        }
+    }, {
+        key: 'handleLoad',
+        value: function handleLoad() {
+            var clientId = this.props.selectedClientId;
+            var client = this.props.clients.filter(function (el) {
+                return el._id == clientId;
+            })[0];
+            console.log("Client 1", client);
 
+            this.props.loadClient(client);
 
-            load(data);
+            return {
+                clientId: clientId,
+                client: client
+            };
         }
     }, {
         key: 'render',
         value: function render() {
-            var _props2 = this.props,
-                handleSubmit = _props2.handleSubmit,
-                pristine = _props2.pristine,
-                reset = _props2.reset,
-                submitting = _props2.submitting,
-                load = _props2.load;
+            var _props = this.props,
+                handleSubmit = _props.handleSubmit,
+                pristine = _props.pristine,
+                reset = _props.reset,
+                submitting = _props.submitting;
 
+            var _handleLoad = this.handleLoad(),
+                clientId = _handleLoad.clientId,
+                client = _handleLoad.client;
 
             return _react2.default.createElement(
-                'form',
-                { onSubmit: handleSubmit },
+                _reactBootstrap.Well,
+                null,
                 _react2.default.createElement(
-                    'div',
+                    'h2',
                     null,
+                    client ? client.name : undefined
+                ),
+                _react2.default.createElement(
+                    'form',
+                    { onSubmit: handleSubmit },
                     _react2.default.createElement(
-                        'label',
+                        'div',
                         null,
-                        'First Name'
+                        _react2.default.createElement(
+                            'button',
+                            { type: 'button', onClick: this.handleLoad.bind(this) },
+                            'Load'
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement(_reduxForm.Field, {
-                            name: 'firstName',
-                            component: 'input',
-                            type: 'text',
-                            placeholder: 'First Name'
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        'Last Name'
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            'First Name'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reduxForm.Field, {
+                                name: 'firstName',
+                                component: 'input',
+                                type: 'text',
+                                placeholder: 'First Name'
+                            })
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement(_reduxForm.Field, {
-                            name: 'lastName',
-                            component: 'input',
-                            type: 'text',
-                            placeholder: 'Last Name'
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        'Email'
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            'Last Name'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reduxForm.Field, {
+                                name: 'lastName',
+                                component: 'input',
+                                type: 'text',
+                                placeholder: 'Last Name'
+                            })
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement(_reduxForm.Field, {
-                            name: 'email',
-                            component: 'input',
-                            type: 'email',
-                            placeholder: 'Email'
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            'Email'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reduxForm.Field, {
+                                name: 'email',
+                                component: 'input',
+                                type: 'email',
+                                placeholder: 'Email'
+                            })
+                        )
+                    ),
                     _react2.default.createElement(
-                        'button',
-                        { type: 'submit', disabled: pristine || submitting },
-                        'Submit'
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'button',
+                            { type: 'submit', disabled: pristine || submitting },
+                            'Submit'
+                        )
                     )
                 )
             );
@@ -97962,13 +97998,25 @@ ClientBind2 = (0, _reduxForm.reduxForm)({
     form: 'simple' // a unique identifier for this form
 })(ClientBind2);
 
-// You have to connect() to any reducers that you wish to connect to yourself
-ClientBind2 = (0, _reactRedux.connect)(function (state) {
+function mapStateToProps(state, props) {
     return {
-        initialValues: state.account.data // pull initial values from account reducer
+        initialValues: state.account.data,
+        clients: state.clients.clients,
+        selectedClientId: state.clients.selectedClientId
     };
-}, { load: _account.load // bind account loading action creator
-})(ClientBind2);
+}
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        loadClient: _clientActions.selectClient2,
+        getClients: _clientActions.getClients,
+        selectClient: _clientActions.selectClient
+    }, dispatch);
+}
+
+// You have to connect() to any reducers that you wish to connect to yourself
+ClientBind2 = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps // bind account loading action creator
+)(ClientBind2);
 
 exports.default = ClientBind2;
 
@@ -97987,20 +98035,13 @@ var reducer = function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case "LOAD_ACCOUNT":
+    case "FIND_CLIENT":
       return {
-        data: action.data
+        data: action.payload
       };
     default:
       return state;
   }
-};
-
-/**
- * Simulates data loaded into this reducer from somewhere
- */
-var load = exports.load = function load(data) {
-  return { type: "LOAD_ACCOUNT", data: data };
 };
 
 exports.default = reducer;

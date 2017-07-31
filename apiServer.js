@@ -28,8 +28,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-var seedDB = require('./seeds');
-seedDB();
+// var seedDB = require('./seeds');
+// seedDB();
 
 var Clients = require('./models/clients.js');
 
@@ -41,6 +41,17 @@ app.get('/clients', function (req, res) {
         res.json(clients);         
     });
 });
+
+app.get('/client/:id', function (req, res) {
+    Clients.findById(req.params.id, function(err, foundClient) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(foundClient);
+        }
+    });
+});
+
 
 app.get('/clients-wfm', function (req, res) {
     wfmApi.getClients(function(apiRes, err) {

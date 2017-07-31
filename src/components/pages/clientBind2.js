@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form'
 import { load as loadAccount } from '../../account';
 import { connect } from 'react-redux'
+import { getClients, selectClient } from '../../actions/clientActions'
+import { bindActionCreators } from 'redux'
 
 const data = {
     // used to populate "account" reducer when "Load" is clicked
@@ -11,17 +13,19 @@ const data = {
 }
 
 class ClientBind2 extends Component {
+    componentDidMount() {
+        // this.props.getClients();
+        // this.props.selectClient(this.props.match.params.id);        
+        const { handleSubmit, pristine, reset, submitting, load } = this.props;
+ 
+        load(data);
+    }
+
     render() {
         const { handleSubmit, pristine, reset, submitting, load } = this.props;
-        console.log("ClientBind2", this.props);
-        return (
 
+        return (
             <form onSubmit={handleSubmit}>
-                <div>
-                    <button type="button" onClick={() => load(data)}>
-                        Load
-                    </button>
-                </div>
                 <div>
                     <label>First Name</label>
                     <div>

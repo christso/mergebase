@@ -36498,7 +36498,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getClients = getClients;
-exports.getSelectedClients = getSelectedClients;
 exports.selectClient = selectClient;
 
 var _axios = __webpack_require__(137);
@@ -36510,10 +36509,9 @@ var _locator = __webpack_require__(138);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // GET CLIENTS
-function getClients() {
+function getClients(callback) {
   return function (dispatch) {
     _axios2.default.get(_locator.ROOT_URL + "/clients").then(function (response) {
-      console.log(response.data);
       dispatch({ type: "GET_CLIENTS", payload: response.data });
     }).catch(function (err) {
       dispatch({ type: "GET_CLIENTS_REJECTED", payload: err });
@@ -36521,13 +36519,25 @@ function getClients() {
   };
 }
 
-function getSelectedClients() {}
-
 function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT", payload: id });
   };
 }
+
+// // GET AND SELECT CLIENTS
+// export function getAndSelectClient(id) {
+//   return function (dispatch) {
+//     axios.get(`${ROOT_URL}/clients`)
+//       .then(function (response) {
+//         dispatch({ type: "GET_CLIENTS", payload: response.data });
+//         dispatch({ type: "SELECT_CLIENT", payload: id });
+//       })
+//       .catch(function (err) {
+//         dispatch({ type: "GET_CLIENTS_REJECTED", payload: err })
+//       });
+//   }
+// }
 
 /***/ }),
 /* 387 */
@@ -51484,9 +51494,7 @@ var ClientEdit = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.getClients();
-            console.log("1: Clients = ", this.props.clients);
             this.props.selectClient(this.props.match.params.id);
-            console.log("2: Select Client = ", this.props.clients);
         }
     }, {
         key: 'handleTemplateChange',
@@ -51496,12 +51504,14 @@ var ClientEdit = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var clientId = this.props.match.params.id;
+            var clientId = this.props.selectedClientId;
             var client = this.props.clients.filter(function (el) {
                 return el._id == clientId;
             })[0];
-            console.log("3: Selected Client = ", client ? client.name : undefined);
-            //console.log("3: Clients = ", this.props.clients);
+            // console.log("1: Clients = ", this.props.clients);
+            // console.log("2: Selectd Client ID = ", this.props.selectedClientId);
+            // console.log("3: Selected Client = ", client ? client.name : undefined);
+
             return _react2.default.createElement(
                 _reactBootstrap.Well,
                 null,
@@ -51522,7 +51532,7 @@ var ClientEdit = function (_Component) {
                         type: 'text',
                         placeholder: 'Enter ID',
                         ref: ')id',
-                        defaultValue: clientId,
+                        value: clientId,
                         readOnly: true }),
                     _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
                 ),
@@ -97818,6 +97828,10 @@ var _account = __webpack_require__(1152);
 
 var _reactRedux = __webpack_require__(32);
 
+var _clientActions = __webpack_require__(386);
+
+var _redux = __webpack_require__(28);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -97843,8 +97857,10 @@ var ClientBind2 = function (_Component) {
     }
 
     _createClass(ClientBind2, [{
-        key: 'render',
-        value: function render() {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            // this.props.getClients();
+            // this.props.selectClient(this.props.match.params.id);        
             var _props = this.props,
                 handleSubmit = _props.handleSubmit,
                 pristine = _props.pristine,
@@ -97852,21 +97868,23 @@ var ClientBind2 = function (_Component) {
                 submitting = _props.submitting,
                 load = _props.load;
 
-            console.log("ClientBind2", this.props);
+
+            load(data);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props2 = this.props,
+                handleSubmit = _props2.handleSubmit,
+                pristine = _props2.pristine,
+                reset = _props2.reset,
+                submitting = _props2.submitting,
+                load = _props2.load;
+
+
             return _react2.default.createElement(
                 'form',
                 { onSubmit: handleSubmit },
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'button',
-                        { type: 'button', onClick: function onClick() {
-                                return load(data);
-                            } },
-                        'Load'
-                    )
-                ),
                 _react2.default.createElement(
                     'div',
                     null,

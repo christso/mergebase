@@ -4,13 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getClients, selectClient } from '../../actions/clientActions'
 
-
 class ClientEdit extends Component {
     componentDidMount() {
         this.props.getClients();
-        console.log("1: Clients = ", this.props.clients);
         this.props.selectClient(this.props.match.params.id);
-        console.log("2: Select Client = ", this.props.clients);
     }
 
     handleTemplateChange(arg) {
@@ -18,12 +15,14 @@ class ClientEdit extends Component {
     }
 
     render() {
-        const clientId = this.props.match.params.id;
+        const clientId = this.props.selectedClientId;
         const client = this.props.clients.filter(function(el) {
                     return el._id == clientId;
                 })[0];      
-        console.log("3: Selected Client = ", client ? client.name : undefined);
-        //console.log("3: Clients = ", this.props.clients);
+        // console.log("1: Clients = ", this.props.clients);
+        // console.log("2: Selectd Client ID = ", this.props.selectedClientId);
+        // console.log("3: Selected Client = ", client ? client.name : undefined);
+
         return (
             <Well>
                 <h2>{client ? client.name : undefined}</h2>
@@ -34,7 +33,7 @@ class ClientEdit extends Component {
                         type="text"
                         placeholder="Enter ID"
                         ref=")id"
-                        defaultValue={clientId}
+                        value={clientId}
                         readOnly />
                     <FormControl.Feedback />
                 </FormGroup>

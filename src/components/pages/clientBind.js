@@ -8,10 +8,10 @@ import { Field, reduxForm } from 'redux-form'
 
 class ClientBind extends Component {
     componentDidMount() {
-        this.props.getClients();
-        console.log("1: Clients = ", this.props.clients);
+        const res1 = this.props.getClients();
+        console.log("0: Clients = ", this.props.clients, res1);
         this.props.selectClient(this.props.match.params.id);
-        console.log("2: Select Client = ", this.props.clients);
+        console.log("2: Select Client = ", this.props.selectClient);
     }
 
 
@@ -26,7 +26,6 @@ class ClientBind extends Component {
         const client = this.props.clients.filter(function (el) {
             return el._id == clientId;
         })[0];
-        console.log("3: Selected Client = ", client ? client.name : undefined);
         return (
            <Well>
                 <h2>{client ? client.name : undefined}</h2>

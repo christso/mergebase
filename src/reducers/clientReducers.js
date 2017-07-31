@@ -6,6 +6,8 @@ export function clientReducers(state = {
             return { ...state, clients: [...action.payload] };      
         case "SELECT_CLIENT":
             return { ...state, selectedClientId: action.payload };
+        case "FIND_CLIENT":
+            return {...state, foundClient: action.payload };
         default:
             return state;
     }

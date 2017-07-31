@@ -17,9 +17,9 @@ class ClientList extends Component {
             <ButtonGroup style={{ marginBottom: '10px' }} className='my-custom-class'>
                 <Button bsStyle="default">
                     <Glyphicon glyph="plus"></Glyphicon> New</Button>
-                <Button bsStyle="default" href={'/client/edit/' + this.props.selectedClientId}>
+                <Button bsStyle="default" href={'/client/' + this.props.selectedClientId + '/edit'}>
                     <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
-                <Button bsStyle="default" href={'/client/bind/' + this.props.selectedClientId}>
+                <Button bsStyle="default" href={'/client/' + this.props.selectedClientId + '/bind'}>
                     <Glyphicon glyph="flash"></Glyphicon> Bind</Button>
             </ButtonGroup>
         );

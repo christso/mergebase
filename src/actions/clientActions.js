@@ -2,7 +2,7 @@ import axios from "axios";
 import { ROOT_URL } from '../locator';
 
 // GET CLIENTS
-export function getClients(callback) {
+export function getClients() {
   return function (dispatch) {
     axios.get(`${ROOT_URL}/clients`)
       .then(function (response) {
@@ -14,15 +14,22 @@ export function getClients(callback) {
   }
 }
 
+// used for highlighting selected row in client list
 export function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT", payload: id });
   }
 }
 
-export function selectClient2(data) {
+export function findClient(id) {
     return function (dispatch) {
-        dispatch({type: "FIND_CLIENT", payload: data });
+      axios.get(`${ROOT_URL}/client/${id}`)
+        .then(function (response) {
+          dispatch({ type: "FIND_CLIENT", payload: response.data })
+        })
+        .catch(function (err) {
+          dispatch({ type: "FIND_CLIENT_REJECTED", payload: err })
+        });
     }
 };
 

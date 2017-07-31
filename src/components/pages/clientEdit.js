@@ -1,103 +1,100 @@
 import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form'
 import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getClients, selectClient } from '../../actions/clientActions'
+import { findClient } from '../../actions/clientActions'
 
 class ClientEdit extends Component {
     componentDidMount() {
-        this.props.getClients();
-        this.props.selectClient(this.props.match.params.id);
+        this.props.findClient(this.props.match.params.id);
     }
 
-    handleTemplateChange(arg) {
-        console.log("handleTemplateChange", arg);
+    renderTextField(field) {
+        return (
+            <FormGroup controlId={field.name}>
+                <ControlLabel>{field.label}</ControlLabel>
+                <FormControl type={field.type} {...field.input} readOnly={field.readOnly} />
+                <FormControl.Feedback />
+            </FormGroup>
+        );
+    }
+    
+    onSubmit(values) {
+        console.log("Submitted", values);
     }
 
     render() {
-        const clientId = this.props.selectedClientId;
-        const client = this.props.clients.filter(function(el) {
-                    return el._id == clientId;
-                })[0];      
-        // console.log("1: Clients = ", this.props.clients);
-        // console.log("2: Selectd Client ID = ", this.props.selectedClientId);
-        // console.log("3: Selected Client = ", client ? client.name : undefined);
-
+        const { handleSubmit, pristine, reset, submitting } = this.props;
+        const client = this.props.foundClient;
         return (
             <Well>
                 <h2>{client ? client.name : undefined}</h2>
-
-                <FormGroup controlId="id">
-                    <ControlLabel>ID</ControlLabel>
-                    <FormControl
+                <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                    <Field
+                        label="ID"
                         type="text"
                         placeholder="Enter ID"
-                        ref=")id"
-                        value={clientId}
+                        name="_id"
+                        component={this.renderTextField.bind(this)}
                         readOnly />
-                    <FormControl.Feedback />
-                </FormGroup>
-                <FormGroup controlId="name">
-                    <ControlLabel>Name</ControlLabel>
-                    <FormControl
+        
+                    <Field
+                        label="Name"
                         type="text"
                         placeholder="Enter Name"
-                        ref="name"
-                        value={client ? client.name : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>
-                <FormGroup controlId="email">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
+                        name="name"
+                        component={this.renderTextField.bind(this)}
+                        />
+
+                    <Field
+                        label="Email"
                         type="text"
                         placeholder="Enter Email"
-                        ref="email"
-                        value={client ? client.email : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>         
-                <FormGroup controlId="phone">
-                    <ControlLabel>Phone</ControlLabel>
-                    <FormControl
+                        name="email"
+                        component={this.renderTextField.bind(this)}
+                        />
+                    <Field
+                        label="Phone"
                         type="text"
                         placeholder="Enter Phone"
-                        ref="phone"
-                        value={client ? client.phone : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>                                             
-                <FormGroup controlId="address">
-                    <ControlLabel>Address</ControlLabel>
-                    <FormControl
+                        name="phone"
+                        component={this.renderTextField.bind(this)}
+                        />
+                    <Field
+                        label="Address"
                         type="text"
                         placeholder="Enter Address"
-                        ref="address"
-                        value={client ? client.address : undefined}
-                        onChange={this.handleTemplateChange} />
-                    <FormControl.Feedback />
-                </FormGroup>  
-                <Button bsStyle="primary">Save</Button>              
+                        name="address"
+                        component={this.renderTextField.bind(this)}
+                        />
+                <Button type="submit" bsStyle="primary" disabled={submitting}>Save</Button>
+                </form>
             </Well>
         )
     }
 }
 
-
 function mapStateToProps(state, props) {
     return {
+        initialValues: state.clients.foundClient,
         clients: state.clients.clients,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients,
-        selectedClientId: state.clients.selectedClientId
+        foundClient: state.clients.foundClient
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getClients,
-        selectClient: selectClient
+        findClient: findClient
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClientEdit);
+ClientEdit = reduxForm({
+    form: 'clientEditForm' // a unique identifier for this form
+})(ClientEdit);
+
+ClientEdit = connect(mapStateToProps, mapDispatchToProps)(ClientEdit);
+
+export default ClientEdit;

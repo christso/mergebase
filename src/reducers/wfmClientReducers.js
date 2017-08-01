@@ -1,4 +1,4 @@
-export function wfmClientReducers(state = {
+export function clientReducers(state = {
     clients: []
 }, action) {
     switch (action.type) {
@@ -11,4 +11,4 @@ export function wfmClientReducers(state = {
     }
 }
 
-export default wfmClientReducers;
+export default clientReducers;

@@ -2,7 +2,7 @@
 import axios from "axios";
 import {ROOT_URL} from '../locator';
 
-export function getWfmClients() {
+export function getClients() {
   return function (dispatch) {
     axios.get(`${ROOT_URL}/clients-wfm`)
       .then(function (response) {
@@ -16,7 +16,7 @@ export function getWfmClients() {
 }
 
 
-export function selectWfmClient(id) {
+export function selectClient(id) {
   return function (dispatch) {
     dispatch({type: "SELECT_CLIENT_WFM", payload: id});
   }

@@ -72,6 +72,7 @@ function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
         selectedClientId: state.clients.selectedClientId,
+        wfmSelectedClientId: state.wfmClients.selectedClientId,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients
     };

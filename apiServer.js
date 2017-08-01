@@ -42,7 +42,7 @@ app.get('/clients', function (req, res) {
     });
 });
 
-app.get('/client/:id', function (req, res) {
+app.get('/clients/:id', function (req, res) {
     Clients.findById(req.params.id, function(err, foundClient) {
         if (err) {
             console.log(err);
@@ -52,6 +52,25 @@ app.get('/client/:id', function (req, res) {
     });
 });
 
+// CREATE ROUTE
+app.post("/clients", function(req, res) {
+    console.log(req.body);
+    res.send("POST SUCCESSFUL");
+});
+
+// UPDATE ROUTE
+app.put("/clients/:id", function(req, res) {
+    console.log(req.body);
+    res.send("UPDATE SUCCESSFUL");
+    // req.body.client = req.sanitize(req.body.client.body);
+    // Clients.findByIdAndUpdate(req.params.id, req.body.client, function(err, updatedClient) {
+    //     if (err) {
+    //         res.redirect("/clients");
+    //     } else {
+    //         res.redirect("/clients");
+    //     }
+    // });
+});
 
 app.get('/clients-wfm', function (req, res) {
     wfmApi.getClients(function(apiRes, err) {

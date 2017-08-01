@@ -3,7 +3,7 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getXplanClients, selectXplanClient } from '../../actions/xplanClientActions';
+import { getClients, selectClient } from '../../actions/xplanClientActions';
 
 class ClientList extends Component {
     componentDidMount() {
@@ -54,8 +54,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getXplanClients,
-        selectClient: selectXplanClient
+        getClients: getClients,
+        selectClient: selectClient
     }, dispatch)
 }
 

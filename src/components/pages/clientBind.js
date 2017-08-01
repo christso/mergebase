@@ -3,12 +3,13 @@ import { Field, reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
-
-import { findClient } from '../../actions/clientActions'
+import queryString  from 'query-string';
+import { findClient, prefillClient } from '../../actions/clientActions'
 
 class ClientBind extends Component {
     componentDidMount() {
-        this.props.findClient(this.props.match.params.id);
+        const newValues = queryString.parse(this.props.location.search);
+        this.props.findClient(this.props.match.params.id, newValues);           
     }
 
     renderTextField(field) {
@@ -67,7 +68,8 @@ class ClientBind extends Component {
 }
 
 ClientBind = reduxForm({
-    form: 'clientBindForm' // a unique identifier for this form
+    form: 'clientBindForm', // a unique identifier for this form
+    enableReinitialize: true
 })(ClientBind);
 
 function mapStateToProps(state, props) {

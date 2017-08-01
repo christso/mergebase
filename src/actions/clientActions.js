@@ -21,18 +21,18 @@ export function selectClient(id) {
   }
 }
 
-export function findClient(id) {
+export function findClient(id, newValues = {}) {
     return function (dispatch) {
-      axios.get(`${ROOT_URL}/client/${id}`)
+      axios.get(`${ROOT_URL}/clients/${id}`)
         .then(function (response) {
-          dispatch({ type: "FIND_CLIENT", payload: response.data })
+          let data = { ...response.data, ...newValues };
+          dispatch({ type: "FIND_CLIENT", payload: data })
         })
         .catch(function (err) {
           dispatch({ type: "FIND_CLIENT_REJECTED", payload: err })
         });
     }
 };
-
 
 // // GET AND SELECT CLIENTS
 // export function getAndSelectClient(id) {

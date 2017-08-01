@@ -19,7 +19,9 @@ class ClientList extends Component {
                     <Glyphicon glyph="plus"></Glyphicon> New</Button>
                 <Button bsStyle="default" href={'/client/' + this.props.selectedClientId + '/edit'}>
                     <Glyphicon glyph="pencil"></Glyphicon> Edit</Button>
-                <Button bsStyle="default" href={'/client/' + this.props.selectedClientId + '/bind'}>
+                <Button bsStyle="default" href={'/client/' + this.props.selectedClientId + '/bind?'
+                    + (this.props.wfmSelectedClientId ? '&wfmId=' + this.props.wfmSelectedClientId : '')
+                    + (this.props.xplanSelectedClientId ? '&xplanId=' + this.props.xplanSelectedClientId : '')}>
                     <Glyphicon glyph="flash"></Glyphicon> Bind</Button>
             </ButtonGroup>
         );
@@ -73,7 +75,9 @@ function mapStateToProps(state) {
         clients: state.clients.clients,
         selectedClientId: state.clients.selectedClientId,
         wfmClients: state.wfmClients.clients,
-        xplanClients: state.xplanClients.clients
+        wfmSelectedClientId: state.wfmClients.selectedClientId,
+        xplanClients: state.xplanClients.clients,
+        xplanSelectedClientId: state.xplanClients.selectedClientId
     };
 }
 

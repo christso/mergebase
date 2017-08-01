@@ -2,7 +2,7 @@
 import axios from "axios";
 import {ROOT_URL} from '../locator';
 
-export function getXplanClients() {
+export function getClients() {
   return function (dispatch) {
     axios.get(`${ROOT_URL}/clients-xplan`)
       .then(function (response) {
@@ -16,7 +16,7 @@ export function getXplanClients() {
 }
 
 
-export function selectXplanClient(id) {
+export function selectClient(id) {
   return function (dispatch) {
     dispatch({type: "SELECT_CLIENT_XPLAN", payload: id});
   }

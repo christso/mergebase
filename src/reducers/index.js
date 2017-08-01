@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import {clientReducers} from './clientReducers';
-import {wfmClientReducers} from './wfmClientReducers';
-import {xplanClientReducers} from './xplanClientReducers';
+import {clientReducers as wfmClientReducers} from './wfmClientReducers';
+import {clientReducers as xplanClientReducers} from './xplanClientReducers';
 import {bglClientReducers} from './bglClientReducers';
 import { reducer as reduxFormReducer } from 'redux-form';
 

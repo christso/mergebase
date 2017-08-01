@@ -3,7 +3,7 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getWfmClients, selectWfmClient } from '../../actions/wfmClientActions'
+import { getClients, selectClient } from '../../actions/wfmClientActions'
 
 class ClientList extends Component {
     componentDidMount() {
@@ -11,7 +11,7 @@ class ClientList extends Component {
     }
 
     onRowClick(row, columnIndex, rowIndex) {
-        console.log(`You click row ID: ${row.wfmId}, column index: ${columnIndex}, row index: ${rowIndex}`);
+        //console.log(`You click row ID: ${row.wfmId}, column index: ${columnIndex}, row index: ${rowIndex}`);
         this.props.selectClient(row.wfmId);
     }
 
@@ -57,8 +57,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getWfmClients,
-        selectClient: selectWfmClient
+        getClients: getClients,
+        selectClient: selectClient
     }, dispatch)
 }
 

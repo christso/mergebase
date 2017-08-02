@@ -3,7 +3,7 @@ import { Field, reduxForm, formValueSelector } from 'redux-form'
 import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { findClient } from '../../actions/clientActions'
+import { findClient, updateClient } from '../../actions/clientActions'
 
 class ClientEdit extends Component {
     componentDidMount() {
@@ -39,7 +39,8 @@ class ClientEdit extends Component {
     }
 
     handleSave(values) {
-        console.log("save", values);
+        this.props.updateClient(values);
+        alert(`Saved client  ${values.name}`);
     }
 
     render() {
@@ -121,7 +122,8 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        findClient: findClient
+        findClient: findClient,
+        updateClient: updateClient
     }, dispatch)
 }
 

@@ -11,6 +11,7 @@ var clientSchema = new mongoose.Schema({
     address: String,
     city: String,
     website: String,
+    comment: String,
     wfmId: String,
     xplanId: String,
     clsupId: String

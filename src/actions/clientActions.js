@@ -34,16 +34,14 @@ export function findClient(id, newValues = {}) {
     }
 };
 
-// // GET AND SELECT CLIENTS
-// export function getAndSelectClient(id) {
-//   return function (dispatch) {
-//     axios.get(`${ROOT_URL}/clients`)
-//       .then(function (response) {
-//         dispatch({ type: "GET_CLIENTS", payload: response.data });
-//         dispatch({ type: "SELECT_CLIENT", payload: id });
-//       })
-//       .catch(function (err) {
-//         dispatch({ type: "GET_CLIENTS_REJECTED", payload: err })
-//       });
-//   }
-// }
+export function updateClient(client) {
+  return function (dispatch) {
+    axios.put(`${ROOT_URL}/clients/${client._id}`, client)
+      .then(function(response) {
+        dispatch({ type: "UPDATE_CLIENT", payload: client })
+      })
+      .catch(function (err) {
+        dispatch({ type: "UPDATE_CLIENT_REJECTED", payload: err })
+      });
+  }
+}

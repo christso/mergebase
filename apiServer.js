@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 var wfmApi = require('./api/workflowmax/clientActions')
 var xplanApi = require('./api/xplan/clientActions');
 
@@ -37,12 +41,13 @@ var Clients = require('./models/clients.js');
 app.get('/clients', function (req, res) {
     Clients.find(function(err, clients) {
         if (err)
-            console.log(err);
+            console.log("Error:", err);
         res.json(clients);         
     });
 });
 
 app.get('/clients/:id', function (req, res) {
+    console.log("REQ BODY: ", req.body);
     Clients.findById(req.params.id, function(err, foundClient) {
         if (err) {
             console.log(err);
@@ -54,23 +59,38 @@ app.get('/clients/:id', function (req, res) {
 
 // CREATE ROUTE
 app.post("/clients", function(req, res) {
-    console.log(req.body);
-    res.send("POST SUCCESSFUL");
+    console.log("REQ BODY: ", req.body);
+    Clients.create(req.body, function(err, newClient) {
+        if (err) {
+            res.send("ERROR CREATING CLIENT");
+        } else {
+            res.json(newClient);
+        }
+    });
 });
 
 // UPDATE ROUTE
 app.put("/clients/:id", function(req, res) {
-    console.log(req.body);
-    res.send("UPDATE SUCCESSFUL");
-    // req.body.client = req.sanitize(req.body.client.body);
-    // Clients.findByIdAndUpdate(req.params.id, req.body.client, function(err, updatedClient) {
-    //     if (err) {
-    //         res.redirect("/clients");
-    //     } else {
-    //         res.redirect("/clients");
-    //     }
-    // });
+    console.log("REQ BODY: ", req.body);
+    Clients.findByIdAndUpdate(req.params.id, req.body, function(err, updatedClient) {
+        if (err) {
+            res.send("# API UPDATE CLIENT:\n" + JSON.stringify(err));
+        } else {
+            res.json(updatedClient);
+        }
+    });
 });
+
+app.delete("/clients/:id", function(req, res) {
+    var query = { _id: req.params.id };
+    Clients.remove(query, function(err, deletedClient) {
+        if (err) {
+            res.send("# API DELETE CLIENT:\n" + JSON.stringify(err));
+        } else {
+            res.send(deletedClient);
+        }
+    });
+})
 
 app.get('/clients-wfm', function (req, res) {
     wfmApi.getClients(function(apiRes, err) {

@@ -16,7 +16,7 @@ class ClientBind extends Component {
         return (
         <FormGroup controlId={field.name}>
             <ControlLabel>{field.label}</ControlLabel>
-            <FormControl type={field.type} {...field.input} readOnly={field.readOnly} />
+            <FormControl type={field.type} defaultValue={field.input.value} readOnly={field.readOnly} />
             <FormControl.Feedback />
         </FormGroup>
         );
@@ -68,8 +68,7 @@ class ClientBind extends Component {
 }
 
 ClientBind = reduxForm({
-    form: 'clientBindForm', // a unique identifier for this form
-    enableReinitialize: true
+    form: 'clientBindForm'
 })(ClientBind);
 
 function mapStateToProps(state, props) {

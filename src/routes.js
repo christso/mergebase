@@ -7,9 +7,11 @@ import ClientEdit from './components/pages/clientEdit';
 import ClientList from './components/pages/clientList';
 import LoginForm from './components/pages/loginForm';
 import Menu from './components/menu';
+import TestPage from './components/pages/testPage';
 import AdminForm from './components/pages/adminForm';
-// import ClientBind from './components/pages/clientBind';
 import ClientBind from './components/pages/clientBind';
+import ClientGeo from './components/pages/clientGeo';
+import ReportList from './components/pages/reportList';
 
 const ReactRouter = require('react-router');
 const Router = ReactRouter.Router;
@@ -45,6 +47,10 @@ const routes = (
       <Route path="/login" component={LoginForm} />
       <Route path="/clients" component={ClientList} />
       <Route path="/admin" component={AdminForm} />
+      <Route path="/clientgeo" component={ClientGeo} />
+      <Route path="/reports" component={ReportList} />
+      <Route exact={true} path="/test" component={TestPage} />
+      <Route path="/test/:id" component={TestPage} />
       <Route exact={true} path="/client/edit" component={ClientEdit} />
       <Route path="/client/:id/edit" component={ClientEdit} />
       <Route exact={true} path="/client/bind" component={ClientBind} />

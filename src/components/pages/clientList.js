@@ -3,7 +3,7 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getClients } from '../../actions/clientActions'
+import { getClients } from '../../actions/clientActions';
 import InternalClientList from './intClientList';
 import WfmClientList from './wfmClientList';
 import XplanClientList from './xplanClientList';
@@ -42,7 +42,7 @@ class ClientList extends Component {
         return (
             <Grid>
                 <Row>
-                    <h2 className="page-header">DPM Core</h2>
+                    <h2 className="page-header">Diversified Practice Manager</h2>
                 </Row>
                 {/* <Row style={{ marginBottom: '15px' }}>
                     <Button bsStyle="primary">Bind</Button>

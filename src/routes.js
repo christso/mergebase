@@ -12,11 +12,6 @@ import ClientBind from './components/clientBind';
 import ClientGeo from './components/clientGeo';
 import ReportList from './components/reportList';
 
-import ClientGeo2 from './components/clientGeo2';
-import TestPage from './components/testPage';
-import TestPage2 from './components/testPage2';
-import TestGmap from './components/testGmap';
-
 // RETRIVES COMPONENTS BASED ON STATUS  
 const Status = function ({ code, children }) {
   return (
@@ -48,11 +43,7 @@ const routes = (
       <Route path="/clients" component={ClientList} />
       <Route path="/admin" component={AdminForm} />
       <Route path="/clientgeo" component={ClientGeo} />
-      <Route path="/clientgeo2" component={ClientGeo2} />
       <Route path="/reports" component={ReportList} />
-      <Route exact={true} path="/test" component={TestPage} />
-      <Route exact={true} path="/test2" component={TestPage2} />
-      <Route exact={true} path="/testgmap" component={TestGmap} />
       <Route exact={true} path="/client/edit" component={ClientEdit} />
       <Route path="/client/:id/edit" component={ClientEdit} />
       <Route exact={true} path="/client/bind" component={ClientBind} />

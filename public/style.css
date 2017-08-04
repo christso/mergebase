@@ -6,3 +6,8 @@ body {
 #clientList-buttons {
   margin-bottom: 10px;
 }
+
+#map {
+height: 500px;
+width: 100%;
+}

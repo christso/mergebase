@@ -1,174 +1,102 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
-import Map, { Marker, GoogleApiWrapper } from 'google-maps-react'
 
-const markers = [
-    {
-        title: 'The marker`s title will appear as a tooltip.',
-        name: '333 George St',
-        position: { lat: -33.8668183, lng: 151.20687210000006 }
-    },
-    {
-        title: 'The marker`s title will appear as a tooltip.',
-        name: '1 Epping',
-        position: { lat: -33.7965476, lng: 151.13836879999997 }
-    },
-    {
-        title: 'The marker`s title will appear as a tooltip.',
-        name: '1 Chatswood Avenue, Chatswood, New South Wales, Australia',
-        position: { lat: -33.793318, lng: 151.19086059999995 }
-    }
-];
+import React from 'react';
+import scriptLoader from 'react-async-script-loader';
+import GoogleMap from './googleMap';
 
-class Contents extends Component {
-    constructor(props, context) {
-        super(props, context);
-        this.state = this.getInitialState();
-    }
-    
-    getInitialState() {
-        return {
-            place: null,
-            position: null
-        }
-    }
+class Gmap extends React.Component {
 
-    onSubmit(e) {
-        e.preventDefault();
-    }
-
-    componentDidMount() {        
-        // const aref = this.refs.autocomplete;        
-        // const node = ReactDOM.findDOMNode(aref);
-        // node.value = "1 George Street, The Rocks, NSW, 2000, Australia";        
-        this.renderAutoComplete();
-        //console.log("Position", this.state.position)
-        //console.log("node mounted", node);
-    }
-
-    componentDidUpdate(prevProps) {
-        const { google, map } = this.props;
-        if (map !== prevProps.map) {
-            this.renderAutoComplete();
-        }
-        
-    }
-
-    renderMarkers(data) {
-        data.map(function (el) {
-            return (
-                <Marker
-                    title={el.title}
-                    name={el.name}
-                    position={el.position} />
-            )
-        })
-    }
-
-    renderAutoComplete() {
-        const { google, map } = this.props;
-
-        if (!google || !map) return;
-
-        const aref = this.refs.autocomplete;
-        const node = ReactDOM.findDOMNode(aref);
-        var autocomplete = new google.maps.places.Autocomplete(node);
-        autocomplete.bindTo('bounds', map);
-
-        autocomplete.addListener('place_changed', () => {
-            const place = autocomplete.getPlace();
-            if (!place.geometry) {
-                return;
-            }
-
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
+    geoCode() {
+        const geocoder = new google.maps.Geocoder();
+        var address = '190 Beecroft Road';
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                console.log("Geocode", results);
             } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
+                alert('Geocode was not successful for the following reason: ' + status);
             }
+        });
+    }
 
-            this.setState({
-                place: place,
-                position: place.geometry.location
+    initMap() {
+
+        const positions = [
+            { lat: -34.397, lng: 150.644 },
+            { lat: -34.497, lng: 150.644 },
+            { lat: -34.597, lng: 151.644 }
+        ];
+
+        var markers = [];
+
+        var uluru = { lat: -25.363, lng: 131.044 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: uluru
+        });
+
+        positions.map(function (position, index) {
+            return new google.maps.Marker({
+                position: position,
+                map: map
             })
-        })
+        });
+    }
+
+    initEditor() {
+        this.geoCode();
+        this.initMap();
+    }
+
+    componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
+        if (isScriptLoaded && !this.props.isScriptLoaded) { // load finished 
+            if (isScriptLoadSucceed) {
+                this.initEditor()
+            }
+            else this.props.onError()
+        }
+    }
+
+    componentDidMount() {
+        const { isScriptLoaded, isScriptLoadSucceed } = this.props
+        if (isScriptLoaded && isScriptLoadSucceed) {
+            this.initEditor()
+        }
     }
 
     render() {
-        const props = this.props;
-        const { position } = this.state;
+        const googleMapProps = {
+            key: 'AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA'
+        };
 
         return (
             <div className="container">
-                <div className="row" style={{ marginBottom: "15px" }}>
+                <div className="row" >
                     <div className="col-xs-12">
-                        <h2>Client Geography 2</h2>
+                        <h2 className="page-header">Client Geography v2</h2>
                     </div>
                 </div>
                 <div className="row" style={{ marginBottom: "15px" }}>
-                    <div className="col-xs-8">
-                        <form onSubmit={this.onSubmit}>
-                            <div className="row">
-                                <div className="col-xs-10">
-                                    <input
-                                        className="form-control"
-                                        ref='autocomplete'
-                                        type="text"
-                                        placeholder="Enter a location" />
-                                </div>
-                                <div className="col=xs-2">
-                                    <input
-                                        className="btn btn-default"
-                                        type='submit'
-                                        value='Go' />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div className="col-xs-4">
-                        <div>Lat: {position && position.lat()}</div>
-                        <div>Lng: {position && position.lng()}</div>
+                    <div className="col-xs-12">
+                        <div className="form-group input-group">
+                            <input type="text" className="form-control" placeholder="Enter a location" />
+                            <span className="input-group-btn">
+                                <button className="btn btn-default" type="button"><i className="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <Map {...props}
-                            containerStyle={{
-                                position: 'relative',
-                                height: '100vh',
-                                width: '100%'
-                            }}
-                            center={this.state.position}
-                            centerAroundCurrentLocation={false}>
-                            <Marker position={this.state.position} />
-                            {this.renderMarkers(markers)}
-                        </Map>
+                        <GoogleMap {...googleMapProps} />
                     </div>
                 </div>
             </div>
-        )
-    }
-}
-
-class MapWrapper extends Component {
-    constructor(props, context) {
-        super(props, context);
-    }
-
-    render() {
-        const props = this.props;
-        const { google } = this.props;
-        return (
-            <Map google={google}
-                className={'map'}
-                visible={false}>
-                <Contents {...props} />
-            </Map>
         );
     }
 }
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA'
-})(MapWrapper)
+export default scriptLoader(
+    [
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA'
+    ]
+)(Gmap);

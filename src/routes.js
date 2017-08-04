@@ -3,21 +3,21 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, Switch } from 'react-router-dom';
 
-import ClientEdit from './components/pages/clientEdit';
-import ClientList from './components/pages/clientList';
-import LoginForm from './components/pages/loginForm';
+import ClientEdit from './components/clientEdit';
+import ClientList from './components/clientList';
+import LoginForm from './components/loginForm';
 import Menu from './components/menu';
-import TestPage from './components/pages/testPage';
-import AdminForm from './components/pages/adminForm';
-import ClientBind from './components/pages/clientBind';
-import ClientGeo from './components/pages/clientGeo';
-import ReportList from './components/pages/reportList';
+import AdminForm from './components/adminForm';
+import ClientBind from './components/clientBind';
+import ClientGeo from './components/clientGeo';
+import ReportList from './components/reportList';
 
-const ReactRouter = require('react-router');
-const Router = ReactRouter.Router;
-const hashHistory = ReactRouter.hashHistory;
+import ClientGeo2 from './components/clientGeo2';
+import TestPage from './components/testPage';
+import TestPage2 from './components/testPage2';
+import TestGmap from './components/testGmap';
 
-// RETRIVES COMPONENTS BASED ON STATUS
+// RETRIVES COMPONENTS BASED ON STATUS  
 const Status = function ({ code, children }) {
   return (
     <Route render={function ({ staticContext }) {
@@ -48,9 +48,11 @@ const routes = (
       <Route path="/clients" component={ClientList} />
       <Route path="/admin" component={AdminForm} />
       <Route path="/clientgeo" component={ClientGeo} />
+      <Route path="/clientgeo2" component={ClientGeo2} />
       <Route path="/reports" component={ReportList} />
       <Route exact={true} path="/test" component={TestPage} />
-      <Route path="/test/:id" component={TestPage} />
+      <Route exact={true} path="/test2" component={TestPage2} />
+      <Route exact={true} path="/testgmap" component={TestGmap} />
       <Route exact={true} path="/client/edit" component={ClientEdit} />
       <Route path="/client/:id/edit" component={ClientEdit} />
       <Route exact={true} path="/client/bind" component={ClientBind} />

@@ -26,6 +26,8 @@ class ClientList extends Component {
 
     render() {
         const selectRow = {
+            mode: 'checkbox',
+            clickToSelect: true
         };
         const options = {
             onRowClick: this.onRowClick.bind(this)
@@ -37,7 +39,8 @@ class ClientList extends Component {
                 trClassName={this.trClassNameFormat.bind(this)}
                 selectRow={selectRow}
                 options={options}
-                data={clients}>
+                data={clients}
+                pagination>
                 <TableHeaderColumn isKey dataField='wfmId'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>

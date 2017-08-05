@@ -24,6 +24,8 @@ class ClientList extends Component {
     }
     render() {
         const selectRow = {
+            mode: 'checkbox',
+            clickToSelect: true
         };
         const options = {
             onRowClick: this.onRowClick.bind(this)
@@ -35,7 +37,8 @@ class ClientList extends Component {
                 options={options}
                 data={clients}
                 trClassName={this.trClassNameFormat.bind(this)}
-                selectRow={selectRow} striped hover>
+                selectRow={selectRow} striped hover
+                pagination>
                 <TableHeaderColumn isKey dataField='_id'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>

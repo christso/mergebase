@@ -7,10 +7,13 @@ class Gmap extends React.Component {
 
     geoCode() {
         const geocoder = new google.maps.Geocoder();
-        var address = '190 Beecroft Road';
+        var address = '333 George St Sydney NSW';
         geocoder.geocode({ 'address': address }, function (results, status) {
             if (status == 'OK') {
-                console.log("Geocode", results);
+                console.log("Geocode", {
+                    lat: results[0].geometry.location.lat(),
+                    lng: results[0].geometry.location.lng()
+                });
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
             }
@@ -22,10 +25,9 @@ class Gmap extends React.Component {
         const positions = [
             { lat: -34.397, lng: 150.644 },
             { lat: -34.497, lng: 150.644 },
-            { lat: -34.597, lng: 151.644 }
+            { lat: -34.597, lng: 150.644 },
+            { lat: -33.8668461, lng: 151.2068971 }
         ];
-
-        var markers = [];
 
         var uluru = { lat: -25.363, lng: 131.044 };
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -33,12 +35,15 @@ class Gmap extends React.Component {
             center: uluru
         });
 
-        positions.map(function (position, index) {
+        var markers = positions.map(function (position, index) {
             return new google.maps.Marker({
                 position: position,
                 map: map
             })
         });
+
+        var markerCluster = new MarkerClusterer(map, markers,
+            { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
     }
 
     initEditor() {
@@ -71,13 +76,14 @@ class Gmap extends React.Component {
             <div className="container">
                 <div className="row" >
                     <div className="col-xs-12">
-                        <h2 className="page-header">Client Geography v2</h2>
+                        <h2 className="page-header">Client Geography</h2>
                     </div>
                 </div>
                 <div className="row" style={{ marginBottom: "15px" }}>
                     <div className="col-xs-12">
                         <div className="form-group input-group">
-                            <input type="text" className="form-control" placeholder="Enter a location" />
+                            <input type="text" className="form-control" 
+                                placeholder="Enter a location" defaultValue="333 George St Sydney NSW" />
                             <span className="input-group-btn">
                                 <button className="btn btn-default" type="button"><i className="glyphicon glyphicon-search"></i>
                                 </button>
@@ -97,6 +103,7 @@ class Gmap extends React.Component {
 
 export default scriptLoader(
     [
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA'
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA',
+        'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js'
     ]
 )(Gmap);

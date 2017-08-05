@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 class ReportList extends Component {
     componentDidMount() {
@@ -13,7 +13,10 @@ class ReportList extends Component {
             <a href="/clientgeo">{cell}</a>
         )
     }
-
+    onRowClick(row, columnIndex, rowIndex) {
+        console.log(`You click row ID: ${row._id}, column index: ${columnIndex}, row index: ${rowIndex}`);
+        
+    }
     render() {
         const reports = [
             {
@@ -31,12 +34,18 @@ class ReportList extends Component {
                 description: 'Analyse profitability of client work',
                 url: '/clientgeo'
             }
-        ]
+        ];
+
+        const options = {
+            onRowClick: this.onRowClick.bind(this)
+        };
 
         return (
             <div>
                 <BootstrapTable striped hover
-                    data={reports}>
+                    data={reports}
+                    options={options}
+                    >
                     <TableHeaderColumn isKey dataField='report'
                         dataFormat={cell => {
                             return (

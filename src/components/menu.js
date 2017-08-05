@@ -5,26 +5,55 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class Menu extends React.Component {
+    componentDidMount() {
+        console.log("props", this.props);
+    }
+
     render() {
         return (
             <Navbar inverse fixedTop>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/">DPM</a>
+                        <a href="/">EntityProcess</a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav pullRight>
-                        <NavItem eventKey={1} href="/admin">Admin</NavItem>
                         <NavItem eventKey={2} href="/clients">Clients</NavItem>
                         <NavItem eventKey={4} href="/reports">Reports</NavItem>
-                        <NavItem eventKey={4} href="/login">Login</NavItem>
+                        <NavItem eventKey={1} href="/admin">Admin</NavItem>
+                        {this.renderLogin()}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
         );
     }
+
+    renderLogin() {
+        if (this.props.isLoggedIn) {
+            return (
+                <NavItem eventKey={4} href="/login">Logout</NavItem>
+            )
+        }
+    }
 }
+
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.app.isLoggedIn
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+
+    }, dispatch)
+}
+
+Menu = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Menu);
 
 export default Menu;

@@ -75450,13 +75450,28 @@ var _bglClientList2 = _interopRequireDefault(_bglClientList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ClientListPanel = function ClientListPanel(props) {
+    return _react2.default.createElement(
+        'div',
+        { className: 'panel panel-default' },
+        _react2.default.createElement(
+            'div',
+            { className: 'panel-heading' },
+            props.panelName
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            props.children
+        )
+    );
+};
 
 var ClientList = function (_Component) {
     _inherits(ClientList, _Component);
@@ -75469,80 +75484,37 @@ var ClientList = function (_Component) {
 
     _createClass(ClientList, [{
         key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.getClients();
-        }
-    }, {
-        key: 'onAfterSaveCell',
-        value: function onAfterSaveCell(row, cellName, cellValue) {
-            console.log('Save cell ' + cellName + ' with value ' + cellValue);
-
-            var rowStr = '';
-            for (var prop in row) {
-                rowStr += prop + ': ' + row[prop] + '\n';
-            }
-
-            console.log('update', _defineProperty({}, cellName, cellValue));
-            // console.log('Thw whole row :\n' + rowStr);
-        }
-    }, {
-        key: 'onBeforeSaveCell',
-        value: function onBeforeSaveCell(row, cellName, cellValue) {
-            // You can do any validation on here for editing value,
-            // return false for reject the editing
-            console.log("before save", _defineProperty({}, cellName, cellValue));
-            return false;
-        }
+        value: function componentDidMount() {}
     }, {
         key: 'render',
         value: function render() {
-            var clients = this.props.clients;
+
             return _react2.default.createElement(
-                _reactBootstrap.Grid,
-                null,
+                'div',
+                { className: 'row' },
                 _react2.default.createElement(
-                    _reactBootstrap.Row,
-                    null,
+                    'div',
+                    { className: 'col-md-8 col-md-offset-2' },
                     _react2.default.createElement(
-                        'h2',
-                        { className: 'page-header' },
-                        'Diversified Practice Manager'
+                        ClientListPanel,
+                        { panelName: 'INTERNAL' },
+                        _react2.default.createElement(_intClientList2.default, null)
+                    ),
+                    _react2.default.createElement(
+                        ClientListPanel,
+                        { panelName: 'Xero Practice Manager' },
+                        _react2.default.createElement(_wfmClientList2.default, null)
+                    ),
+                    _react2.default.createElement(
+                        ClientListPanel,
+                        { panelName: 'IRESS XPLAN' },
+                        _react2.default.createElement(_xplanClientList2.default, null)
+                    ),
+                    _react2.default.createElement(
+                        ClientListPanel,
+                        { panelName: 'BGL Simple Fund 360' },
+                        _react2.default.createElement(_bglClientList2.default, null)
                     )
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Row,
-                    null,
-                    _react2.default.createElement(_intClientList2.default, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Row,
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        { className: 'page-header' },
-                        'Xero Practice Manager'
-                    ),
-                    _react2.default.createElement(_wfmClientList2.default, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Row,
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        { className: 'page-header' },
-                        'IRESS XPLAN'
-                    ),
-                    _react2.default.createElement(_xplanClientList2.default, null)
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Row,
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        { className: 'page-header' },
-                        'BGL Simple Fund 360'
-                    ),
-                    _react2.default.createElement(_bglClientList2.default, null)
                 )
             );
         }
@@ -98411,29 +98383,40 @@ var ClientList = function (_Component) {
             this.props.getClients();
         }
     }, {
+        key: 'onDelete',
+        value: function onDelete() {
+            alert("DELETE");
+        }
+    }, {
         key: 'createCustomButtonGroup',
         value: function createCustomButtonGroup() {
 
             return _react2.default.createElement(
-                _reactBootstrap.ButtonGroup,
-                { id: 'clientList-buttons' },
+                'div',
+                { id: 'clientList-buttons', className: 'btn-group' },
                 _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { bsStyle: 'default' },
-                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'plus' }),
+                    'a',
+                    { className: 'btn btn-default' },
+                    _react2.default.createElement('i', { className: 'fa fa-plus' }),
                     ' New'
                 ),
                 _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { bsStyle: 'default', href: '/client/' + this.props.selectedClientId + '/edit' },
-                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
+                    'a',
+                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientId + '/edit' },
+                    _react2.default.createElement('i', { className: 'fa fa-pencil' }),
                     ' Edit'
                 ),
                 _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { bsStyle: 'default', href: '/client/' + this.props.selectedClientId + '/bind?' + (this.props.wfmSelectedClientId ? '&wfmId=' + this.props.wfmSelectedClientId : '') + (this.props.xplanSelectedClientId ? '&xplanId=' + this.props.xplanSelectedClientId : '') },
-                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'flash' }),
+                    'a',
+                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientId + '/bind?' + (this.props.wfmSelectedClientId ? '&wfmId=' + this.props.wfmSelectedClientId : '') + (this.props.xplanSelectedClientId ? '&xplanId=' + this.props.xplanSelectedClientId : '') },
+                    _react2.default.createElement('i', { className: 'fa fa-bolt' }),
                     ' Bind'
+                ),
+                _react2.default.createElement(
+                    'a',
+                    { className: 'btn btn-default', onClick: this.onDelete.bind(this) },
+                    _react2.default.createElement('i', { className: 'fa fa-trash' }),
+                    ' Delete'
                 )
             );
         }
@@ -98459,9 +98442,12 @@ var ClientList = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var selectRow = {};
+            var selectRow = {
+                mode: 'checkbox',
+                clickToSelect: true
+            };
             var options = {
-                btnGroup: this.createCustomButtonGroup.bind(this),
+                // btnGroup: this.createCustomButtonGroup.bind(this),
                 onRowClick: this.onRowClick.bind(this)
             };
 
@@ -98469,13 +98455,15 @@ var ClientList = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 null,
+                this.createCustomButtonGroup(),
                 _react2.default.createElement(
                     _reactBootstrapTable.BootstrapTable,
                     { striped: true, hover: true,
                         trClassName: this.trClassNameFormat.bind(this),
                         selectRow: selectRow,
                         options: options,
-                        data: clients },
+                        data: clients,
+                        pagination: true },
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
                         { isKey: true, dataField: '_id', hidden: true },
@@ -98594,7 +98582,10 @@ var ClientList = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var selectRow = {};
+            var selectRow = {
+                mode: 'checkbox',
+                clickToSelect: true
+            };
             var options = {
                 onRowClick: this.onRowClick.bind(this)
             };
@@ -98606,7 +98597,8 @@ var ClientList = function (_Component) {
                     trClassName: this.trClassNameFormat.bind(this),
                     selectRow: selectRow,
                     options: options,
-                    data: clients },
+                    data: clients,
+                    pagination: true },
                 _react2.default.createElement(
                     _reactBootstrapTable.TableHeaderColumn,
                     { isKey: true, dataField: 'wfmId' },
@@ -98718,7 +98710,10 @@ var ClientList = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var selectRow = {};
+            var selectRow = {
+                mode: 'checkbox',
+                clickToSelect: true
+            };
             var options = {
                 onRowClick: this.onRowClick.bind(this)
             };
@@ -98730,7 +98725,8 @@ var ClientList = function (_Component) {
                     options: options,
                     data: clients,
                     trClassName: this.trClassNameFormat.bind(this),
-                    selectRow: selectRow, striped: true, hover: true },
+                    selectRow: selectRow, striped: true, hover: true,
+                    pagination: true },
                 _react2.default.createElement(
                     _reactBootstrapTable.TableHeaderColumn,
                     { isKey: true, dataField: '_id' },
@@ -98849,7 +98845,8 @@ var ClientList = function (_Component) {
         key: 'render',
         value: function render() {
             var selectRow = {
-                mode: 'checkbox'
+                mode: 'checkbox',
+                clickToSelect: true
             };
             var cellEditProp = {
                 mode: 'click',
@@ -98955,6 +98952,8 @@ var _reactRedux = __webpack_require__(24);
 
 var _redux = __webpack_require__(27);
 
+var _appActions = __webpack_require__(1172);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -98998,6 +98997,14 @@ var LoginForm = function (_Component) {
     }
 
     _createClass(LoginForm, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.setLoginStatus(function () {
+                return false;
+            });
+            // console.log("Logged In", this.props.isLoggedIn);
+        }
+    }, {
         key: 'onSubmit',
         value: function onSubmit() {
             console.log("YOU PRESSED SUBMIT");
@@ -99047,6 +99054,20 @@ var LoginForm = function (_Component) {
     return LoginForm;
 }(_react.Component);
 
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.app.isLoggedIn
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        setLoginStatus: _appActions.setLoginStatus
+    }, dispatch);
+}
+
+LoginForm = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
+
 exports.default = LoginForm;
 
 /***/ }),
@@ -99090,6 +99111,11 @@ var Menu = function (_React$Component) {
     }
 
     _createClass(Menu, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            console.log("props", this.props);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -99104,7 +99130,7 @@ var Menu = function (_React$Component) {
                         _react2.default.createElement(
                             'a',
                             { href: '/' },
-                            'DPM'
+                            'EntityProcess'
                         )
                     ),
                     _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
@@ -99117,11 +99143,6 @@ var Menu = function (_React$Component) {
                         { pullRight: true },
                         _react2.default.createElement(
                             _reactBootstrap.NavItem,
-                            { eventKey: 1, href: '/admin' },
-                            'Admin'
-                        ),
-                        _react2.default.createElement(
-                            _reactBootstrap.NavItem,
                             { eventKey: 2, href: '/clients' },
                             'Clients'
                         ),
@@ -99132,17 +99153,41 @@ var Menu = function (_React$Component) {
                         ),
                         _react2.default.createElement(
                             _reactBootstrap.NavItem,
-                            { eventKey: 4, href: '/login' },
-                            'Login'
-                        )
+                            { eventKey: 1, href: '/admin' },
+                            'Admin'
+                        ),
+                        this.renderLogin()
                     )
                 )
             );
+        }
+    }, {
+        key: 'renderLogin',
+        value: function renderLogin() {
+            if (this.props.isLoggedIn) {
+                return _react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { eventKey: 4, href: '/login' },
+                    'Logout'
+                );
+            }
         }
     }]);
 
     return Menu;
 }(_react2.default.Component);
+
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.app.isLoggedIn
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({}, dispatch);
+}
+
+Menu = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Menu);
 
 exports.default = Menu;
 
@@ -99733,10 +99778,13 @@ var Gmap = function (_React$Component) {
         key: 'geoCode',
         value: function geoCode() {
             var geocoder = new google.maps.Geocoder();
-            var address = '190 Beecroft Road';
+            var address = '333 George St Sydney NSW';
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status == 'OK') {
-                    console.log("Geocode", results);
+                    console.log("Geocode", {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+                    });
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
@@ -99746,9 +99794,7 @@ var Gmap = function (_React$Component) {
         key: 'initMap',
         value: function initMap() {
 
-            var positions = [{ lat: -34.397, lng: 150.644 }, { lat: -34.497, lng: 150.644 }, { lat: -34.597, lng: 151.644 }];
-
-            var markers = [];
+            var positions = [{ lat: -34.397, lng: 150.644 }, { lat: -34.497, lng: 150.644 }, { lat: -34.597, lng: 150.644 }, { lat: -33.8668461, lng: 151.2068971 }];
 
             var uluru = { lat: -25.363, lng: 131.044 };
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -99756,12 +99802,14 @@ var Gmap = function (_React$Component) {
                 center: uluru
             });
 
-            positions.map(function (position, index) {
+            var markers = positions.map(function (position, index) {
                 return new google.maps.Marker({
                     position: position,
                     map: map
                 });
             });
+
+            var markerCluster = new MarkerClusterer(map, markers, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
         }
     }, {
         key: 'initEditor',
@@ -99812,7 +99860,7 @@ var Gmap = function (_React$Component) {
                         _react2.default.createElement(
                             'h2',
                             { className: 'page-header' },
-                            'Client Geography v2'
+                            'Client Geography'
                         )
                     )
                 ),
@@ -99825,7 +99873,8 @@ var Gmap = function (_React$Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'form-group input-group' },
-                            _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Enter a location' }),
+                            _react2.default.createElement('input', { type: 'text', className: 'form-control',
+                                placeholder: 'Enter a location', defaultValue: '333 George St Sydney NSW' }),
                             _react2.default.createElement(
                                 'span',
                                 { className: 'input-group-btn' },
@@ -99854,7 +99903,7 @@ var Gmap = function (_React$Component) {
     return Gmap;
 }(_react2.default.Component);
 
-exports.default = (0, _reactAsyncScriptLoader2.default)(['https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA'])(Gmap);
+exports.default = (0, _reactAsyncScriptLoader2.default)(['https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA', 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js'])(Gmap);
 
 /***/ }),
 /* 1162 */
@@ -100287,6 +100336,11 @@ var ReportList = function (_Component) {
             );
         }
     }, {
+        key: 'onRowClick',
+        value: function onRowClick(row, columnIndex, rowIndex) {
+            console.log('You click row ID: ' + row._id + ', column index: ' + columnIndex + ', row index: ' + rowIndex);
+        }
+    }, {
         key: 'render',
         value: function render() {
             var reports = [{
@@ -100303,13 +100357,19 @@ var ReportList = function (_Component) {
                 url: '/clientgeo'
             }];
 
+            var options = {
+                onRowClick: this.onRowClick.bind(this)
+            };
+
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     _reactBootstrapTable.BootstrapTable,
                     { striped: true, hover: true,
-                        data: reports },
+                        data: reports,
+                        options: options
+                    },
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
                         { isKey: true, dataField: 'report',
@@ -100360,11 +100420,14 @@ var _bglClientReducers = __webpack_require__(1170);
 
 var _reduxForm = __webpack_require__(187);
 
+var _appReducers = __webpack_require__(1171);
+
 exports.default = (0, _redux.combineReducers)({
   clients: _clientReducers.clientReducers,
   wfmClients: _wfmClientReducers.clientReducers,
   xplanClients: _xplanClientReducers.clientReducers,
   bglClients: _bglClientReducers.bglClientReducers,
+  app: _appReducers.appReducers,
   form: _reduxForm.reducer
 });
 
@@ -100513,6 +100576,51 @@ function bglClientReducers() {
 }
 
 exports.default = bglClientReducers;
+
+/***/ }),
+/* 1171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.appReducers = appReducers;
+function appReducers() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        isLoggedIn: true
+    };
+    var action = arguments[1];
+
+    switch (action.type) {
+        case "SET_LOGIN_STATUS":
+            return { isLoggedIn: action.payload };
+        default:
+            return state;
+    }
+}
+
+exports.default = appReducers;
+
+/***/ }),
+/* 1172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.setLoginStatus = setLoginStatus;
+function setLoginStatus(targetStatus) {
+  return function (dispatch) {
+    console.log("ACTION");
+    dispatch({ type: "SET_LOGIN_STATUS", payload: targetStatus() });
+  };
+}
 
 /***/ })
 /******/ ]);

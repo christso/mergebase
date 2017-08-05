@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
+import {setLoginStatus} from '../actions/appActions';
 
 function FieldGroup({ id, label, help, ...props }) {
     return (
@@ -14,6 +15,11 @@ function FieldGroup({ id, label, help, ...props }) {
 }
 
 class LoginForm extends Component {
+    componentDidMount() {
+        this.props.setLoginStatus(() => false);
+        // console.log("Logged In", this.props.isLoggedIn);
+    }
+
     onSubmit() {
         console.log("YOU PRESSED SUBMIT");
     }
@@ -50,5 +56,22 @@ class LoginForm extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.app.isLoggedIn
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        setLoginStatus: setLoginStatus
+    }, dispatch)
+}
+
+LoginForm = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LoginForm);
 
 export default LoginForm;

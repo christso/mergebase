@@ -21,6 +21,18 @@ export function selectClient(id) {
   }
 }
 
+export function deselectClient(id) {
+  return function (dispatch) {
+    dispatch({ type: "DESELECT_CLIENT", payload: id });
+  }
+}
+
+export function setSelectedClients(keys) {
+  return function (dispatch) {
+    dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys})
+  }
+}
+
 export function findClient(id, newValues = {}) {
     return function (dispatch) {
       axios.get(`${ROOT_URL}/clients/${id}`)

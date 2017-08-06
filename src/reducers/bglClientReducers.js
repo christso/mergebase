@@ -1,9 +1,10 @@
 export function bglClientReducers(state = {
-    clients: []
+    clients: [],
+    selectedClientIds: []
 }, action) {
     switch (action.type) {
         case "GET_CLIENTS_BGL":
-            return { clients: [...action.payload] };      
+            return { ...state, clients: [...action.payload] };      
         default:
             return state;
     }

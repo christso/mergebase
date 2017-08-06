@@ -1,11 +1,34 @@
+function extendClientList(clients = []) {
+    clients.forEach(function(client) {
+        client.binds = (client.wfmId ? 1 : 0)
+            + (client.xplanId ? 1 : 0)
+            + (client.bglId ? 1 : 0);
+    });
+    return clients;
+}
+
 export function clientReducers(state = {
-    clients: []
+    clients: [],
+    selectedClientIds: []
 }, action) {
+
     switch (action.type) {
         case "GET_CLIENTS":
-            return { ...state, clients: [...action.payload] };      
+            return { ...state, clients: extendClientList([...action.payload]) };      
+        case "SET_SELECTED_CLIENTS":
+            return { ...state, selectedClientIds: [...action.payload]};
         case "SELECT_CLIENT":
-            return { ...state, selectedClientId: action.payload };
+            return { ...state, selectedClientIds: [...state.selectedClientIds, action.payload] };
+        case "DESELECT_CLIENT":
+            const currentClientIds = state.selectedClientIds;
+            const clientIdIndex = currentClientIds.findIndex(function(id) {
+                return id === action.payload;
+            });        
+
+            return { ...state, selectedClientIds: [
+                ...currentClientIds.slice(0, clientIdIndex),
+                ...currentClientIds.slice(clientIdIndex+1)
+            ] };            
         case "FIND_CLIENT":
             return {...state, foundClient: action.payload };
         case "UPDATE_CLIENT":

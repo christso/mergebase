@@ -6,7 +6,6 @@ export function getClients() {
   return function (dispatch) {
     axios.get(`${ROOT_URL}/clients-wfm`)
       .then(function (response) {
-        console.log(response.data);
         dispatch({ type: "GET_CLIENTS_WFM", payload: response.data })
       })
       .catch(function (err) {
@@ -15,9 +14,20 @@ export function getClients() {
   }
 }
 
+export function setSelectedClients(keys) {
+  return function (dispatch) {
+    dispatch({ type: "SET_SELECTED_CLIENTS_WFM", payload: keys})
+  }
+}
 
 export function selectClient(id) {
   return function (dispatch) {
     dispatch({type: "SELECT_CLIENT_WFM", payload: id});
+  }
+}
+
+export function deselectClient(id) {
+  return function (dispatch) {
+    dispatch({type: "DESELECT_CLIENT_WFM", payload: id});
   }
 }

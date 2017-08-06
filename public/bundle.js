@@ -12491,6 +12491,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.getClients = getClients;
 exports.selectClient = selectClient;
+exports.deselectClient = deselectClient;
+exports.setSelectedClients = setSelectedClients;
 exports.findClient = findClient;
 exports.updateClient = updateClient;
 
@@ -12517,6 +12519,18 @@ function getClients() {
 function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT", payload: id });
+  };
+}
+
+function deselectClient(id) {
+  return function (dispatch) {
+    dispatch({ type: "DESELECT_CLIENT", payload: id });
+  };
+}
+
+function setSelectedClients(keys) {
+  return function (dispatch) {
+    dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys });
   };
 }
 
@@ -37736,7 +37750,15 @@ var _temp = function () {
   /**
    * Create a factory that creates HTML tag elements.
    */
-  var createDOMFactory = React.createFactory;
+  function createDOMFactory(type) {
+    var factory = React.createElement.bind(null, type);
+    // Expose the type on the factory and the prototype so that it can be
+    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+    // This should not be named `constructor` since this may not be the function
+    // that created the element, and it may not even be a constructor.
+    factory.type = type;
+    return factory;
+  };
 
   /**
    * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
@@ -40154,7 +40176,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getClients = getClients;
+exports.setSelectedClients = setSelectedClients;
 exports.selectClient = selectClient;
+exports.deselectClient = deselectClient;
 
 var _axios = __webpack_require__(146);
 
@@ -40167,7 +40191,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getClients() {
   return function (dispatch) {
     _axios2.default.get(_locator.ROOT_URL + "/clients-wfm").then(function (response) {
-      console.log(response.data);
       dispatch({ type: "GET_CLIENTS_WFM", payload: response.data });
     }).catch(function (err) {
       dispatch({ type: "GET_CLIENTS_WFM_REJECTED", payload: err });
@@ -40175,9 +40198,21 @@ function getClients() {
   };
 }
 
+function setSelectedClients(keys) {
+  return function (dispatch) {
+    dispatch({ type: "SET_SELECTED_CLIENTS_WFM", payload: keys });
+  };
+}
+
 function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT_WFM", payload: id });
+  };
+}
+
+function deselectClient(id) {
+  return function (dispatch) {
+    dispatch({ type: "DESELECT_CLIENT_WFM", payload: id });
   };
 }
 
@@ -40192,7 +40227,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getClients = getClients;
+exports.setSelectedClients = setSelectedClients;
 exports.selectClient = selectClient;
+exports.deselectClient = deselectClient;
 
 var _axios = __webpack_require__(146);
 
@@ -40205,7 +40242,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getClients() {
   return function (dispatch) {
     _axios2.default.get(_locator.ROOT_URL + "/clients-xplan").then(function (response) {
-      console.log(response.data);
       dispatch({ type: "GET_CLIENTS_XPLAN", payload: response.data });
     }).catch(function (err) {
       dispatch({ type: "GET_CLIENTS_XPLAN_REJECTED", payload: err });
@@ -40213,9 +40249,21 @@ function getClients() {
   };
 }
 
+function setSelectedClients(keys) {
+  return function (dispatch) {
+    dispatch({ type: "SET_SELECTED_CLIENTS_XPLAN", payload: keys });
+  };
+}
+
 function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT_XPLAN", payload: id });
+  };
+}
+
+function deselectClient(id) {
+  return function (dispatch) {
+    dispatch({ type: "DESELECT_CLIENT_XPLAN", payload: id });
   };
 }
 
@@ -40254,7 +40302,7 @@ var _routes = __webpack_require__(612);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _index = __webpack_require__(1166);
+var _index = __webpack_require__(1167);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -55460,23 +55508,23 @@ var _loginForm = __webpack_require__(1154);
 
 var _loginForm2 = _interopRequireDefault(_loginForm);
 
-var _menu = __webpack_require__(1155);
+var _menu = __webpack_require__(1156);
 
 var _menu2 = _interopRequireDefault(_menu);
 
-var _adminForm = __webpack_require__(1156);
+var _settings = __webpack_require__(1157);
 
-var _adminForm2 = _interopRequireDefault(_adminForm);
+var _settings2 = _interopRequireDefault(_settings);
 
-var _clientBind = __webpack_require__(1157);
+var _clientBind = __webpack_require__(1158);
 
 var _clientBind2 = _interopRequireDefault(_clientBind);
 
-var _clientGeo = __webpack_require__(1161);
+var _clientGeo = __webpack_require__(1162);
 
 var _clientGeo2 = _interopRequireDefault(_clientGeo);
 
-var _reportList = __webpack_require__(1165);
+var _reportList = __webpack_require__(1166);
 
 var _reportList2 = _interopRequireDefault(_reportList);
 
@@ -55522,7 +55570,7 @@ var routes = _react2.default.createElement(
     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _loginForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _loginForm2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/clients', component: _clientList2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { path: '/admin', component: _adminForm2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/clientgeo', component: _clientGeo2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/reports', component: _reportList2.default }),
     _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/client/edit', component: _clientEdit2.default }),
@@ -75488,7 +75536,6 @@ var ClientList = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-
             return _react2.default.createElement(
                 'div',
                 { className: 'row' },
@@ -75526,8 +75573,8 @@ var ClientList = function (_Component) {
 function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
-        selectedClientId: state.clients.selectedClientId,
-        wfmSelectedClientId: state.wfmClients.selectedClientId,
+        selectedClientIds: state.clients.selectedClientIds,
+        wfmselectedClientIds: state.wfmClients.selectedClientIds,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients
     };
@@ -93748,12 +93795,12 @@ var PaginationList = function (_Component) {
         { className: 'row', style: { marginTop: 15 } },
         content || [_react2.default.createElement(
           'div',
-          { className: 'col-md-6 col-xs-6 col-sm-6 col-lg-6' },
+          { key: 'paging-left', className: 'col-md-6 col-xs-6 col-sm-6 col-lg-6' },
           total,
           sizePerPageList.length > 1 ? dropdown : null
         ), _react2.default.createElement(
           'div',
-          { style: { display: hidePageList },
+          { key: 'paging-right', style: { display: hidePageList },
             className: 'col-md-6 col-xs-6 col-sm-6 col-lg-6' },
           pageBtns
         )]
@@ -98371,10 +98418,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ClientList = function (_Component) {
     _inherits(ClientList, _Component);
 
-    function ClientList() {
+    function ClientList(props) {
         _classCallCheck(this, ClientList);
 
-        return _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).call(this, props));
     }
 
     _createClass(ClientList, [{
@@ -98402,13 +98449,13 @@ var ClientList = function (_Component) {
                 ),
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientId + '/edit' },
+                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientIds[0] + '/edit' },
                     _react2.default.createElement('i', { className: 'fa fa-pencil' }),
                     ' Edit'
                 ),
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientId + '/bind?' + (this.props.wfmSelectedClientId ? '&wfmId=' + this.props.wfmSelectedClientId : '') + (this.props.xplanSelectedClientId ? '&xplanId=' + this.props.xplanSelectedClientId : '') },
+                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientIds[0] + '/bind?' + (this.props.wfmselectedClientIds ? '&wfmId=' + this.props.wfmselectedClientIds[0] : '') + (this.props.xplanselectedClientIds ? '&xplanId=' + this.props.xplanselectedClientIds[0] : '') },
                     _react2.default.createElement('i', { className: 'fa fa-bolt' }),
                     ' Bind'
                 ),
@@ -98424,30 +98471,68 @@ var ClientList = function (_Component) {
         key: 'onRowClick',
         value: function onRowClick(row, columnIndex, rowIndex) {
             //console.log(`You click row ID: ${row._id}, column index: ${columnIndex}, row index: ${rowIndex}`);
-            this.props.selectClient(row._id);
-            this.props.selectWfmClient(row.wfmId);
-            this.props.selectXplanClient(row.xplanId);
+        }
+    }, {
+        key: 'onSelect',
+        value: function onSelect(row, isSelected, event) {
+            if (isSelected) {
+                console.log("You selected row", row);
+                this.props.selectClient(row._id);
+                this.props.selectWfmClient(row.wfmId);
+                this.props.selectXplanClient(row.xplanId);
+            } else {
+                console.log("You deselected row", row);
+                this.props.deselectClient(row._id);
+                this.props.deselectWfmClient(row.wfmId);
+                this.props.deselectXplanClient(row.xplanId);
+            }
+            return false;
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            if (!isSelected) {
+                this.props.setSelectedClients([]);
+                this.props.setSelectedWfmClients([]);
+                this.props.setSelectedXplanClients([]);
+            }
+            return false;
         }
     }, {
         key: 'trClassNameFormat',
         value: function trClassNameFormat(rowData, rIndex) {
             // this.props.selectClientId || rowData._id == this.props.selectClientId
-            //console.log("selectedClientId", this.props.selectedClientId);
-            if (this.props.selectedClientId === rowData._id) {
+            //console.log("selectedClientIds", this.props.selectedClientIds);
+            var selectedClientIds = this.props.selectedClientIds;
+            var found = selectedClientIds.find(function (sel) {
+                return sel === rowData._id;
+            });
+            if (found) {
                 return 'info';
             } else {
                 return '';
             }
         }
     }, {
+        key: 'bindFormatter',
+        value: function bindFormatter(cell, row) {
+            return _react2.default.createElement(
+                'div',
+                null,
+                cell ? cell : '-'
+            );
+        }
+    }, {
         key: 'render',
         value: function render() {
             var selectRow = {
                 mode: 'checkbox',
-                clickToSelect: true
+                clickToSelect: true,
+                onSelect: this.onSelect.bind(this),
+                onSelectAll: this.onSelectAll.bind(this),
+                selected: this.props.selectedClientIds
             };
             var options = {
-                // btnGroup: this.createCustomButtonGroup.bind(this),
                 onRowClick: this.onRowClick.bind(this)
             };
 
@@ -98483,6 +98568,14 @@ var ClientList = function (_Component) {
                         _reactBootstrapTable.TableHeaderColumn,
                         { dataField: 'phone' },
                         'Phone'
+                    ),
+                    _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'wfmId', hidden: true }),
+                    _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'xplanId', hidden: true }),
+                    _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'bglId', hidden: true }),
+                    _react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { dataField: 'binds', width: '60', dataAlign: 'center', dataFormat: this.bindFormatter.bind(this) },
+                        'Binds'
                     )
                 )
             );
@@ -98495,11 +98588,11 @@ var ClientList = function (_Component) {
 function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
-        selectedClientId: state.clients.selectedClientId,
+        selectedClientIds: state.clients.selectedClientIds,
         wfmClients: state.wfmClients.clients,
-        wfmSelectedClientId: state.wfmClients.selectedClientId,
+        wfmselectedClientIds: state.wfmClients.selectedClientIds,
         xplanClients: state.xplanClients.clients,
-        xplanSelectedClientId: state.xplanClients.selectedClientId
+        xplanselectedClientIds: state.xplanClients.selectedClientIds
     };
 }
 
@@ -98507,8 +98600,14 @@ function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         getClients: _clientActions.getClients,
         selectClient: _clientActions.selectClient,
+        deselectClient: _clientActions.deselectClient,
         selectWfmClient: _wfmClientActions.selectClient,
-        selectXplanClient: _xplanClientActions.selectClient
+        deselectWfmClient: _wfmClientActions.deselectClient,
+        selectXplanClient: _xplanClientActions.selectClient,
+        deselectXplanClient: _xplanClientActions.deselectClient,
+        setSelectedClients: _clientActions.setSelectedClients,
+        setSelectedWfmClients: _wfmClientActions.setSelectedClients,
+        setSelectedXplanClients: _xplanClientActions.setSelectedClients
     }, dispatch);
 }
 
@@ -98564,16 +98663,24 @@ var ClientList = function (_Component) {
             this.props.getClients();
         }
     }, {
-        key: 'onRowClick',
-        value: function onRowClick(row, columnIndex, rowIndex) {
-            //console.log(`You click row ID: ${row.wfmId}, column index: ${columnIndex}, row index: ${rowIndex}`);
-            this.props.selectClient(row.wfmId);
+        key: 'onSelect',
+        value: function onSelect(row, isSelected, event) {
+            if (isSelected) {
+                console.log("You selected row", row);
+                this.props.selectClient(row.wfmId);
+            } else {
+                console.log("You deselected row", row);
+                this.props.deselectClient(row._id);
+            }
         }
     }, {
         key: 'trClassNameFormat',
         value: function trClassNameFormat(rowData, rIndex) {
-            console.log("Selected Check", this.props.selectedClientId, rowData.wfmId);
-            if (this.props.selectedClientId === rowData.wfmId) {
+            var selectedClientIds = this.props.selectedClientIds;
+            var found = selectedClientIds.find(function (sel) {
+                return sel === rowData.wfmId;
+            });
+            if (found) {
                 return 'info';
             } else {
                 return '';
@@ -98587,7 +98694,7 @@ var ClientList = function (_Component) {
                 clickToSelect: true
             };
             var options = {
-                onRowClick: this.onRowClick.bind(this)
+                // onRowClick: this.onRowClick.bind(this)
             };
 
             var clients = this.props.clients;
@@ -98629,14 +98736,15 @@ var ClientList = function (_Component) {
 function mapStateToProps(state) {
     return {
         clients: state.wfmClients.clients,
-        selectedClientId: state.wfmClients.selectedClientId
+        selectedClientIds: state.wfmClients.selectedClientIds
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         getClients: _wfmClientActions.getClients,
-        selectClient: _wfmClientActions.selectClient
+        selectClient: _wfmClientActions.selectClient,
+        deselectClient: _wfmClientActions.deselectClient
     }, dispatch);
 }
 
@@ -98695,13 +98803,17 @@ var ClientList = function (_Component) {
         key: 'onRowClick',
         value: function onRowClick(row, columnIndex, rowIndex) {
             //console.log(`You click row ID: ${row.xplanId}, column index: ${columnIndex}, row index: ${rowIndex}`);
-            this.props.selectClient(row._id);
+
         }
     }, {
         key: 'trClassNameFormat',
         value: function trClassNameFormat(rowData, rIndex) {
-            console.log("Selected Check", this.props.selectedClientId, rowData._id);
-            if (this.props.selectedClientId === rowData._id) {
+            // console.log("Selected Check", this.props.selectedClientIds, rowData._id);
+            var selectedClientIds = this.props.selectedClientIds;
+            var found = selectedClientIds.find(function (sel) {
+                return sel === rowData._id;
+            });
+            if (found) {
                 return 'info';
             } else {
                 return '';
@@ -98715,16 +98827,16 @@ var ClientList = function (_Component) {
                 clickToSelect: true
             };
             var options = {
-                onRowClick: this.onRowClick.bind(this)
+                // onRowClick: this.onRowClick.bind(this)
             };
 
             var clients = this.props.clients;
             return _react2.default.createElement(
                 _reactBootstrapTable.BootstrapTable,
                 {
+                    trClassName: this.trClassNameFormat.bind(this),
                     options: options,
                     data: clients,
-                    trClassName: this.trClassNameFormat.bind(this),
                     selectRow: selectRow, striped: true, hover: true,
                     pagination: true },
                 _react2.default.createElement(
@@ -98757,7 +98869,7 @@ var ClientList = function (_Component) {
 function mapStateToProps(state) {
     return {
         clients: state.xplanClients.clients,
-        selectedClientId: state.xplanClients.selectedClientId
+        selectedClientIds: state.xplanClients.selectedClientIds
     };
 }
 
@@ -98952,7 +99064,7 @@ var _reactRedux = __webpack_require__(24);
 
 var _redux = __webpack_require__(27);
 
-var _appActions = __webpack_require__(1172);
+var _appActions = __webpack_require__(1155);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -99025,7 +99137,7 @@ var LoginForm = function (_Component) {
                         _react2.default.createElement(
                             'h3',
                             { style: { textAlign: 'center' } },
-                            'Welcome to Diversified Practice Manager'
+                            'Welcome to FirmKeeper'
                         ),
                         _react2.default.createElement('br', null),
                         _react2.default.createElement(FieldGroup, {
@@ -99072,6 +99184,23 @@ exports.default = LoginForm;
 
 /***/ }),
 /* 1155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.setLoginStatus = setLoginStatus;
+function setLoginStatus(targetStatus) {
+  return function (dispatch) {
+    dispatch({ type: "SET_LOGIN_STATUS", payload: targetStatus() });
+  };
+}
+
+/***/ }),
+/* 1156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99148,13 +99277,23 @@ var Menu = function (_React$Component) {
                         ),
                         _react2.default.createElement(
                             _reactBootstrap.NavItem,
+                            { eventKey: 6, href: '/clients' },
+                            'Contacts'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
+                            { eventKey: 5, href: '/jobs' },
+                            'Jobs'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.NavItem,
                             { eventKey: 4, href: '/reports' },
                             'Reports'
                         ),
                         _react2.default.createElement(
                             _reactBootstrap.NavItem,
-                            { eventKey: 1, href: '/admin' },
-                            'Admin'
+                            { eventKey: 1, href: '/settings' },
+                            'Settings'
                         ),
                         this.renderLogin()
                     )
@@ -99192,7 +99331,7 @@ Menu = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Menu);
 exports.default = Menu;
 
 /***/ }),
-/* 1156 */
+/* 1157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99222,16 +99361,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AdminForm = function (_Component) {
-    _inherits(AdminForm, _Component);
+var Settings = function (_Component) {
+    _inherits(Settings, _Component);
 
-    function AdminForm() {
-        _classCallCheck(this, AdminForm);
+    function Settings() {
+        _classCallCheck(this, Settings);
 
-        return _possibleConstructorReturn(this, (AdminForm.__proto__ || Object.getPrototypeOf(AdminForm)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Settings.__proto__ || Object.getPrototypeOf(Settings)).apply(this, arguments));
     }
 
-    _createClass(AdminForm, [{
+    _createClass(Settings, [{
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -99246,13 +99385,13 @@ var AdminForm = function (_Component) {
         }
     }]);
 
-    return AdminForm;
+    return Settings;
 }(_react.Component);
 
-exports.default = AdminForm;
+exports.default = Settings;
 
 /***/ }),
-/* 1157 */
+/* 1158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99276,7 +99415,7 @@ var _redux = __webpack_require__(27);
 
 var _reactBootstrap = __webpack_require__(41);
 
-var _queryString = __webpack_require__(1158);
+var _queryString = __webpack_require__(1159);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -99406,14 +99545,14 @@ ClientBind = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Clien
 exports.default = ClientBind;
 
 /***/ }),
-/* 1158 */
+/* 1159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(1159);
+var strictUriEncode = __webpack_require__(1160);
 var objectAssign = __webpack_require__(12);
-var decodeComponent = __webpack_require__(1160);
+var decodeComponent = __webpack_require__(1161);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -99619,7 +99758,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 1159 */
+/* 1160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99632,7 +99771,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 1160 */
+/* 1161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99733,7 +99872,7 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 1161 */
+/* 1162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99749,11 +99888,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactAsyncScriptLoader = __webpack_require__(1162);
+var _reactAsyncScriptLoader = __webpack_require__(1163);
 
 var _reactAsyncScriptLoader2 = _interopRequireDefault(_reactAsyncScriptLoader);
 
-var _googleMap = __webpack_require__(1164);
+var _googleMap = __webpack_require__(1165);
 
 var _googleMap2 = _interopRequireDefault(_googleMap);
 
@@ -99906,7 +100045,7 @@ var Gmap = function (_React$Component) {
 exports.default = (0, _reactAsyncScriptLoader2.default)(['https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdDiyF1_eMx99-djO-A97lQWHGpb9ZvA', 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js'])(Gmap);
 
 /***/ }),
-/* 1162 */
+/* 1163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99934,7 +100073,7 @@ var _hoistNonReactStatics = __webpack_require__(165);
 
 var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
-var _utils = __webpack_require__(1163);
+var _utils = __webpack_require__(1164);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -100084,7 +100223,7 @@ var scriptLoader = function scriptLoader() {
 exports.default = scriptLoader;
 
 /***/ }),
-/* 1163 */
+/* 1164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100221,7 +100360,7 @@ var series = exports.series = function series() {
 };
 
 /***/ }),
-/* 1164 */
+/* 1165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100285,7 +100424,7 @@ var GoogleMap = function (_Component) {
 exports.default = GoogleMap;
 
 /***/ }),
-/* 1165 */
+/* 1166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100398,7 +100537,7 @@ var ReportList = function (_Component) {
 exports.default = ReportList;
 
 /***/ }),
-/* 1166 */
+/* 1167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100410,17 +100549,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(27);
 
-var _clientReducers = __webpack_require__(1167);
+var _clientReducers = __webpack_require__(1168);
 
-var _wfmClientReducers = __webpack_require__(1168);
+var _wfmClientReducers = __webpack_require__(1169);
 
-var _xplanClientReducers = __webpack_require__(1169);
+var _xplanClientReducers = __webpack_require__(1170);
 
-var _bglClientReducers = __webpack_require__(1170);
+var _bglClientReducers = __webpack_require__(1171);
 
 var _reduxForm = __webpack_require__(187);
 
-var _appReducers = __webpack_require__(1171);
+var _appReducers = __webpack_require__(1172);
 
 exports.default = (0, _redux.combineReducers)({
   clients: _clientReducers.clientReducers,
@@ -100430,52 +100569,6 @@ exports.default = (0, _redux.combineReducers)({
   app: _appReducers.appReducers,
   form: _reduxForm.reducer
 });
-
-/***/ }),
-/* 1167 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.clientReducers = clientReducers;
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function clientReducers() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        clients: []
-    };
-    var action = arguments[1];
-
-    switch (action.type) {
-        case "GET_CLIENTS":
-            return _extends({}, state, { clients: [].concat(_toConsumableArray(action.payload)) });
-        case "SELECT_CLIENT":
-            return _extends({}, state, { selectedClientId: action.payload });
-        case "FIND_CLIENT":
-            return _extends({}, state, { foundClient: action.payload });
-        case "UPDATE_CLIENT":
-            var clientsToUpdate = state.clients;
-            var clientToUpdate = action.payload;
-            var indexToUpdate = clientsToUpdate.findIndex(function (client) {
-                return client._id === clientToUpdate._id;
-            });
-            var newClientsToUpdate = [].concat(_toConsumableArray(clientsToUpdate.slice(0, indexToUpdate)), [clientToUpdate], _toConsumableArray(clientsToUpdate.slice(indexToUpdate + 1)));
-            // console.log("UPDATE_CLIENT -> newClientsToUpdate", newClientsToUpdate);
-            return _extends({}, state, { clients: [].concat(_toConsumableArray(newClientsToUpdate)), updatedClient: action.payload });
-        default:
-            return state;
-    }
-}
-
-exports.default = clientReducers;
 
 /***/ }),
 /* 1168 */
@@ -100494,17 +100587,48 @@ exports.clientReducers = clientReducers;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+function extendClientList() {
+    var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    clients.forEach(function (client) {
+        client.binds = (client.wfmId ? 1 : 0) + (client.xplanId ? 1 : 0) + (client.bglId ? 1 : 0);
+    });
+    return clients;
+}
+
 function clientReducers() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        clients: []
+        clients: [],
+        selectedClientIds: []
     };
     var action = arguments[1];
 
+
     switch (action.type) {
-        case "GET_CLIENTS_WFM":
-            return { clients: [].concat(_toConsumableArray(action.payload)) };
-        case "SELECT_CLIENT_WFM":
-            return _extends({}, state, { selectedClientId: action.payload });
+        case "GET_CLIENTS":
+            return _extends({}, state, { clients: extendClientList([].concat(_toConsumableArray(action.payload))) });
+        case "SET_SELECTED_CLIENTS":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(action.payload)) });
+        case "SELECT_CLIENT":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(state.selectedClientIds), [action.payload]) });
+        case "DESELECT_CLIENT":
+            var currentClientIds = state.selectedClientIds;
+            var clientIdIndex = currentClientIds.findIndex(function (id) {
+                return id === action.payload;
+            });
+
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(currentClientIds.slice(0, clientIdIndex)), _toConsumableArray(currentClientIds.slice(clientIdIndex + 1))) });
+        case "FIND_CLIENT":
+            return _extends({}, state, { foundClient: action.payload });
+        case "UPDATE_CLIENT":
+            var clientsToUpdate = state.clients;
+            var clientToUpdate = action.payload;
+            var indexToUpdate = clientsToUpdate.findIndex(function (client) {
+                return client._id === clientToUpdate._id;
+            });
+            var newClientsToUpdate = [].concat(_toConsumableArray(clientsToUpdate.slice(0, indexToUpdate)), [clientToUpdate], _toConsumableArray(clientsToUpdate.slice(indexToUpdate + 1)));
+            // console.log("UPDATE_CLIENT -> newClientsToUpdate", newClientsToUpdate);
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(newClientsToUpdate)), updatedClient: action.payload });
         default:
             return state;
     }
@@ -100531,15 +100655,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function clientReducers() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        clients: []
+        clients: [],
+        selectedClientIds: []
     };
     var action = arguments[1];
 
     switch (action.type) {
-        case "GET_CLIENTS_XPLAN":
-            return { clients: [].concat(_toConsumableArray(action.payload)) };
-        case "SELECT_CLIENT_XPLAN":
-            return _extends({}, state, { selectedClientId: action.payload });
+        case "GET_CLIENTS_WFM":
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(action.payload)) });
+        case "SET_SELECTED_CLIENTS_WFM":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(action.payload)) });
+        case "SELECT_CLIENT_WFM":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(state.selectedClientIds), [action.payload]) });
+        case "DESELECT_CLIENT_WFM":
+            var currentClientIds = state.selectedClientIds;
+            var clientIdIndex = currentClientIds.findIndex(function (id) {
+                return id === action.payload;
+            });
+
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(currentClientIds.slice(0, clientIdIndex)), _toConsumableArray(currentClientIds.slice(clientIdIndex + 1))) });
         default:
             return state;
     }
@@ -100557,19 +100691,68 @@ exports.default = clientReducers;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.clientReducers = clientReducers;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function clientReducers() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        clients: [],
+        selectedClientIds: []
+    };
+    var action = arguments[1];
+
+    switch (action.type) {
+        case "GET_CLIENTS_XPLAN":
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(action.payload)) });
+        case "SET_SELECTED_CLIENTS_XPLAN":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(action.payload)) });
+        case "SELECT_CLIENT_XPLAN":
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(state.selectedClientIds), [action.payload]) });
+        case "DESELECT_CLIENT_XPLAN":
+            var currentClientIds = state.selectedClientIds;
+            var clientIdIndex = currentClientIds.findIndex(function (id) {
+                return id === action.payload;
+            });
+
+            return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(currentClientIds.slice(0, clientIdIndex)), _toConsumableArray(currentClientIds.slice(clientIdIndex + 1))) });
+        default:
+            return state;
+    }
+}
+
+exports.default = clientReducers;
+
+/***/ }),
+/* 1171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.bglClientReducers = bglClientReducers;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function bglClientReducers() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        clients: []
+        clients: [],
+        selectedClientIds: []
     };
     var action = arguments[1];
 
     switch (action.type) {
         case "GET_CLIENTS_BGL":
-            return { clients: [].concat(_toConsumableArray(action.payload)) };
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(action.payload)) });
         default:
             return state;
     }
@@ -100578,7 +100761,7 @@ function bglClientReducers() {
 exports.default = bglClientReducers;
 
 /***/ }),
-/* 1171 */
+/* 1172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100603,24 +100786,6 @@ function appReducers() {
 }
 
 exports.default = appReducers;
-
-/***/ }),
-/* 1172 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.setLoginStatus = setLoginStatus;
-function setLoginStatus(targetStatus) {
-  return function (dispatch) {
-    console.log("ACTION");
-    dispatch({ type: "SET_LOGIN_STATUS", payload: targetStatus() });
-  };
-}
 
 /***/ })
 /******/ ]);

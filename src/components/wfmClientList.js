@@ -3,21 +3,30 @@ import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Pa
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { getClients, selectClient } from '../actions/wfmClientActions'
+import { getClients, selectClient, deselectClient } from '../actions/wfmClientActions'
 
 class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
 
-    onRowClick(row, columnIndex, rowIndex) {
-        //console.log(`You click row ID: ${row.wfmId}, column index: ${columnIndex}, row index: ${rowIndex}`);
-        this.props.selectClient(row.wfmId);
+    onSelect(row, isSelected, event) {
+        if (isSelected) {
+            console.log("You selected row", row);
+            this.props.selectClient(row.wfmId);
+        } else {
+            console.log("You deselected row", row);
+            this.props.deselectClient(row._id);
+        }
+
     }
 
     trClassNameFormat(rowData, rIndex) {
-        console.log("Selected Check", this.props.selectedClientId, rowData.wfmId);
-        if (this.props.selectedClientId === rowData.wfmId) {
+        const selectedClientIds = this.props.selectedClientIds;
+        const found = selectedClientIds.find(function(sel) {
+            return sel === rowData.wfmId;
+        });        
+        if (found) {
             return 'info'
         } else {
             return '';
@@ -30,7 +39,7 @@ class ClientList extends Component {
             clickToSelect: true
         };
         const options = {
-            onRowClick: this.onRowClick.bind(this)
+            // onRowClick: this.onRowClick.bind(this)
         };
 
         const clients = this.props.clients;
@@ -54,14 +63,15 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return { 
         clients: state.wfmClients.clients,
-        selectedClientId: state.wfmClients.selectedClientId,
+        selectedClientIds: state.wfmClients.selectedClientIds,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getClients: getClients,
-        selectClient: selectClient
+        selectClient: selectClient,
+        deselectClient: deselectClient
     }, dispatch)
 }
 

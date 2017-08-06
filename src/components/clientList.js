@@ -20,16 +20,12 @@ const ClientListPanel = (props) => {
     )
 }
 
-
 class ClientList extends Component {
     componentDidMount() {
 
     }
 
     render() {
-
-
-
         return (
             <div className="row">
                 <div className="col-md-8 col-md-offset-2">
@@ -54,8 +50,8 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
-        selectedClientId: state.clients.selectedClientId,
-        wfmSelectedClientId: state.wfmClients.selectedClientId,
+        selectedClientIds: state.clients.selectedClientIds,
+        wfmselectedClientIds: state.wfmClients.selectedClientIds,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients
     };

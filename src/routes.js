@@ -7,7 +7,7 @@ import ClientEdit from './components/clientEdit';
 import ClientList from './components/clientList';
 import LoginForm from './components/loginForm';
 import Menu from './components/menu';
-import AdminForm from './components/adminForm';
+import Settings from './components/settings';
 import ClientBind from './components/clientBind';
 import ClientGeo from './components/clientGeo';
 import ReportList from './components/reportList';
@@ -41,7 +41,7 @@ const routes = (
       <Route exact={true} path="/" component={LoginForm} />
       <Route path="/login" component={LoginForm} />
       <Route path="/clients" component={ClientList} />
-      <Route path="/admin" component={AdminForm} />
+      <Route path="/settings" component={Settings} />
       <Route path="/clientgeo" component={ClientGeo} />
       <Route path="/reports" component={ReportList} />
       <Route exact={true} path="/client/edit" component={ClientEdit} />

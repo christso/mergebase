@@ -3,7 +3,7 @@ export function appReducers(state = {
 }, action) {
     switch (action.type) {
         case "SET_LOGIN_STATUS":
-            return { isLoggedIn: action.payload };      
+            return { isLoggedIn: action.payload };     
         default:
             return state;
     }

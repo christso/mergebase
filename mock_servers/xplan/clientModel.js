@@ -9,7 +9,7 @@ var clientSchema = new mongoose.Schema({
     phone: String,
     businessStructure: String,
     address: String,
-    city: String,
+    
     website: String
 });
 

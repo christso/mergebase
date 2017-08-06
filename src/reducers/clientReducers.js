@@ -1,11 +1,4 @@
-function extendClientList(clients = []) {
-    clients.forEach(function(client) {
-        client.binds = (client.wfmId ? 1 : 0)
-            + (client.xplanId ? 1 : 0)
-            + (client.bglId ? 1 : 0);
-    });
-    return clients;
-}
+import {extendClientList} from '../selectors/index';
 
 export function clientReducers(state = {
     clients: [],
@@ -14,7 +7,7 @@ export function clientReducers(state = {
 
     switch (action.type) {
         case "GET_CLIENTS":
-            return { ...state, clients: extendClientList([...action.payload]) };      
+            return { ...state, clients: [...action.payload] };      
         case "SET_SELECTED_CLIENTS":
             return { ...state, selectedClientIds: [...action.payload]};
         case "SELECT_CLIENT":

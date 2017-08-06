@@ -55654,131 +55654,143 @@ var ClientEdit = function (_Component) {
 
             var client = this.props.foundClient;
             return _react2.default.createElement(
-                _reactBootstrap.Well,
-                null,
+                'div',
+                { className: 'row' },
                 _react2.default.createElement(
-                    'h2',
-                    null,
-                    client ? client.name : undefined
-                ),
-                _react2.default.createElement(
-                    'form',
-                    null,
+                    'div',
+                    { className: 'col-md-8 col-md-offset-2' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'form-group has-feedback' },
+                        { className: 'panel panel-default' },
                         _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'ID'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'ID',
-                            type: 'text',
-                            placeholder: 'Enter ID',
-                            name: '_id',
-                            component: 'input',
-                            readOnly: true })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group has-feedback' },
-                        _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'Name'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'Name',
-                            type: 'text',
-                            placeholder: 'Enter Name',
-                            name: 'name',
-                            component: 'input'
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group has-feedback' },
-                        _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'Email'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'Email',
-                            type: 'text',
-                            placeholder: 'Enter Email',
-                            name: 'email',
-                            component: 'input'
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group has-feedback' },
-                        _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'Phone'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'Phone',
-                            type: 'text',
-                            placeholder: 'Enter Phone',
-                            name: 'phone',
-                            component: 'input'
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group has-feedback' },
-                        _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'Address'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'Address',
-                            type: 'text',
-                            placeholder: 'Enter Address',
-                            name: 'address',
-                            component: 'input'
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group has-feedback' },
-                        _react2.default.createElement(
-                            _reactBootstrap.ControlLabel,
-                            null,
-                            'Comment'
-                        ),
-                        _react2.default.createElement(_reduxForm.Field, {
-                            className: 'form-control',
-                            label: 'Comment',
-                            placeholder: 'Enter Comment',
-                            name: 'comment',
-                            component: 'textarea'
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.ButtonToolbar,
-                        null,
-                        _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { type: 'submit', onClick: handleSubmit(this.handleSave.bind(this)),
-                                bsStyle: 'primary', disabled: submitting },
-                            'Save'
+                            'div',
+                            { className: 'panel-heading' },
+                            client ? client.name : undefined
                         ),
                         _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { type: 'submit', onClick: handleSubmit(this.handleBroadcast.bind(this)),
-                                bsStyle: 'primary', disabled: submitting },
-                            'Broadcast'
+                            'div',
+                            { className: 'panel-body' },
+                            _react2.default.createElement(
+                                'form',
+                                null,
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'ID'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'ID',
+                                        type: 'text',
+                                        placeholder: 'Enter ID',
+                                        name: '_id',
+                                        component: 'input',
+                                        readOnly: true })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Name'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'Name',
+                                        type: 'text',
+                                        placeholder: 'Enter Name',
+                                        name: 'name',
+                                        component: 'input'
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Email'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'Email',
+                                        type: 'text',
+                                        placeholder: 'Enter Email',
+                                        name: 'email',
+                                        component: 'input'
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Phone'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'Phone',
+                                        type: 'text',
+                                        placeholder: 'Enter Phone',
+                                        name: 'phone',
+                                        component: 'input'
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Address'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'Address',
+                                        type: 'text',
+                                        placeholder: 'Enter Address',
+                                        name: 'address',
+                                        component: 'input'
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group has-feedback' },
+                                    _react2.default.createElement(
+                                        'label',
+                                        null,
+                                        'Comment'
+                                    ),
+                                    _react2.default.createElement(_reduxForm.Field, {
+                                        className: 'form-control',
+                                        label: 'Comment',
+                                        placeholder: 'Enter Comment',
+                                        name: 'comment',
+                                        component: 'textarea'
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    _reactBootstrap.ButtonToolbar,
+                                    null,
+                                    _react2.default.createElement(
+                                        _reactBootstrap.Button,
+                                        { type: 'submit', onClick: handleSubmit(this.handleSave.bind(this)),
+                                            bsStyle: 'primary', disabled: submitting },
+                                        'Save'
+                                    ),
+                                    _react2.default.createElement(
+                                        _reactBootstrap.Button,
+                                        { type: 'submit', onClick: handleSubmit(this.handleBroadcast.bind(this)),
+                                            bsStyle: 'primary', disabled: submitting },
+                                        'Broadcast'
+                                    )
+                                )
+                            )
                         )
                     )
                 )
@@ -98393,8 +98405,6 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactBootstrap = __webpack_require__(41);
-
 var _reactRedux = __webpack_require__(24);
 
 var _redux = __webpack_require__(27);
@@ -98406,6 +98416,8 @@ var _clientActions = __webpack_require__(145);
 var _wfmClientActions = __webpack_require__(468);
 
 var _xplanClientActions = __webpack_require__(469);
+
+var _index = __webpack_require__(1174);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -98436,32 +98448,33 @@ var ClientList = function (_Component) {
         }
     }, {
         key: 'createCustomButtonGroup',
-        value: function createCustomButtonGroup() {
+        value: function createCustomButtonGroup(props) {
 
             return _react2.default.createElement(
-                'div',
-                { id: 'clientList-buttons', className: 'btn-group' },
+                _reactBootstrapTable.ButtonGroup,
+                null,
+                props.showSelectedOnlyBtn,
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default' },
+                    { className: 'btn btn-primary' },
                     _react2.default.createElement('i', { className: 'fa fa-plus' }),
                     ' New'
                 ),
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientIds[0] + '/edit' },
+                    { className: 'btn btn-primary', href: '/client/' + this.props.selectedClientIds[0] + '/edit' },
                     _react2.default.createElement('i', { className: 'fa fa-pencil' }),
                     ' Edit'
                 ),
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default', href: '/client/' + this.props.selectedClientIds[0] + '/bind?' + (this.props.wfmselectedClientIds ? '&wfmId=' + this.props.wfmselectedClientIds[0] : '') + (this.props.xplanselectedClientIds ? '&xplanId=' + this.props.xplanselectedClientIds[0] : '') },
+                    { className: 'btn btn-primary', href: '/client/' + this.props.selectedClientIds[0] + '/bind?' + (this.props.wfmselectedClientIds ? '&wfmId=' + this.props.wfmselectedClientIds[0] : '') + (this.props.xplanselectedClientIds ? '&xplanId=' + this.props.xplanselectedClientIds[0] : '') },
                     _react2.default.createElement('i', { className: 'fa fa-bolt' }),
                     ' Bind'
                 ),
                 _react2.default.createElement(
                     'a',
-                    { className: 'btn btn-default', onClick: this.onDelete.bind(this) },
+                    { className: 'btn btn-primary', onClick: this.onDelete.bind(this) },
                     _react2.default.createElement('i', { className: 'fa fa-trash' }),
                     ' Delete'
                 )
@@ -98527,23 +98540,26 @@ var ClientList = function (_Component) {
         value: function render() {
             var selectRow = {
                 mode: 'checkbox',
+                showOnlySelected: true,
                 clickToSelect: true,
                 onSelect: this.onSelect.bind(this),
                 onSelectAll: this.onSelectAll.bind(this),
                 selected: this.props.selectedClientIds
             };
             var options = {
-                onRowClick: this.onRowClick.bind(this)
+                onRowClick: this.onRowClick.bind(this),
+                btnGroup: this.createCustomButtonGroup.bind(this)
+
             };
 
             var clients = this.props.clients;
             return _react2.default.createElement(
                 'div',
                 null,
-                this.createCustomButtonGroup(),
                 _react2.default.createElement(
                     _reactBootstrapTable.BootstrapTable,
                     { striped: true, hover: true,
+                        search: true,
                         trClassName: this.trClassNameFormat.bind(this),
                         selectRow: selectRow,
                         options: options,
@@ -98556,25 +98572,32 @@ var ClientList = function (_Component) {
                     ),
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
-                        { dataField: 'name' },
+                        { dataField: 'name', dataSort: true },
                         'Name'
                     ),
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
-                        { dataField: 'email' },
+                        { dataField: 'email', dataSort: true },
                         'Email'
                     ),
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
-                        { dataField: 'phone' },
+                        { dataField: 'phone', dataSort: true },
                         'Phone'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { dataField: 'address', hidden: true },
+                        'Address'
                     ),
                     _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'wfmId', hidden: true }),
                     _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'xplanId', hidden: true }),
                     _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'bglId', hidden: true }),
                     _react2.default.createElement(
                         _reactBootstrapTable.TableHeaderColumn,
-                        { dataField: 'binds', width: '60', dataAlign: 'center', dataFormat: this.bindFormatter.bind(this) },
+                        { dataField: 'binds', width: '60', dataAlign: 'center',
+                            dataSort: true,
+                            dataFormat: this.bindFormatter.bind(this) },
                         'Binds'
                     )
                 )
@@ -98587,7 +98610,7 @@ var ClientList = function (_Component) {
 
 function mapStateToProps(state) {
     return {
-        clients: state.clients.clients,
+        clients: (0, _index.extendClientList)(state),
         selectedClientIds: state.clients.selectedClientIds,
         wfmClients: state.wfmClients.clients,
         wfmselectedClientIds: state.wfmClients.selectedClientIds,
@@ -98691,7 +98714,8 @@ var ClientList = function (_Component) {
         value: function render() {
             var selectRow = {
                 mode: 'checkbox',
-                clickToSelect: true
+                clickToSelect: true,
+                showOnlySelected: true
             };
             var options = {
                 // onRowClick: this.onRowClick.bind(this)
@@ -98824,7 +98848,8 @@ var ClientList = function (_Component) {
         value: function render() {
             var selectRow = {
                 mode: 'checkbox',
-                clickToSelect: true
+                clickToSelect: true,
+                showOnlySelected: true
             };
             var options = {
                 // onRowClick: this.onRowClick.bind(this)
@@ -98958,7 +98983,8 @@ var ClientList = function (_Component) {
         value: function render() {
             var selectRow = {
                 mode: 'checkbox',
-                clickToSelect: true
+                clickToSelect: true,
+                showOnlySelected: true
             };
             var cellEditProp = {
                 mode: 'click',
@@ -100585,16 +100611,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.clientReducers = clientReducers;
 
+var _index = __webpack_require__(1174);
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function extendClientList() {
-    var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-    clients.forEach(function (client) {
-        client.binds = (client.wfmId ? 1 : 0) + (client.xplanId ? 1 : 0) + (client.bglId ? 1 : 0);
-    });
-    return clients;
-}
 
 function clientReducers() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
@@ -100606,7 +100625,7 @@ function clientReducers() {
 
     switch (action.type) {
         case "GET_CLIENTS":
-            return _extends({}, state, { clients: extendClientList([].concat(_toConsumableArray(action.payload))) });
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(action.payload)) });
         case "SET_SELECTED_CLIENTS":
             return _extends({}, state, { selectedClientIds: [].concat(_toConsumableArray(action.payload)) });
         case "SELECT_CLIENT":
@@ -100786,6 +100805,164 @@ function appReducers() {
 }
 
 exports.default = appReducers;
+
+/***/ }),
+/* 1173 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.defaultMemoize = defaultMemoize;
+exports.createSelectorCreator = createSelectorCreator;
+exports.createStructuredSelector = createStructuredSelector;
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = defaultMemoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = exports.createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
+
+/***/ }),
+/* 1174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.extendClientList = undefined;
+
+var _reselect = __webpack_require__(1173);
+
+var getClientList = function getClientList(state) {
+    return state.clients.clients;
+};
+
+var extendClientList = exports.extendClientList = (0, _reselect.createSelector)([getClientList], function () {
+    var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    clients.forEach(function (client) {
+        client.binds = (client.wfmId ? 1 : 0) + (client.xplanId ? 1 : 0) + (client.bglId ? 1 : 0);
+    });
+    return clients;
+});
 
 /***/ })
 /******/ ]);

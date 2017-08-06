@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, ButtonGroup, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
 import { getClients, selectClient, deselectClient, setSelectedClients } from '../actions/clientActions';
-import { selectClient as selectWfmClient,
+import {
+    selectClient as selectWfmClient,
     deselectClient as deselectWfmClient,
-    setSelectedClients as setSelectedWfmClients } from '../actions/wfmClientActions';
-import { selectClient as selectXplanClient, 
+    setSelectedClients as setSelectedWfmClients
+} from '../actions/wfmClientActions';
+import {
+    selectClient as selectXplanClient,
     deselectClient as deselectXplanClient,
-    setSelectedClients as setSelectedXplanClients } from '../actions/xplanClientActions';
+    setSelectedClients as setSelectedXplanClients
+} from '../actions/xplanClientActions';
+import { extendClientList } from '../selectors/index';
 
 class ClientList extends Component {
     constructor(props) {
@@ -24,21 +28,24 @@ class ClientList extends Component {
         alert("DELETE");
     }
 
-    createCustomButtonGroup() {
+
+    createCustomButtonGroup(props) {
 
         return (
-            <div id="clientList-buttons" className="btn-group">
-                <a className="btn btn-default">
+            <ButtonGroup>
+                {props.showSelectedOnlyBtn}
+                <a className="btn btn-primary">
                     <i className="fa fa-plus"></i> New</a>
-                <a className="btn btn-default" href={'/client/' + this.props.selectedClientIds[0] + '/edit'}>
+                <a className="btn btn-primary" href={'/client/' + this.props.selectedClientIds[0] + '/edit'}>
                     <i className="fa fa-pencil"></i> Edit</a>
-                <a className="btn btn-default" href={'/client/' + this.props.selectedClientIds[0] + '/bind?'
+                <a className="btn btn-primary" href={'/client/' + this.props.selectedClientIds[0] + '/bind?'
                     + (this.props.wfmselectedClientIds ? '&wfmId=' + this.props.wfmselectedClientIds[0] : '')
                     + (this.props.xplanselectedClientIds ? '&xplanId=' + this.props.xplanselectedClientIds[0] : '')}>
                     <i className="fa fa-bolt"></i> Bind</a>
-                <a className="btn btn-default" onClick={this.onDelete.bind(this)}>
+                <a className="btn btn-primary" onClick={this.onDelete.bind(this)}>
                     <i className="fa fa-trash"></i> Delete</a>
-            </div>
+
+            </ButtonGroup>
         );
     }
 
@@ -93,33 +100,40 @@ class ClientList extends Component {
     render() {
         const selectRow = {
             mode: 'checkbox',
+            showOnlySelected: true,
             clickToSelect: true,
             onSelect: this.onSelect.bind(this),
             onSelectAll: this.onSelectAll.bind(this),
             selected: this.props.selectedClientIds
         };
         const options = {
-            onRowClick: this.onRowClick.bind(this)
+            onRowClick: this.onRowClick.bind(this),
+            btnGroup: this.createCustomButtonGroup.bind(this),
+
         };
 
         const clients = this.props.clients;
         return (
             <div>
-                {this.createCustomButtonGroup()}
+
                 <BootstrapTable striped hover
+                    search={true}
                     trClassName={this.trClassNameFormat.bind(this)}
                     selectRow={selectRow}
                     options={options}
                     data={clients}
                     pagination>
                     <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
-                    <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                    <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataSort={true}>Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email' dataSort={true}>Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='phone' dataSort={true}>Phone</TableHeaderColumn>
+                    <TableHeaderColumn dataField='address' hidden>Address</TableHeaderColumn>
                     <TableHeaderColumn dataField='wfmId' hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='xplanId'hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='bglId'hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='binds' width="60" dataAlign="center" dataFormat={this.bindFormatter.bind(this)}>Binds</TableHeaderColumn>
+                    <TableHeaderColumn dataField='xplanId' hidden></TableHeaderColumn>
+                    <TableHeaderColumn dataField='bglId' hidden></TableHeaderColumn>
+                    <TableHeaderColumn dataField='binds' width="60" dataAlign="center"
+                        dataSort={true}
+                        dataFormat={this.bindFormatter.bind(this)}>Binds</TableHeaderColumn>
                 </BootstrapTable>
             </div>
         )
@@ -129,7 +143,7 @@ class ClientList extends Component {
 
 function mapStateToProps(state) {
     return {
-        clients: state.clients.clients,
+        clients: extendClientList(state),
         selectedClientIds: state.clients.selectedClientIds,
         wfmClients: state.wfmClients.clients,
         wfmselectedClientIds: state.wfmClients.selectedClientIds,

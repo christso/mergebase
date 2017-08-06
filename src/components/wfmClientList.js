@@ -23,9 +23,9 @@ class ClientList extends Component {
 
     trClassNameFormat(rowData, rIndex) {
         const selectedClientIds = this.props.selectedClientIds;
-        const found = selectedClientIds.find(function(sel) {
+        const found = selectedClientIds.find(function (sel) {
             return sel === rowData.wfmId;
-        });        
+        });
         if (found) {
             return 'info'
         } else {
@@ -36,7 +36,8 @@ class ClientList extends Component {
     render() {
         const selectRow = {
             mode: 'checkbox',
-            clickToSelect: true
+            clickToSelect: true,
+            showOnlySelected: true
         };
         const options = {
             // onRowClick: this.onRowClick.bind(this)
@@ -61,7 +62,7 @@ class ClientList extends Component {
 
 
 function mapStateToProps(state) {
-    return { 
+    return {
         clients: state.wfmClients.clients,
         selectedClientIds: state.wfmClients.selectedClientIds,
     };

@@ -32,7 +32,8 @@ class ClientList extends Component {
     render() {
         const selectRow = {
             mode: 'checkbox',
-            clickToSelect: true
+            clickToSelect: true,
+            showOnlySelected: true            
         };        
         const cellEditProp = {
             mode: 'click',

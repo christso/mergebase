@@ -29,7 +29,8 @@ class ClientList extends Component {
     render() {
         const selectRow = {
             mode: 'checkbox',
-            clickToSelect: true
+            clickToSelect: true,
+            showOnlySelected: true
         };
         const options = {
             // onRowClick: this.onRowClick.bind(this)

@@ -100,8 +100,6 @@ app.get('/clients-wfm', function (req, res) {
     });
 });
 
-
-
 app.get('/clients-xplan', function (req, res) {
     xplanApi.getClients(function(apiRes, err) {
         if (err)

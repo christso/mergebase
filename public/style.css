@@ -3,11 +3,16 @@ body {
   margin-bottom: 50px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* React Bootstrap Table */
+
 #clientList-buttons {
   margin-bottom: 5px;
 }
 
-/* hack to align pagination button */
 #clientList-inline-button {
   padding: 0px 0px;
   border-width: 0px;

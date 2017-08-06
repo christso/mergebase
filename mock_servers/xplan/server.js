@@ -7,7 +7,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
 var Clients = require('./clientModel');
-var seedDB = require('./seed');
+// var seedDB = require('./seeds');
 
 // seedDB();
 

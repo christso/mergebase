@@ -10,7 +10,8 @@ import Menu from './components/menu';
 import Settings from './components/settings';
 import ClientBind from './components/clientBind';
 import ClientGeo from './components/clientGeo';
-import ReportList from './components/reportList';
+import AppTools from './components/appTools';
+import MergeTool from './components/mergeTool';
 
 // RETRIVES COMPONENTS BASED ON STATUS  
 const Status = function ({ code, children }) {
@@ -43,7 +44,8 @@ const routes = (
       <Route path="/clients" component={ClientList} />
       <Route path="/settings" component={Settings} />
       <Route path="/clientgeo" component={ClientGeo} />
-      <Route path="/reports" component={ReportList} />
+      <Route path="/tools" component={AppTools} />
+      <Route path="/merge" component={MergeTool} />
       <Route exact={true} path="/client/edit" component={ClientEdit} />
       <Route path="/client/:id/edit" component={ClientEdit} />
       <Route exact={true} path="/client/bind" component={ClientBind} />

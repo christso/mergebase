@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 
 class Menu extends React.Component {
     componentDidMount() {
-        console.log("props", this.props);
+
     }
 
     render() {

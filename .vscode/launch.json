@@ -33,7 +33,10 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Selected",
-            "program": "${file}"
+            "program": "${file}",
+            "env": {
+                
+            }
         }            
     ]
 }

@@ -1,8 +1,3 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-var universe = require('universe');
 
 var data = [
     {
@@ -86,41 +81,35 @@ var data = [
 
 
 
-class MergeTool extends Component {
-    componentDidMount() {
-        data = data.map(function (el) {
-            el.source === "WFM" ? el.wfm = 1 : el.wfm = 0;
-            el.source === "INT" ? el.int = 1 : el.int = 0;
-            return el;
-        });
-        var groupToValues = data.reduce(function(obj,item){
-            obj[item.name] = obj[item.name] || [];
+data = data.map(function (el) {
+    el.source === "WFM" ? el.wfm = 1 : el.wfm = 0;
+    el.source === "INT" ? el.int = 1 : el.int = 0;
+    return el;
+});
+var groupToValues = data.reduce(function(obj,item){
+    obj[item.firstName] = obj[item.firstName] || {};
+    obj[item.firstName][item.lastName] = obj[item.firstName][item.lastName] || {};
+    let resItem = obj[item.firstName][item.lastName];
 
-            if (item.source === "WFM") 
-                obj[item.name].wfmFlag = 1;
-            else if (item.source === "INT")
-                obj[item.name].intFlag = 1;
-            return obj;
-        }, {});
-        var groups = Object.keys(groupToValues).map(function(key){
-            return {
-                name: key, 
-                intSrc: groupToValues[key].intSrc, 
-                wfmSrc: groupToValues[key].wfmSrc
-            };
-        });  
-        
-        console.log(groups);
-        //console.log(data);
-    }
-
-    render() {
-        return (
-            <div className="panel">
-                <h2>Merge Tool</h2>
-            </div>
-        )
-    }
-}
-
-export default MergeTool;
+    if (!resItem.wfmFlag) resItem.wfmFlag = 0;
+    if (!resItem.intFlag) resItem.intFlag = 0;
+    if (item.source === "WFM") 
+        resItem.wfmFlag = 1;
+    else if (item.source === "INT")
+        resItem.intFlag = 1;
+    return obj;
+}, {});
+var groups = Object.keys(groupToValues).map(function(fnKey) {
+    return Object.keys(groupToValues[fnKey]).map(function(lnKey) {
+        return {
+            firstName: fnKey,
+            lastName: lnKey,
+            intSrc: groupToValues[fnKey][lnKey].intFlag, 
+            wfmSrc: groupToValues[fnKey][lnKey].wfmFlag
+        }
+    });
+});  
+groups = groups.map(function(el) {
+    return el[0];
+});
+console.log(groups);

@@ -8,10 +8,10 @@
     "start-react": "set PORT=8080 && react-scripts start",
     "start": "concurrently \"npm run server\" \"npm run client\" \"npm run xplan\"",
     "server": "babel-node start-server.js",
-    "xplan": "babel-node ./mock_servers/xplan/server.js",
+    "xplan": "babel-node ./api/xplanMock/server.js",
+    "bgl": "babel-node ./api/bglMock/server.js",
     "client": "babel-node appClient.js",
     "debug-server": "babel-node --debug-brk=5859 start-server.js",
-    "debug-xplan": "babel-node --debug-brk=5861 xplan-server.js",
     "debug-client": "babel-node --debug-brk=5860 appClient.js",
     "debug-react": "webpack-dev-server"
   },

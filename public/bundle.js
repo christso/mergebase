@@ -78222,15 +78222,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactBootstrap = __webpack_require__(45);
-
 var _reactRedux = __webpack_require__(20);
 
 var _redux = __webpack_require__(21);
 
-var _reactBootstrapTable = __webpack_require__(50);
-
 var _bglClientActions = __webpack_require__(870);
+
+var _reactTable = __webpack_require__(937);
+
+var _reactTable2 = _interopRequireDefault(_reactTable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78293,29 +78293,9 @@ var ClientList = function (_Component) {
             };
             var clients = this.props.clients;
             return _react2.default.createElement(
-                _reactBootstrapTable.BootstrapTable,
-                { data: clients, selectRow: selectRow,
-                    striped: true, hover: true, cellEdit: cellEditProp },
-                _react2.default.createElement(
-                    _reactBootstrapTable.TableHeaderColumn,
-                    { isKey: true, dataField: 'bglId', hidden: true },
-                    'ID'
-                ),
-                _react2.default.createElement(
-                    _reactBootstrapTable.TableHeaderColumn,
-                    { dataField: 'name' },
-                    'Name'
-                ),
-                _react2.default.createElement(
-                    _reactBootstrapTable.TableHeaderColumn,
-                    { dataField: 'email' },
-                    'Email'
-                ),
-                _react2.default.createElement(
-                    _reactBootstrapTable.TableHeaderColumn,
-                    { dataField: 'phone' },
-                    'Phone'
-                )
+                'div',
+                null,
+                'Hello'
             );
         }
     }]);
@@ -85909,29 +85889,67 @@ module.exports = function (service) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var _react = __webpack_require__(0);var _react2 = _interopRequireDefault(_react);
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
 var _reactRedux = __webpack_require__(20);
+
 var _redux = __webpack_require__(21);
-var _reactBootstrapTable = __webpack_require__(50);
-var _universe = __webpack_require__(350);var _universe2 = _interopRequireDefault(_universe);
+
+var _universe = __webpack_require__(350);
+
+var _universe2 = _interopRequireDefault(_universe);
+
 var _clientActions = __webpack_require__(69);
+
 var _mergeActions = __webpack_require__(354);
+
 var _wfmClientActions = __webpack_require__(120);
+
 var _index = __webpack_require__(121);
-var _reactTable = __webpack_require__(937);var _reactTable2 = _interopRequireDefault(_reactTable);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var
 
-MergeTool = function (_Component) {_inherits(MergeTool, _Component);
-    function MergeTool(props) {_classCallCheck(this, MergeTool);return _possibleConstructorReturn(this, (MergeTool.__proto__ || Object.getPrototypeOf(MergeTool)).call(this,
-        props));
-    }_createClass(MergeTool, [{ key: 'componentDidMount', value: function componentDidMount()
+var _reactTable = __webpack_require__(937);
 
-        {
+var _reactTable2 = _interopRequireDefault(_reactTable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MergeTool = function (_Component) {
+    _inherits(MergeTool, _Component);
+
+    function MergeTool(props) {
+        _classCallCheck(this, MergeTool);
+
+        return _possibleConstructorReturn(this, (MergeTool.__proto__ || Object.getPrototypeOf(MergeTool)).call(this, props));
+    }
+
+    _createClass(MergeTool, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
             this.props.getClients();
             this.props.wfmGetClients();
             console.log(this.props.clients);
-        } }, { key: 'getTdProps', value: function getTdProps(
+        }
+    }, {
+        key: 'getTdProps',
+        value: function getTdProps(state, rowInfo, column, instance) {
+            var _this2 = this;
 
-        state, rowInfo, column, instance) {var _this2 = this;
             return {
                 onClick: function onClick(e, handleOriginal) {
                     console.log('A Td Element was clicked!');
@@ -85955,72 +85973,74 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
                     if (handleOriginal) {
                         handleOriginal();
                     }
-                } };
-
-        } }, { key: 'render', value: function render()
-
-        {
+                }
+            };
+        }
+    }, {
+        key: 'render',
+        value: function render() {
 
             var clients = this.props.clients;
-            return (
-                _react2.default.createElement('div', { className: 'panel' },
-                    _react2.default.createElement('div', { className: 'panel-heading' }, 'Merge Tool'),
+            return _react2.default.createElement(
+                'div',
+                { className: 'panel' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'panel-heading' },
+                    'Merge Tool'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'panel-body' },
+                    _react2.default.createElement(_reactTable2.default, {
+                        data: clients,
+                        columns: [{
+                            Header: "Name",
+                            accessor: "name"
+                        }, {
+                            Header: "Email",
+                            accessor: "email"
+                        }, {
+                            Header: "Phone",
+                            accessor: "phone"
+                        }, {
+                            Header: "INT",
+                            accessor: "intFlag",
+                            Cell: function Cell(row) {
+                                return row.value > 0 ? _react2.default.createElement(
+                                    'div',
+                                    {
+                                        style: {
+                                            backgroundColor: '#85cc00'
+                                        } },
+                                    row.value
+                                ) : row.value;
+                            }
+                        }, {
+                            Header: "WFM",
+                            accessor: "wfmFlag",
+                            Cell: function Cell(row) {
+                                return row.value > 0 ? _react2.default.createElement(
+                                    'div',
+                                    {
+                                        style: {
+                                            backgroundColor: '#85cc00'
+                                        } },
+                                    row.value
+                                ) : row.value;
+                            }
+                        }],
+                        defaultPageSize: 10,
+                        className: '-striped -highlight',
+                        getTdProps: this.getTdProps.bind(this)
+                    })
+                )
+            );
+        }
+    }]);
 
-
-                    _react2.default.createElement('div', { className: 'panel-body' },
-                        _react2.default.createElement(_reactTable2.default, {
-                            data: clients,
-                            columns: [
-                            {
-                                Header: "Name",
-                                accessor: "name" },
-
-                            {
-                                Header: "Email",
-                                accessor: "email" },
-
-                            {
-                                Header: "Phone",
-                                accessor: "phone" },
-
-                            {
-                                Header: "INT",
-                                accessor: "intFlag",
-                                Cell: function Cell(row) {return (
-                                        row.value > 0 ?
-                                        _react2.default.createElement('div', {
-                                                style: {
-                                                    backgroundColor: '#85cc00' } },
-
-                                            row.value) :
-
-                                        row.value);} },
-
-
-                            {
-                                Header: "WFM",
-                                accessor: "wfmFlag",
-                                Cell: function Cell(row) {return (
-                                        row.value > 0 ?
-                                        _react2.default.createElement('div', {
-                                                style: {
-                                                    backgroundColor: '#85cc00' } },
-
-                                            row.value) :
-
-                                        row.value);} }],
-
-
-
-                            defaultPageSize: 10,
-                            className: '-striped -highlight',
-                            getTdProps: this.getTdProps.bind(this) }))));
-
-
-
-
-        } }]);return MergeTool;}(_react.Component);
-
+    return MergeTool;
+}(_react.Component);
 
 // dataFormat={this.sourceFormatter.bind(this)}
 
@@ -86036,11 +86056,11 @@ function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         getClients: _clientActions.getClients,
         wfmGetClients: _wfmClientActions.getClients,
-        selectMergeCell: _mergeActions.selectMergeCell },
-    dispatch);
-}exports.default =
+        selectMergeCell: _mergeActions.selectMergeCell
+    }, dispatch);
+}
 
-(0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MergeTool);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MergeTool);
 
 /***/ }),
 /* 937 */

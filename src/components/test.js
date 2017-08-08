@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
 import universe from 'universe';
 import { getClients } from '../actions/clientActions';
 import { selectMergeCell } from '../actions/mergeActions';

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { getBglClients } from '../actions/bglClientActions';
+import ReactTable from "react-table";
 
 class ClientList extends Component {
     componentDidMount() {
@@ -44,13 +43,8 @@ class ClientList extends Component {
         };
         const clients = this.props.clients;
         return (
-            <BootstrapTable data={clients} selectRow={selectRow}
-                striped hover cellEdit={cellEditProp}>
-                <TableHeaderColumn isKey dataField='bglId' hidden>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
-            </BootstrapTable>
+            <div>Hello
+            </div>
         )
     }
 }

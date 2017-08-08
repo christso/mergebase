@@ -108,4 +108,14 @@ app.get('/clients-xplan', function (req, res) {
     });
 });
 
+
+app.get('/bgl/clients', function (req, res) {
+    xplanApi.getClients(function(apiRes, err) {
+        if (err)
+            console.log(err);
+        res.json(apiRes); 
+    });
+});
+
+
 module.exports = app;

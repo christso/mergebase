@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
 import universe from 'universe';
 import { getClients } from '../actions/clientActions';
 import { selectMergeCell } from '../actions/mergeActions';
@@ -16,7 +17,7 @@ class MergeTool extends Component {
     componentDidMount() {
         this.props.getClients();
         this.props.wfmGetClients();
-        console.log(this.props.clients);
+        // console.log(this.props.clients);
     }
 
     getTdProps(state, rowInfo, column, instance) {
@@ -56,61 +57,13 @@ class MergeTool extends Component {
                     Merge Tool
                 </div>
                 <div className="panel-body">
-                    <ReactTable
-                        data={clients}
-                        columns={[
-                            {
-                                Header: "Name",
-                                accessor: "name"
-                            },
-                            {
-                                Header: "Email",
-                                accessor: "email"
-                            },
-                            {
-                                Header: "Phone",
-                                accessor: "phone"
-                            },
-                            {
-                                Header: "INT",
-                                accessor: "intFlag",
-                                Cell: row => (
-                                    row.value > 0 ?
-                                        <div
-                                            style={{
-                                                backgroundColor: '#85cc00'
-                                            }}>
-                                            {row.value}
-                                        </div>
-                                        : row.value
-                                )
-                            },
-                            {
-                                Header: "WFM",
-                                accessor: "wfmFlag",
-                                Cell: row => (
-                                    row.value > 0 ?
-                                        <div
-                                            style={{
-                                                backgroundColor: '#85cc00'
-                                            }}>
-                                            {row.value}
-                                        </div>
-                                        : row.value
-                                )
-                            }
-                        ]}
-                        defaultPageSize={10}
-                        className="-striped -highlight"
-                        getTdProps={this.getTdProps.bind(this)}
-                    />
+
                 </div>
             </div>
         )
     }
 }
 
-// dataFormat={this.sourceFormatter.bind(this)}
 
 function mapStateToProps(state) {
     return {

@@ -1,62 +1,57 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid, Glyphicon, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { getClients, selectClient, deselectClient } from '../actions/wfmClientActions'
+import ReactTable from "react-table";
 
 class ClientList extends Component {
     componentDidMount() {
         this.props.getClients();
     }
 
-    onSelect(row, isSelected, event) {
-        if (isSelected) {
-            console.log("You selected row", row);
-            this.props.selectClient(row.wfmId);
-        } else {
-            console.log("You deselected row", row);
-            this.props.deselectClient(row._id);
-        }
-
-    }
-
-    trClassNameFormat(rowData, rIndex) {
+    getTrProps(state, rowInfo, column) {
+        if (!rowInfo) return {};
+        // '597ea4538bdccc1394fa8664'
         const selectedClientIds = this.props.selectedClientIds;
         const found = selectedClientIds.find(function (sel) {
-            return sel === rowData.wfmId;
-        });
+            return sel === rowInfo.original.wfmId;
+        });        
         if (found) {
-            return 'info'
+            return {
+                className: '-info'
+            }
         } else {
-            return '';
+            return {};
         }
     }
 
     render() {
-        const selectRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            showOnlySelected: true,
-            selected: this.props.selectedClientIds
-        };
-        const options = {
-            // onRowClick: this.onRowClick.bind(this)
-        };
-
         const clients = this.props.clients;
         return (
-            <BootstrapTable striped hover
-                trClassName={this.trClassNameFormat.bind(this)}
-                selectRow={selectRow}
-                options={options}
+            <ReactTable
                 data={clients}
-                pagination>
-                <TableHeaderColumn isKey dataField='wfmId'>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
-            </BootstrapTable>
+                columns={[
+                    {
+                        Header: "ID",
+                        accessor: "wfmId"
+                    },
+                    {
+                        Header: "Name",
+                        accessor: "name"
+                    },
+                    {
+                        Header: "Email",
+                        accessor: "email"
+                    },
+                    {
+                        Header: "Phone",
+                        accessor: "phone"
+                    }
+                ]}
+                defaultPageSize={5}
+                className="-striped -highlight"
+                getTrProps={this.getTrProps.bind(this)}
+            />
         )
     }
 }

@@ -7,11 +7,6 @@ body {
   cursor: pointer;
 }
 
-/* React Table */
-.rt-th {
-  font-weight: bold;
-}
-
 /* React Bootstrap Table */
 
 #clientList-buttons {

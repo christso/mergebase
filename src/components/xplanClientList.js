@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getClients, selectClient } from '../actions/xplanClientActions';
 import ReactTable from "react-table";
-import "react-table/react-table.css";
 
 class ClientList extends Component {
     constructor(props) {
@@ -14,19 +13,21 @@ class ClientList extends Component {
         this.props.getClients();
     }
 
-    trClassNameFormat(rowData, rIndex) {
-        // console.log("Selected Check", this.props.selectedClientIds, rowData._id);
+    getTrProps(state, rowInfo, column) {
+        if (!rowInfo) return {};
+        // '597ea4538bdccc1394fa8664'
         const selectedClientIds = this.props.selectedClientIds;
         const found = selectedClientIds.find(function (sel) {
-            return sel === rowData._id;
-        });
+            return sel === rowInfo.original._id;
+        });        
         if (found) {
-            return 'info'
+            return {
+                className: '-info'
+            }
         } else {
-            return '';
+            return {};
         }
     }
-
     getTdProps(state, rowInfo, column, instance) {
         return {
             onClick: (e, handleOriginal) => {
@@ -41,21 +42,7 @@ class ClientList extends Component {
             }
         }
     }
-
-    getTrProps(state, rowInfo, column) {
-        if (!rowInfo) return {};
-
-        if (rowInfo.original._id === '597ea4538bdccc1394fa8664') {
-            return {
-                style: {
-                    background: 'green'
-                }
-            }
-        } else {
-            return {};
-        }
-    }
-
+    
     render() {
 
         const clients = this.props.clients;

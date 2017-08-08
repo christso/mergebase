@@ -5,46 +5,40 @@ import { getBglClients } from '../actions/bglClientActions';
 import ReactTable from "react-table";
 
 class ClientList extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
         this.props.getClients();
     }
-    onAfterSaveCell(row, cellName, cellValue) {
-        console.log(`Save cell ${cellName} with value ${cellValue}`);
-
-        let rowStr = '';
-        for (const prop in row) {
-            rowStr += prop + ': ' + row[prop] + '\n';
-        }
-
-        console.log('update', {
-            [cellName]: cellValue
-        });
-        // console.log('Thw whole row :\n' + rowStr);
-    }
-
-    onBeforeSaveCell(row, cellName, cellValue) {
-        // You can do any validation on here for editing value,
-        // return false for reject the editing
-        return true;
-    }
 
     render() {
-        const selectRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            showOnlySelected: true,
-            selected: this.props.selectedClientIds         
-        };        
-        const cellEditProp = {
-            mode: 'click',
-            blurToSave: true,
-            beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-            afterSaveCell: this.onAfterSaveCell.bind(this)  // a hook for after saving cell            
-        };
         const clients = this.props.clients;
         return (
-            <div>Hello
-            </div>
+            <ReactTable
+                data={clients}
+                columns={[
+                    {
+                        Header: "ID",
+                        accessor: "_id"
+                    },
+                    {
+                        Header: "Name",
+                        accessor: "name"
+                    },
+                    {
+                        Header: "Email",
+                        accessor: "email"
+                    },
+                    {
+                        Header: "Phone",
+                        accessor: "phone"
+                    }
+                ]}
+                defaultPageSize={5}
+                className="-striped -highlight"
+            />
         )
     }
 }

@@ -6,7 +6,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 var wfmApi = require('./api/workflowmax/clientActions')
-var xplanApi = require('./api/xplan/clientActions');
+var xplanApi = require('./api/xplanMock/clientActions');
+var bglApi = require('./api/bglMock/clientActions');
 
 mongoose.connect('mongodb://localhost:27017/practice_integrator_demo');
 var db = mongoose.connection;
@@ -100,7 +101,7 @@ app.get('/clients-wfm', function (req, res) {
     });
 });
 
-app.get('/clients-xplan', function (req, res) {
+app.get('/xplan/clients', function (req, res) {
     xplanApi.getClients(function(apiRes, err) {
         if (err)
             console.log(err);
@@ -108,9 +109,8 @@ app.get('/clients-xplan', function (req, res) {
     });
 });
 
-
 app.get('/bgl/clients', function (req, res) {
-    xplanApi.getClients(function(apiRes, err) {
+    bglApi.getClients(function(apiRes, err) {
         if (err)
             console.log(err);
         res.json(apiRes); 

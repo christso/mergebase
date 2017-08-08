@@ -19,17 +19,26 @@
             "webRoot": "${workspaceRoot}"
         },
         {
+            "name": "Launch API Server",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "babel-node",
+            "program": "${workspaceRoot}/start-server.js",
+            "restart": true,
+            "console": "integratedTerminal"
+        },
+        {
             "type": "node",
             "request": "attach",
             "name": "Attach API Server",
             "port": 5859
-        },        
+        },
         {
             "type": "node",
             "request": "attach",
             "name": "Attach Client",
             "port": 5860
-        },  
+        },
         {
             "type": "node",
             "request": "attach",

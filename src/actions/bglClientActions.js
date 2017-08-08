@@ -4,7 +4,7 @@ import {ROOT_URL} from '../locator';
 
 export function getBglClients() {
   return function (dispatch) {
-    axios.get(`${ROOT_URL}/clients-bgl`)
+    axios.get(`${ROOT_URL}/bgl/clients`)
       .then(function (response) {
         console.log(response.data);
         dispatch({ type: "GET_CLIENTS_BGL", payload: response.data })

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-react": "set PORT=8080 && react-scripts start",
-    "start": "concurrently \"npm run server\" \"npm run client\" \"npm run xplan\"",
+    "start": "concurrently \"npm run client\" \"npm run server\" \"npm run xplan\" \"npm run bgl\"",
     "server": "babel-node start-server.js",
     "xplan": "babel-node ./api/xplanMock/server.js",
     "bgl": "babel-node ./api/bglMock/server.js",

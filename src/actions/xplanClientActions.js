@@ -4,7 +4,7 @@ import {ROOT_URL} from '../locator';
 
 export function getClients() {
   return function (dispatch) {
-    axios.get(`${ROOT_URL}/clients-xplan`)
+    axios.get(`${ROOT_URL}/xplan/clients`)
       .then(function (response) {
         dispatch({ type: "GET_CLIENTS_XPLAN", payload: response.data })
       })

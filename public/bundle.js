@@ -31922,7 +31922,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function getClients() {
   return function (dispatch) {
-    _axios2.default.get(_locator.ROOT_URL + "/clients-xplan").then(function (response) {
+    _axios2.default.get(_locator.ROOT_URL + "/xplan/clients").then(function (response) {
       dispatch({ type: "GET_CLIENTS_XPLAN", payload: response.data });
     }).catch(function (err) {
       dispatch({ type: "GET_CLIENTS_XPLAN_REJECTED", payload: err });
@@ -78234,8 +78234,6 @@ var _reactTable2 = _interopRequireDefault(_reactTable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -78245,10 +78243,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ClientList = function (_Component) {
     _inherits(ClientList, _Component);
 
-    function ClientList() {
+    function ClientList(props) {
         _classCallCheck(this, ClientList);
 
-        return _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).call(this, props));
     }
 
     _createClass(ClientList, [{
@@ -78257,46 +78255,27 @@ var ClientList = function (_Component) {
             this.props.getClients();
         }
     }, {
-        key: 'onAfterSaveCell',
-        value: function onAfterSaveCell(row, cellName, cellValue) {
-            console.log('Save cell ' + cellName + ' with value ' + cellValue);
-
-            var rowStr = '';
-            for (var prop in row) {
-                rowStr += prop + ': ' + row[prop] + '\n';
-            }
-
-            console.log('update', _defineProperty({}, cellName, cellValue));
-            // console.log('Thw whole row :\n' + rowStr);
-        }
-    }, {
-        key: 'onBeforeSaveCell',
-        value: function onBeforeSaveCell(row, cellName, cellValue) {
-            // You can do any validation on here for editing value,
-            // return false for reject the editing
-            return true;
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var selectRow = {
-                mode: 'checkbox',
-                clickToSelect: true,
-                showOnlySelected: true,
-                selected: this.props.selectedClientIds
-            };
-            var cellEditProp = {
-                mode: 'click',
-                blurToSave: true,
-                beforeSaveCell: this.onBeforeSaveCell.bind(this), // a hook for before saving cell
-                afterSaveCell: this.onAfterSaveCell.bind(this) // a hook for after saving cell            
-            };
             var clients = this.props.clients;
-            return _react2.default.createElement(
-                'div',
-                null,
-                'Hello'
-            );
+            return _react2.default.createElement(_reactTable2.default, {
+                data: clients,
+                columns: [{
+                    Header: "ID",
+                    accessor: "_id"
+                }, {
+                    Header: "Name",
+                    accessor: "name"
+                }, {
+                    Header: "Email",
+                    accessor: "email"
+                }, {
+                    Header: "Phone",
+                    accessor: "phone"
+                }],
+                defaultPageSize: 5,
+                className: '-striped -highlight'
+            });
         }
     }]);
 
@@ -78337,7 +78316,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function getBglClients() {
   return function (dispatch) {
-    _axios2.default.get(_locator.ROOT_URL + "/clients-bgl").then(function (response) {
+    _axios2.default.get(_locator.ROOT_URL + "/bgl/clients").then(function (response) {
       console.log(response.data);
       dispatch({ type: "GET_CLIENTS_BGL", payload: response.data });
     }).catch(function (err) {

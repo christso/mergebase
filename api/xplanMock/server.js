@@ -5,10 +5,10 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/xplan_mock');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
+import {port} from './serverConfig';
 
 var Clients = require('./clientModel');
 // var seedDB = require('./seeds');
-
 // seedDB();
 
 //----->>>> GET CLIENTS <<<---------
@@ -20,10 +20,10 @@ app.get('/clients', function (req, res) {
     });
 });
 
-app.listen(3002, function (err) {
+app.listen(port, function (err) {
     if (err) {
         return console.log(err);
     }
-    console.log('XPLAN Server is listening on http://localhost:3002');
+    console.log(`XPLAN Server is listening on http://localhost:${port}`);
 });
 

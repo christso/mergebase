@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ROOT_URL } from '../locator';
+import { selectClient as wfmSelectClient, deselectClient as wfmDeselectClient } from './wfmClientActions';
 
 // GET CLIENTS
 export function getClients() {
@@ -17,11 +18,27 @@ export function getClients() {
 // used for highlighting selected row in client list
 export function toggleSelectClient(client) {
   return function (dispatch) {
-    dispatch({ type: "TOGGLE_SELECT_CLIENT",
-      payload: { _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId,
-        bglId: client.bglId } 
+    dispatch({
+      type: "TOGGLE_SELECT_CLIENT",
+      payload: {
+        _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId,
+        bglId: client.bglId
+      }
     });
-  }  
+  }
+}
+
+export function chainToggleSelectClient(client, isSelect) {
+  return function (dispatch) {
+    toggleSelectClient(client)(dispatch);
+    if (isSelect) {
+      wfmSelectClient(client.wfmId)(dispatch);
+    } else {
+      wfmDeselectClient(client.wfmId)(dispatch);
+    }
+  }
+
+
 }
 
 export function selectClient(id) {
@@ -38,27 +55,27 @@ export function deselectClient(id) {
 
 export function setSelectedClients(keys) {
   return function (dispatch) {
-    dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys})
+    dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys })
   }
 }
 
 export function findClient(id, newValues = {}) {
-    return function (dispatch) {
-      axios.get(`${ROOT_URL}/clients/${id}`)
-        .then(function (response) {
-          let data = { ...response.data, ...newValues };
-          dispatch({ type: "FIND_CLIENT", payload: data })
-        })
-        .catch(function (err) {
-          dispatch({ type: "FIND_CLIENT_REJECTED", payload: err })
-        });
-    }
+  return function (dispatch) {
+    axios.get(`${ROOT_URL}/clients/${id}`)
+      .then(function (response) {
+        let data = { ...response.data, ...newValues };
+        dispatch({ type: "FIND_CLIENT", payload: data })
+      })
+      .catch(function (err) {
+        dispatch({ type: "FIND_CLIENT_REJECTED", payload: err })
+      });
+  }
 };
 
 export function updateClient(client) {
   return function (dispatch) {
     axios.put(`${ROOT_URL}/clients/${client._id}`, client)
-      .then(function(response) {
+      .then(function (response) {
         dispatch({ type: "UPDATE_CLIENT", payload: client })
       })
       .catch(function (err) {

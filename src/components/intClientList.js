@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import ReactTable from "react-table";
-import { getClients, selectClient, deselectClient, setSelectedClients,
-    toggleSelectClient } from '../actions/clientActions';
+import {
+    getClients, selectClient, deselectClient, setSelectedClients,
+    toggleSelectClient, chainToggleSelectClient
+} from '../actions/clientActions';
 import {
     selectClient as selectWfmClient,
     deselectClient as deselectWfmClient,
@@ -19,6 +21,9 @@ import { extendClientList } from '../selectors/index';
 class ClientList extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showOnlySelected: false
+        };
     }
 
     componentDidMount() {
@@ -31,14 +36,20 @@ class ClientList extends Component {
 
 
     createCustomButtonGroup(props) {
+        const selectedClientIds = this.props.selectedClients.map((sel) => {
+            return sel._id;
+        })
+        console.log("edit", selectedClientIds.length > 0 ? selectedClientIds[0] : undefined);
 
         return (
             <div id="clientList-buttons" className="btn-group btn-group-sm">
-                <a className="btn btn-primary">
-                    <i className="fa fa-star"></i> Show Selected</a>
+                <a className="btn btn-primary" onClick={this.toggleSelectAll.bind(this)}>
+                    <i className="fa fa-star"></i>
+                    {this.state.showOnlySelected ? "  Show Selected" : "  Show All"}</a>
                 <a className="btn btn-primary">
                     <i className="fa fa-plus"></i> New</a>
-                <a className="btn btn-primary" href={'/client/' + this.props.selectedClients + '/edit'}>
+                <a className="btn btn-primary" href={'/client/' +
+                    (selectedClientIds.length > 0 ? selectedClientIds[0] : undefined) + '/edit'}>
                     <i className="fa fa-pencil"></i> Edit</a>
                 <a className="btn btn-primary" href={'/client/' + this.props.selectedClients + '/bind?'
                     + (this.props.wfmselectedClients + '&wfmId=' + this.props.wfmselectedClients + '')
@@ -51,12 +62,24 @@ class ClientList extends Component {
         );
     }
 
+    toggleSelectAll() {
+        if (this.state.showOnlySelected) {
+            this.setState({
+                showOnlySelected: false
+            });
+        } else {
+            this.setState({
+                showOnlySelected: true
+            });
+        }
+    }
+
     getTrProps(state, rowInfo, column) {
         if (!rowInfo) return {};
         const selectedClients = this.props.selectedClients;
         const found = selectedClients.find(function (sel) {
             return sel._id === rowInfo.original._id;
-        });        
+        });
         if (found) {
             return {
                 className: '-info'
@@ -64,21 +87,22 @@ class ClientList extends Component {
         } else {
             return {};
         }
-    }    
+    }
 
     getTdProps(state, rowInfo, column, instance) {
         return {
             onClick: (e, handleOriginal) => {
-                console.log('A Td Element was clicked!')
-                console.log('it produced this event:', e)
-                console.log('It was in this column:', column)
-                console.log('It was in this row:', rowInfo)
-                console.log('It was in this table instance:', instance)
-                
+
+                const selectedClients = this.props.selectedClients;
+                const found = selectedClients.find(function (sel) {
+                    return sel._id === rowInfo.original._id;
+                });
+
                 if (column.Header === "Binds") {
-                    this.props.toggleSelectClient(rowInfo.original);
+                    this.props.chainToggleSelectClient(rowInfo.original,
+                        found ? false : true);
                 }
-                
+
                 if (handleOriginal) {
                     handleOriginal()
                 }
@@ -116,10 +140,44 @@ class ClientList extends Component {
                             Header: "Binds",
                             accessor: "binds",
                             Cell: row => (
-                                    row.value === 0 ?
-                                        <div>-</div>
-                                        : row.value
+                                row.value === 0 ?
+                                    <div>-</div>
+                                    : row.value
+                            ),
+                            filterMethod: (filter, row) => {
+                                if (filter.value === "all") {
+                                    return true;
+                                }
+                                if (filter.value === "selected") {
+                                    const selectedClients = this.props.selectedClients;
+                                    const found = selectedClients.find(function (sel) {
+                                        return sel._id === row._original._id;
+                                    });
+                                    if (found) return true;
+                                }
+                                if (filter.value === "bound") {
+                                    return row[filter.id] > 0;
+                                }
+                                if (filter.value === "unbound") {
+                                    return row[filter.id] === 0;
+                                }
+                            },
+                            Filter: ({ filter, onChange }) => {
+                                // value={filter ? filter.value : "all"}
+                                return (
+                                    <select
+                                        onChange={event => onChange(event.target.value)}
+                                        style={{ width: "100%" }}
+                                        value={filter ? filter.value : "all"}
+                                    >
+                                        <option value="all">Show All</option>
+                                        <option value="selected">Selected</option>
+                                        <option value="bound">Bound</option>
+                                        <option value="unbound">Unbound</option>
+                                    </select>
                                 )
+                            }
+
                         }
                     ]}
                     defaultPageSize={5}
@@ -133,8 +191,19 @@ class ClientList extends Component {
                         }
                         return false;
                     }}
-                        
-                />
+
+
+                >
+                    {(state, makeTable, instance) => {
+                        console.log("STATE", state);
+                        return (
+                            <div>
+                                {makeTable()}
+                            </div>
+                        )
+
+                    }}
+                </ReactTable>
             </div>
         )
     }
@@ -164,7 +233,8 @@ function mapDispatchToProps(dispatch) {
         setSelectedClients: setSelectedClients,
         setSelectedWfmClients: setSelectedWfmClients,
         setSelectedXplanClients: setSelectedXplanClients,
-        toggleSelectClient: toggleSelectClient
+        toggleSelectClient: toggleSelectClient,
+        chainToggleSelectClient: chainToggleSelectClient
     }, dispatch)
 }
 

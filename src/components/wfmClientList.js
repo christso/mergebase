@@ -13,14 +13,37 @@ class ClientList extends Component {
         if (!rowInfo) return {};
         const selectedClients = this.props.selectedClients;
         const found = selectedClients.find(function (sel) {
-            return sel.wfmId === rowInfo.original.wfmId;
-        });        
+            return sel === rowInfo.original.wfmId;
+        });
         if (found) {
             return {
                 className: '-info'
             }
         } else {
             return {};
+        }
+    }
+
+
+    getTdProps(state, rowInfo, column, instance) {
+        return {
+            onClick: (e, handleOriginal) => {
+
+                const selectedClients = this.props.selectedClients;
+                const found = selectedClients.find(function (sel) {
+                    return sel === rowInfo.original.wfmId;
+                });
+
+                if (found) {
+                    this.props.deselectClient(rowInfo.original.wfmId);
+                } else {
+                    this.props.selectClient(rowInfo.original.wfmId);                    
+                }
+                
+                if (handleOriginal) {
+                    handleOriginal()
+                }
+            }
         }
     }
 
@@ -45,11 +68,63 @@ class ClientList extends Component {
                     {
                         Header: "Phone",
                         accessor: "phone"
+                    },
+                    {
+                        Header: "Binds",
+                        accessor: "binds",
+                        Cell: row => (
+                            row.value === 0 ?
+                                <div>-</div>
+                                : row.value
+                        ),
+                        filterMethod: (filter, row) => {
+                            if (filter.value === "all") {
+                                return true;
+                            }
+                            if (filter.value === "selected") {
+                                const selectedClients = this.props.selectedClients;
+                                const found = selectedClients.find(function (sel) {
+                                    return sel._id === row._original._id;
+                                });
+                                if (found) return true;
+                            }
+                            if (filter.value === "bound") {
+                                return row[filter.id] > 0;
+                            }
+                            if (filter.value === "unbound") {
+                                return row[filter.id] === 0;
+                            }
+                        },
+                        Filter: ({ filter, onChange }) => {
+                            // value={filter ? filter.value : "all"}
+                            return (
+                                <select
+                                    onChange={event => onChange(event.target.value)}
+                                    style={{ width: "100%" }}
+                                    value={filter ? filter.value : "all"}
+                                >
+                                    <option value="all">Show All</option>
+                                    <option value="selected">Selected</option>
+                                    <option value="bound">Bound</option>
+                                    <option value="unbound">Unbound</option>
+                                </select>
+                            )
+                        },
+
+
                     }
                 ]}
                 defaultPageSize={5}
                 className="-striped -highlight"
+                getTdProps={this.getTdProps.bind(this)}
                 getTrProps={this.getTrProps.bind(this)}
+                filterable
+                defaultFilterMethod={(filter, row) => {
+                    if (String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) >= 0) {
+                        return true;
+                    }
+                    return false;
+                }}
             />
         )
     }
@@ -59,7 +134,7 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: state.wfmClients.clients,
-        selectedClients: state.clients.selectedClients,
+        selectedClients: state.wfmClients.selectedClients,
     };
 }
 

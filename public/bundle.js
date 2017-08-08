@@ -8827,6 +8827,7 @@ Object.defineProperty(exports, "__esModule", { value: true });var _extends = Obj
 
 
 
+
 getClients = getClients;exports.
 
 
@@ -8841,6 +8842,22 @@ getClients = getClients;exports.
 
 
 toggleSelectClient = toggleSelectClient;exports.
+
+
+
+
+
+
+
+
+
+
+
+chainToggleSelectClient = chainToggleSelectClient;exports.
+
+
+
+
 
 
 
@@ -8880,9 +8897,9 @@ findClient = findClient;exports.
 
 
 
-updateClient = updateClient;var _axios = __webpack_require__(118);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(119);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // GET CLIENTS
-function getClients() {return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + "/clients").then(function (response) {dispatch({ type: "GET_CLIENTS", payload: response.data });}).catch(function (err) {dispatch({ type: "GET_CLIENTS_REJECTED", payload: err });});};} // used for highlighting selected row in client list
-function toggleSelectClient(client) {return function (dispatch) {dispatch({ type: "TOGGLE_SELECT_CLIENT", payload: { _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId, bglId: client.bglId } });};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT", payload: id });};}function deselectClient(id) {return function (dispatch) {dispatch({ type: "DESELECT_CLIENT", payload: id });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys });};}function findClient(id) {var newValues = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + "/clients/" + id).then(function (response) {var data = _extends({}, response.data, newValues);dispatch({ type: "FIND_CLIENT", payload: data });}).catch(function (err) {dispatch({ type: "FIND_CLIENT_REJECTED", payload: err });});};};function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + "/clients/" + client._id, client).
+updateClient = updateClient;var _axios = __webpack_require__(118);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(119);var _wfmClientActions = __webpack_require__(196);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // GET CLIENTS
+function getClients() {return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + '/clients').then(function (response) {dispatch({ type: "GET_CLIENTS", payload: response.data });}).catch(function (err) {dispatch({ type: "GET_CLIENTS_REJECTED", payload: err });});};} // used for highlighting selected row in client list
+function toggleSelectClient(client) {return function (dispatch) {dispatch({ type: "TOGGLE_SELECT_CLIENT", payload: { _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId, bglId: client.bglId } });};}function chainToggleSelectClient(client, isSelect) {return function (dispatch) {toggleSelectClient(client)(dispatch);if (isSelect) {(0, _wfmClientActions.selectClient)(client.wfmId)(dispatch);} else {(0, _wfmClientActions.deselectClient)(client.wfmId)(dispatch);}};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT", payload: id });};}function deselectClient(id) {return function (dispatch) {dispatch({ type: "DESELECT_CLIENT", payload: id });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys });};}function findClient(id) {var newValues = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + '/clients/' + id).then(function (response) {var data = _extends({}, response.data, newValues);dispatch({ type: "FIND_CLIENT", payload: data });}).catch(function (err) {dispatch({ type: "FIND_CLIENT_REJECTED", payload: err });});};};function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + '/clients/' + client._id, client).
     then(function (response) {
       dispatch({ type: "UPDATE_CLIENT", payload: client });
     }).
@@ -78074,6 +78091,8 @@ var _redux = __webpack_require__(23);
 var _reactTable = __webpack_require__(88);var _reactTable2 = _interopRequireDefault(_reactTable);
 var _clientActions = __webpack_require__(87);
 
+
+
 var _wfmClientActions = __webpack_require__(196);
 
 
@@ -78087,8 +78106,11 @@ var _xplanClientActions = __webpack_require__(872);
 var _index = __webpack_require__(200);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var
 
 ClientList = function (_Component) {_inherits(ClientList, _Component);
-    function ClientList(props) {_classCallCheck(this, ClientList);return _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).call(this,
+    function ClientList(props) {_classCallCheck(this, ClientList);var _this = _possibleConstructorReturn(this, (ClientList.__proto__ || Object.getPrototypeOf(ClientList)).call(this,
         props));
+        _this.state = {
+            showOnlySelected: false };return _this;
+
     }_createClass(ClientList, [{ key: 'componentDidMount', value: function componentDidMount()
 
         {
@@ -78101,14 +78123,20 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
 
 
         props) {
+            var selectedClientIds = this.props.selectedClients.map(function (sel) {
+                return sel._id;
+            });
+            console.log("edit", selectedClientIds.length > 0 ? selectedClientIds[0] : undefined);
 
             return (
                 _react2.default.createElement('div', { id: 'clientList-buttons', className: 'btn-group btn-group-sm' },
-                    _react2.default.createElement('a', { className: 'btn btn-primary' },
-                        _react2.default.createElement('i', { className: 'fa fa-star' }), ' Show Selected'),
+                    _react2.default.createElement('a', { className: 'btn btn-primary', onClick: this.toggleSelectAll.bind(this) },
+                        _react2.default.createElement('i', { className: 'fa fa-star' }),
+                        this.state.showOnlySelected ? "  Show Selected" : "  Show All"),
                     _react2.default.createElement('a', { className: 'btn btn-primary' },
                         _react2.default.createElement('i', { className: 'fa fa-plus' }), ' New'),
-                    _react2.default.createElement('a', { className: 'btn btn-primary', href: '/client/' + this.props.selectedClients + '/edit' },
+                    _react2.default.createElement('a', { className: 'btn btn-primary', href: '/client/' + (
+                            selectedClientIds.length > 0 ? selectedClientIds[0] : undefined) + '/edit' },
                         _react2.default.createElement('i', { className: 'fa fa-pencil' }), ' Edit'),
                     _react2.default.createElement('a', { className: 'btn btn-primary', href: '/client/' + this.props.selectedClients + '/bind?' + (
                             this.props.wfmselectedClients + '&wfmId=' + this.props.wfmselectedClients + '') + (
@@ -78119,6 +78147,18 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
 
 
 
+        } }, { key: 'toggleSelectAll', value: function toggleSelectAll()
+
+        {
+            if (this.state.showOnlySelected) {
+                this.setState({
+                    showOnlySelected: false });
+
+            } else {
+                this.setState({
+                    showOnlySelected: true });
+
+            }
         } }, { key: 'getTrProps', value: function getTrProps(
 
         state, rowInfo, column) {
@@ -78139,14 +78179,15 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
         state, rowInfo, column, instance) {var _this2 = this;
             return {
                 onClick: function onClick(e, handleOriginal) {
-                    console.log('A Td Element was clicked!');
-                    console.log('it produced this event:', e);
-                    console.log('It was in this column:', column);
-                    console.log('It was in this row:', rowInfo);
-                    console.log('It was in this table instance:', instance);
+
+                    var selectedClients = _this2.props.selectedClients;
+                    var found = selectedClients.find(function (sel) {
+                        return sel._id === rowInfo.original._id;
+                    });
 
                     if (column.Header === "Binds") {
-                        _this2.props.toggleSelectClient(rowInfo.original);
+                        _this2.props.chainToggleSelectClient(rowInfo.original,
+                        found ? false : true);
                     }
 
                     if (handleOriginal) {
@@ -78162,48 +78203,93 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
 
         } }, { key: 'render', value: function render()
 
-        {
+        {var _this3 = this;
             var clients = this.props.clients;
             return (
                 _react2.default.createElement('div', null,
                     this.createCustomButtonGroup(),
                     _react2.default.createElement(_reactTable2.default, {
-                        data: clients,
-                        columns: [
-                        {
-                            Header: "Name",
-                            accessor: "name" },
+                            data: clients,
+                            columns: [
+                            {
+                                Header: "Name",
+                                accessor: "name" },
 
-                        {
-                            Header: "Email",
-                            accessor: "email" },
+                            {
+                                Header: "Email",
+                                accessor: "email" },
 
-                        {
-                            Header: "Phone",
-                            accessor: "phone" },
+                            {
+                                Header: "Phone",
+                                accessor: "phone" },
 
-                        {
-                            Header: "Binds",
-                            accessor: "binds",
-                            Cell: function Cell(row) {return (
-                                    row.value === 0 ?
-                                    _react2.default.createElement('div', null, '-') :
-                                    row.value);} }],
+                            {
+                                Header: "Binds",
+                                accessor: "binds",
+                                Cell: function Cell(row) {return (
+                                        row.value === 0 ?
+                                        _react2.default.createElement('div', null, '-') :
+                                        row.value);},
+
+                                filterMethod: function filterMethod(filter, row) {
+                                    if (filter.value === "all") {
+                                        return true;
+                                    }
+                                    if (filter.value === "selected") {
+                                        var selectedClients = _this3.props.selectedClients;
+                                        var found = selectedClients.find(function (sel) {
+                                            return sel._id === row._original._id;
+                                        });
+                                        if (found) return true;
+                                    }
+                                    if (filter.value === "bound") {
+                                        return row[filter.id] > 0;
+                                    }
+                                    if (filter.value === "unbound") {
+                                        return row[filter.id] === 0;
+                                    }
+                                },
+                                Filter: function Filter(_ref) {var filter = _ref.filter,_onChange = _ref.onChange;
+                                    // value={filter ? filter.value : "all"}
+                                    return (
+                                        _react2.default.createElement('select', {
+                                                onChange: function onChange(event) {return _onChange(event.target.value);},
+                                                style: { width: "100%" },
+                                                value: filter ? filter.value : "all" },
+
+                                            _react2.default.createElement('option', { value: 'all' }, 'Show All'),
+                                            _react2.default.createElement('option', { value: 'selected' }, 'Selected'),
+                                            _react2.default.createElement('option', { value: 'bound' }, 'Bound'),
+                                            _react2.default.createElement('option', { value: 'unbound' }, 'Unbound')));
+
+
+                                } }],
 
 
 
-                        defaultPageSize: 5,
-                        className: '-striped -highlight',
-                        getTrProps: this.getTrProps.bind(this),
-                        getTdProps: this.getTdProps.bind(this),
-                        filterable: true,
-                        defaultFilterMethod: function defaultFilterMethod(filter, row) {
-                            if (String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) >= 0) {
-                                return true;
-                            }
-                            return false;
-                        } })));
+                            defaultPageSize: 5,
+                            className: '-striped -highlight',
+                            getTrProps: this.getTrProps.bind(this),
+                            getTdProps: this.getTdProps.bind(this),
+                            filterable: true,
+                            defaultFilterMethod: function defaultFilterMethod(filter, row) {
+                                if (String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) >= 0) {
+                                    return true;
+                                }
+                                return false;
+                            } },
 
+
+
+                        function (state, makeTable, instance) {
+                            console.log("STATE", state);
+                            return (
+                                _react2.default.createElement('div', null,
+                                    makeTable()));
+
+
+
+                        })));
 
 
 
@@ -78234,7 +78320,8 @@ function mapDispatchToProps(dispatch) {
         setSelectedClients: _clientActions.setSelectedClients,
         setSelectedWfmClients: _wfmClientActions.setSelectedClients,
         setSelectedXplanClients: _xplanClientActions.setSelectedClients,
-        toggleSelectClient: _clientActions.toggleSelectClient },
+        toggleSelectClient: _clientActions.toggleSelectClient,
+        chainToggleSelectClient: _clientActions.chainToggleSelectClient },
     dispatch);
 }exports.default =
 
@@ -78260,7 +78347,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);function C
             if (!rowInfo) return {};
             var selectedClients = this.props.selectedClients;
             var found = selectedClients.find(function (sel) {
-                return sel.wfmId === rowInfo.original.wfmId;
+                return sel === rowInfo.original.wfmId;
             });
             if (found) {
                 return {
@@ -78269,9 +78356,32 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);function C
             } else {
                 return {};
             }
+        } }, { key: 'getTdProps', value: function getTdProps(
+
+
+        state, rowInfo, column, instance) {var _this2 = this;
+            return {
+                onClick: function onClick(e, handleOriginal) {
+
+                    var selectedClients = _this2.props.selectedClients;
+                    var found = selectedClients.find(function (sel) {
+                        return sel === rowInfo.original.wfmId;
+                    });
+
+                    if (found) {
+                        _this2.props.deselectClient(rowInfo.original.wfmId);
+                    } else {
+                        _this2.props.selectClient(rowInfo.original.wfmId);
+                    }
+
+                    if (handleOriginal) {
+                        handleOriginal();
+                    }
+                } };
+
         } }, { key: 'render', value: function render()
 
-        {
+        {var _this3 = this;
             var clients = this.props.clients;
             return (
                 _react2.default.createElement(_reactTable2.default, {
@@ -78291,12 +78401,64 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);function C
 
                     {
                         Header: "Phone",
-                        accessor: "phone" }],
+                        accessor: "phone" },
+
+                    {
+                        Header: "Binds",
+                        accessor: "binds",
+                        Cell: function Cell(row) {return (
+                                row.value === 0 ?
+                                _react2.default.createElement('div', null, '-') :
+                                row.value);},
+
+                        filterMethod: function filterMethod(filter, row) {
+                            if (filter.value === "all") {
+                                return true;
+                            }
+                            if (filter.value === "selected") {
+                                var selectedClients = _this3.props.selectedClients;
+                                var found = selectedClients.find(function (sel) {
+                                    return sel._id === row._original._id;
+                                });
+                                if (found) return true;
+                            }
+                            if (filter.value === "bound") {
+                                return row[filter.id] > 0;
+                            }
+                            if (filter.value === "unbound") {
+                                return row[filter.id] === 0;
+                            }
+                        },
+                        Filter: function Filter(_ref) {var filter = _ref.filter,_onChange = _ref.onChange;
+                            // value={filter ? filter.value : "all"}
+                            return (
+                                _react2.default.createElement('select', {
+                                        onChange: function onChange(event) {return _onChange(event.target.value);},
+                                        style: { width: "100%" },
+                                        value: filter ? filter.value : "all" },
+
+                                    _react2.default.createElement('option', { value: 'all' }, 'Show All'),
+                                    _react2.default.createElement('option', { value: 'selected' }, 'Selected'),
+                                    _react2.default.createElement('option', { value: 'bound' }, 'Bound'),
+                                    _react2.default.createElement('option', { value: 'unbound' }, 'Unbound')));
+
+
+                        } }],
+
+
 
 
                     defaultPageSize: 5,
                     className: '-striped -highlight',
-                    getTrProps: this.getTrProps.bind(this) }));
+                    getTdProps: this.getTdProps.bind(this),
+                    getTrProps: this.getTrProps.bind(this),
+                    filterable: true,
+                    defaultFilterMethod: function defaultFilterMethod(filter, row) {
+                        if (String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) >= 0) {
+                            return true;
+                        }
+                        return false;
+                    } }));
 
 
         } }]);return ClientList;}(_react.Component);
@@ -78306,7 +78468,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);function C
 function mapStateToProps(state) {
     return {
         clients: state.wfmClients.clients,
-        selectedClients: state.clients.selectedClients };
+        selectedClients: state.wfmClients.selectedClients };
 
 }
 
@@ -87378,30 +87540,44 @@ var _mergeReducers = __webpack_require__(948);exports.default =
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });var _extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}return target;};exports.
 
+clientReducers = clientReducers;var _index = __webpack_require__(200);function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}}function clientReducers()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-clientReducers = clientReducers;var _index = __webpack_require__(200);function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}}function toggleSelectClient(state, action) {var currentClients = state.selectedClients;var clientIdIndex = currentClients.findIndex(function (client) {return client._id === action.payload._id;}); // if client is not selected, append to selection
-    // else, remove from selection
-    if (clientIdIndex === -1) {return _extends({}, state, { selectedClients: [].concat(_toConsumableArray(state.selectedClients), [action.payload]) });} else {return _extends({}, state, { selectedClients: [].concat(_toConsumableArray(currentClients.slice(0, clientIdIndex)), _toConsumableArray(currentClients.slice(clientIdIndex + 1))) });}}function clientReducers()
 {var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { clients: [], selectedClients: [] };var action = arguments[1];
+
+    function toggleSelectClient(state, action) {
+
+        var currentClients = state.selectedClients;
+        var clientIdIndex = currentClients.findIndex(function (client) {
+            return client._id === action.payload._id;
+        });
+        // if client is not selected, append to selection
+        // else, remove from selection
+        if (clientIdIndex === -1) {
+            return _extends({}, state, { selectedClients: [].concat(_toConsumableArray(state.selectedClients), [action.payload]) });
+        } else {
+            return _extends({},
+            state, { selectedClients: [].concat(_toConsumableArray(
+                currentClients.slice(0, clientIdIndex)), _toConsumableArray(
+                currentClients.slice(clientIdIndex + 1))) });
+
+
+        }
+    }
+
+    function deSelectClient(state, clientId) {
+        var currentClientIds = state.selectedClients;
+        var clientIdIndex = currentClientIds.findIndex(function (id) {
+            return id === clientId;
+        });
+
+        return _extends({},
+        state, { selectedClients: [].concat(_toConsumableArray(
+            currentClientIds.slice(0, clientIdIndex)), _toConsumableArray(
+            currentClientIds.slice(clientIdIndex + 1))) });
+
+
+    }
 
     switch (action.type) {
         case "GET_CLIENTS":
@@ -87411,17 +87587,7 @@ clientReducers = clientReducers;var _index = __webpack_require__(200);function _
         case "SELECT_CLIENT":
             return _extends({}, state, { selectedClients: [].concat(_toConsumableArray(state.selectedClients), [action.payload]) });
         case "DESELECT_CLIENT":
-            var currentClientIds = state.selectedClients;
-            var clientIdIndex = currentClientIds.findIndex(function (id) {
-                return id === action.payload;
-            });
-
-            return _extends({},
-            state, { selectedClients: [].concat(_toConsumableArray(
-                currentClientIds.slice(0, clientIdIndex)), _toConsumableArray(
-                currentClientIds.slice(clientIdIndex + 1))) });
-
-
+            return deSelectClient(state, action);
         case "TOGGLE_SELECT_CLIENT":
             return toggleSelectClient(state, action);
         case "FIND_CLIENT":

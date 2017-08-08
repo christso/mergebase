@@ -1,29 +1,43 @@
 import { extendClientList } from '../selectors/index';
 
-function toggleSelectClient(state, action) {
-
-    const currentClients = state.selectedClients;
-    const clientIdIndex = currentClients.findIndex(function (client) {
-        return client._id === action.payload._id;
-    });
-    // if client is not selected, append to selection
-    // else, remove from selection
-    if (clientIdIndex === -1) {
-        return { ...state, selectedClients: [...state.selectedClients, action.payload] };
-    } else {
-        return {
-            ...state, selectedClients: [
-                ...currentClients.slice(0, clientIdIndex),
-                ...currentClients.slice(clientIdIndex + 1)
-            ]
-        }
-    }    
-}
-
 export function clientReducers(state = {
     clients: [],
     selectedClients: []
 }, action) {
+
+    function toggleSelectClient(state, action) {
+
+        const currentClients = state.selectedClients;
+        const clientIdIndex = currentClients.findIndex(function (client) {
+            return client._id === action.payload._id;
+        });
+        // if client is not selected, append to selection
+        // else, remove from selection
+        if (clientIdIndex === -1) {
+            return { ...state, selectedClients: [...state.selectedClients, action.payload] };
+        } else {
+            return {
+                ...state, selectedClients: [
+                    ...currentClients.slice(0, clientIdIndex),
+                    ...currentClients.slice(clientIdIndex + 1)
+                ]
+            }
+        }
+    }
+
+    function deSelectClient(state, clientId) {
+        const currentClientIds = state.selectedClients;
+        const clientIdIndex = currentClientIds.findIndex(function (id) {
+            return id === clientId;
+        });
+
+        return {
+            ...state, selectedClients: [
+                ...currentClientIds.slice(0, clientIdIndex),
+                ...currentClientIds.slice(clientIdIndex + 1)
+            ]
+        };
+    }
 
     switch (action.type) {
         case "GET_CLIENTS":
@@ -33,17 +47,7 @@ export function clientReducers(state = {
         case "SELECT_CLIENT":
             return { ...state, selectedClients: [...state.selectedClients, action.payload] };
         case "DESELECT_CLIENT":
-            const currentClientIds = state.selectedClients;
-            const clientIdIndex = currentClientIds.findIndex(function (id) {
-                return id === action.payload;
-            });
-
-            return {
-                ...state, selectedClients: [
-                    ...currentClientIds.slice(0, clientIdIndex),
-                    ...currentClientIds.slice(clientIdIndex + 1)
-                ]
-            };
+            return deSelectClient(state, action);
         case "TOGGLE_SELECT_CLIENT":
             return toggleSelectClient(state, action);
         case "FIND_CLIENT":

@@ -126,6 +126,14 @@ class ClientList extends Component {
                     className="-striped -highlight"
                     getTrProps={this.getTrProps.bind(this)}
                     getTdProps={this.getTdProps.bind(this)}
+                    filterable
+                    defaultFilterMethod={(filter, row) => {
+                        if (String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) >= 0) {
+                            return true;
+                        }
+                        return false;
+                    }}
+                        
                 />
             </div>
         )

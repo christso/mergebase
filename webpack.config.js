@@ -12,7 +12,7 @@ module.exports = {
 
     devServer: {
         inline: true,
-        port: 8080
+        port: 8081
     },
 
     module: {
@@ -23,8 +23,12 @@ module.exports = {
                 loader: 'babel-loader',
 
                 query: {
-                    presets: ['react', 'es2015', 'stage-1']
+                    presets: ['react', 'es2015', 'stage-2']
                 }
+            },
+            { 
+                test: /\.css$/, 
+                loader: "style-loader!css-loader" 
             }
         ]
     }

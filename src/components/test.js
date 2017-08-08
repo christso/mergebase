@@ -8,7 +8,6 @@ import { selectMergeCell } from '../actions/mergeActions';
 import { getClients as wfmGetClients } from '../actions/wfmClientActions';
 import { getClientMergeList, extendClientList } from '../selectors/index';
 import ReactTable from "react-table";
-import "react-table/react-table.css";
 
 class MergeTool extends Component {
     constructor(props) {
@@ -112,6 +111,7 @@ class MergeTool extends Component {
     }
 }
 
+// dataFormat={this.sourceFormatter.bind(this)}
 
 function mapStateToProps(state) {
     return {

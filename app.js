@@ -1,5 +1,5 @@
-require('babel-core/register')({
-  "presets":["es2015", "react", "stage-1"]
+require('babel-register')({
+  "presets":["es2015", "react", "stage-2"]
 });
 
 var express = require('express');

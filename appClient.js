@@ -25,18 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 // })
 
-app.get("/test", function(req, res) {
-   res.render("test");
-});
-
-app.get("/test2", function(req, res) {
-   res.render("test2");
-});
-
-app.get("/testGmap", function(req, res) {
-   res.render("testGmap");
-});
-
 app.get('*', function(req, res) {
   res.render('index');
 })

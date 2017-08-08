@@ -50,8 +50,8 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: state.clients.clients,
-        selectedClientIds: state.clients.selectedClientIds,
-        wfmselectedClientIds: state.wfmClients.selectedClientIds,
+        selectedClients: state.clients.selectedClients,
+        wfmselectedClients: state.wfmClients.selectedClients,
         wfmClients: state.wfmClients.clients,
         xplanClients: state.xplanClients.clients
     };

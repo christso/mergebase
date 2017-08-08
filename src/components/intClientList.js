@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import ReactTable from "react-table";
-import { getClients, selectClient, deselectClient, setSelectedClients } from '../actions/clientActions';
+import { getClients, selectClient, deselectClient, setSelectedClients,
+    toggleSelectClient } from '../actions/clientActions';
 import {
     selectClient as selectWfmClient,
     deselectClient as deselectWfmClient,
@@ -37,11 +38,11 @@ class ClientList extends Component {
                     <i className="fa fa-star"></i> Show Selected</a>
                 <a className="btn btn-primary">
                     <i className="fa fa-plus"></i> New</a>
-                <a className="btn btn-primary" href={'/client/' + this.props.selectedClientIds[0] + '/edit'}>
+                <a className="btn btn-primary" href={'/client/' + this.props.selectedClients + '/edit'}>
                     <i className="fa fa-pencil"></i> Edit</a>
-                <a className="btn btn-primary" href={'/client/' + this.props.selectedClientIds[0] + '/bind?'
-                    + (this.props.wfmselectedClientIds ? '&wfmId=' + this.props.wfmselectedClientIds[0] : '')
-                    + (this.props.xplanselectedClientIds ? '&xplanId=' + this.props.xplanselectedClientIds[0] : '')}>
+                <a className="btn btn-primary" href={'/client/' + this.props.selectedClients + '/bind?'
+                    + (this.props.wfmselectedClients + '&wfmId=' + this.props.wfmselectedClients + '')
+                    + (this.props.xplanselectedClients + '&xplanId=' + this.props.xplanselectedClients + '')}>
                     <i className="fa fa-bolt"></i> Bind</a>
                 <a className="btn btn-primary" onClick={this.onDelete.bind(this)}>
                     <i className="fa fa-trash"></i> Delete</a>
@@ -50,40 +51,11 @@ class ClientList extends Component {
         );
     }
 
-    onRowClick(row, columnIndex, rowIndex) {
-        //console.log(`You click row ID: ${row._id}, column index: ${columnIndex}, row index: ${rowIndex}`);
-    }
-
-    onSelect(row, isSelected, event) {
-        if (isSelected) {
-            console.log("You selected row", row);
-            this.props.selectClient(row._id);
-            this.props.selectWfmClient(row.wfmId);
-            this.props.selectXplanClient(row.xplanId);
-        } else {
-            console.log("You deselected row", row);
-            this.props.deselectClient(row._id);
-            this.props.deselectWfmClient(row.wfmId);
-            this.props.deselectXplanClient(row.xplanId);
-        }
-        return false;
-    }
-
-    onSelectAll(isSelected) {
-        if (!isSelected) {
-            this.props.setSelectedClients([]);
-            this.props.setSelectedWfmClients([]);
-            this.props.setSelectedXplanClients([]);
-        }
-        return false;
-    }
-
     getTrProps(state, rowInfo, column) {
         if (!rowInfo) return {};
-        // '597ea4538bdccc1394fa8664'
-        const selectedClientIds = this.props.selectedClientIds;
-        const found = selectedClientIds.find(function (sel) {
-            return sel === rowInfo.original._id;
+        const selectedClients = this.props.selectedClients;
+        const found = selectedClients.find(function (sel) {
+            return sel._id === rowInfo.original._id;
         });        
         if (found) {
             return {
@@ -94,6 +66,26 @@ class ClientList extends Component {
         }
     }    
 
+    getTdProps(state, rowInfo, column, instance) {
+        return {
+            onClick: (e, handleOriginal) => {
+                console.log('A Td Element was clicked!')
+                console.log('it produced this event:', e)
+                console.log('It was in this column:', column)
+                console.log('It was in this row:', rowInfo)
+                console.log('It was in this table instance:', instance)
+                
+                if (column.Header === "Binds") {
+                    this.props.toggleSelectClient(rowInfo.original);
+                }
+                
+                if (handleOriginal) {
+                    handleOriginal()
+                }
+            }
+        }
+    }
+
     bindFormatter(cell, row) {
         return (
             <div>{cell ? cell : '-'}</div>
@@ -101,15 +93,6 @@ class ClientList extends Component {
     }
 
     render() {
-        const selectRow = {
-            mode: 'checkbox',
-            showOnlySelected: true,
-            clickToSelect: true,
-            onSelect: this.onSelect.bind(this),
-            onSelectAll: this.onSelectAll.bind(this),
-            selected: this.props.selectedClientIds
-        };
-
         const clients = this.props.clients;
         return (
             <div>
@@ -131,12 +114,18 @@ class ClientList extends Component {
                         },
                         {
                             Header: "Binds",
-                            accessor: "binds"
+                            accessor: "binds",
+                            Cell: row => (
+                                    row.value === 0 ?
+                                        <div>-</div>
+                                        : row.value
+                                )
                         }
                     ]}
                     defaultPageSize={5}
                     className="-striped -highlight"
                     getTrProps={this.getTrProps.bind(this)}
+                    getTdProps={this.getTdProps.bind(this)}
                 />
             </div>
         )
@@ -147,11 +136,11 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: extendClientList(state),
-        selectedClientIds: state.clients.selectedClientIds,
+        selectedClients: state.clients.selectedClients,
         wfmClients: state.wfmClients.clients,
-        wfmselectedClientIds: state.wfmClients.selectedClientIds,
+        wfmselectedClients: state.wfmClients.selectedClients,
         xplanClients: state.xplanClients.clients,
-        xplanselectedClientIds: state.xplanClients.selectedClientIds
+        xplanselectedClients: state.xplanClients.selectedClients
     };
 }
 
@@ -166,7 +155,8 @@ function mapDispatchToProps(dispatch) {
         deselectXplanClient: deselectXplanClient,
         setSelectedClients: setSelectedClients,
         setSelectedWfmClients: setSelectedWfmClients,
-        setSelectedXplanClients: setSelectedXplanClients
+        setSelectedXplanClients: setSelectedXplanClients,
+        toggleSelectClient: toggleSelectClient
     }, dispatch)
 }
 

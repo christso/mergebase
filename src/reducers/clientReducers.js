@@ -1,29 +1,53 @@
-import {extendClientList} from '../selectors/index';
+import { extendClientList } from '../selectors/index';
+
+function toggleSelectClient(state, action) {
+
+    const currentClients = state.selectedClients;
+    const clientIdIndex = currentClients.findIndex(function (client) {
+        return client._id === action.payload._id;
+    });
+    // if client is not selected, append to selection
+    // else, remove from selection
+    if (clientIdIndex === -1) {
+        return { ...state, selectedClients: [...state.selectedClients, action.payload] };
+    } else {
+        return {
+            ...state, selectedClients: [
+                ...currentClients.slice(0, clientIdIndex),
+                ...currentClients.slice(clientIdIndex + 1)
+            ]
+        }
+    }    
+}
 
 export function clientReducers(state = {
     clients: [],
-    selectedClientIds: []
+    selectedClients: []
 }, action) {
 
     switch (action.type) {
         case "GET_CLIENTS":
-            return { ...state, clients: [...action.payload] };      
+            return { ...state, clients: [...action.payload] };
         case "SET_SELECTED_CLIENTS":
-            return { ...state, selectedClientIds: [...action.payload]};
+            return { ...state, selectedClients: [...action.payload] };
         case "SELECT_CLIENT":
-            return { ...state, selectedClientIds: [...state.selectedClientIds, action.payload] };
+            return { ...state, selectedClients: [...state.selectedClients, action.payload] };
         case "DESELECT_CLIENT":
-            const currentClientIds = state.selectedClientIds;
-            const clientIdIndex = currentClientIds.findIndex(function(id) {
+            const currentClientIds = state.selectedClients;
+            const clientIdIndex = currentClientIds.findIndex(function (id) {
                 return id === action.payload;
-            });        
+            });
 
-            return { ...state, selectedClientIds: [
-                ...currentClientIds.slice(0, clientIdIndex),
-                ...currentClientIds.slice(clientIdIndex+1)
-            ] };            
+            return {
+                ...state, selectedClients: [
+                    ...currentClientIds.slice(0, clientIdIndex),
+                    ...currentClientIds.slice(clientIdIndex + 1)
+                ]
+            };
+        case "TOGGLE_SELECT_CLIENT":
+            return toggleSelectClient(state, action);
         case "FIND_CLIENT":
-            return {...state, foundClient: action.payload };
+            return { ...state, foundClient: action.payload };
         case "UPDATE_CLIENT":
             const clientsToUpdate = state.clients;
             const clientToUpdate = action.payload;

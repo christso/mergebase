@@ -16,9 +16,9 @@ class ClientList extends Component {
     getTrProps(state, rowInfo, column) {
         if (!rowInfo) return {};
         // '597ea4538bdccc1394fa8664'
-        const selectedClientIds = this.props.selectedClientIds;
-        const found = selectedClientIds.find(function (sel) {
-            return sel === rowInfo.original._id;
+        const selectedClients = this.props.selectedClients;
+        const found = selectedClients.find(function (sel) {
+            return sel.xplanId === rowInfo.original._id;
         });        
         if (found) {
             return {
@@ -79,7 +79,7 @@ class ClientList extends Component {
 function mapStateToProps(state) {
     return {
         clients: state.xplanClients.clients,
-        selectedClientIds: state.xplanClients.selectedClientIds,
+        selectedClients: state.clients.selectedClients,
     };
 }
 

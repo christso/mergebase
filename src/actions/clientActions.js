@@ -15,6 +15,15 @@ export function getClients() {
 }
 
 // used for highlighting selected row in client list
+export function toggleSelectClient(client) {
+  return function (dispatch) {
+    dispatch({ type: "TOGGLE_SELECT_CLIENT",
+      payload: { _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId,
+        bglId: client.bglId } 
+    });
+  }  
+}
+
 export function selectClient(id) {
   return function (dispatch) {
     dispatch({ type: "SELECT_CLIENT", payload: id });

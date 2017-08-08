@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
+import ReactTable from "react-table";
 import { getClients, selectClient, deselectClient, setSelectedClients } from '../actions/clientActions';
 import {
     selectClient as selectWfmClient,
@@ -32,8 +32,9 @@ class ClientList extends Component {
     createCustomButtonGroup(props) {
 
         return (
-            <ButtonGroup>
-                {props.showSelectedOnlyBtn}
+            <div id="clientList-buttons" className="btn-group btn-group-sm">
+                <a className="btn btn-primary">
+                    <i className="fa fa-star"></i> Show Selected</a>
                 <a className="btn btn-primary">
                     <i className="fa fa-plus"></i> New</a>
                 <a className="btn btn-primary" href={'/client/' + this.props.selectedClientIds[0] + '/edit'}>
@@ -45,7 +46,7 @@ class ClientList extends Component {
                 <a className="btn btn-primary" onClick={this.onDelete.bind(this)}>
                     <i className="fa fa-trash"></i> Delete</a>
 
-            </ButtonGroup>
+            </div>
         );
     }
 
@@ -77,19 +78,21 @@ class ClientList extends Component {
         return false;
     }
 
-    trClassNameFormat(rowData, rIndex) {
-        // this.props.selectClientId || rowData._id == this.props.selectClientId
-        //console.log("selectedClientIds", this.props.selectedClientIds);
+    getTrProps(state, rowInfo, column) {
+        if (!rowInfo) return {};
+        // '597ea4538bdccc1394fa8664'
         const selectedClientIds = this.props.selectedClientIds;
         const found = selectedClientIds.find(function (sel) {
-            return sel === rowData._id;
-        });
+            return sel === rowInfo.original._id;
+        });        
         if (found) {
-            return 'info'
+            return {
+                className: '-info'
+            }
         } else {
-            return '';
+            return {};
         }
-    }
+    }    
 
     bindFormatter(cell, row) {
         return (
@@ -106,35 +109,35 @@ class ClientList extends Component {
             onSelectAll: this.onSelectAll.bind(this),
             selected: this.props.selectedClientIds
         };
-        const options = {
-            onRowClick: this.onRowClick.bind(this),
-            btnGroup: this.createCustomButtonGroup.bind(this),
-
-        };
 
         const clients = this.props.clients;
         return (
             <div>
-
-                <BootstrapTable striped hover
-                    search={true}
-                    trClassName={this.trClassNameFormat.bind(this)}
-                    selectRow={selectRow}
-                    options={options}
+                {this.createCustomButtonGroup()}
+                <ReactTable
                     data={clients}
-                    pagination>
-                    <TableHeaderColumn isKey dataField='_id' hidden>ID</TableHeaderColumn>
-                    <TableHeaderColumn dataField='name' dataSort={true}>Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField='email' dataSort={true}>Email</TableHeaderColumn>
-                    <TableHeaderColumn dataField='phone' dataSort={true}>Phone</TableHeaderColumn>
-                    <TableHeaderColumn dataField='address' hidden>Address</TableHeaderColumn>
-                    <TableHeaderColumn dataField='wfmId' hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='xplanId' hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='bglId' hidden></TableHeaderColumn>
-                    <TableHeaderColumn dataField='binds' width="60" dataAlign="center"
-                        dataSort={true}
-                        dataFormat={this.bindFormatter.bind(this)}>Binds</TableHeaderColumn>
-                </BootstrapTable>
+                    columns={[
+                        {
+                            Header: "Name",
+                            accessor: "name"
+                        },
+                        {
+                            Header: "Email",
+                            accessor: "email"
+                        },
+                        {
+                            Header: "Phone",
+                            accessor: "phone"
+                        },
+                        {
+                            Header: "Binds",
+                            accessor: "binds"
+                        }
+                    ]}
+                    defaultPageSize={5}
+                    className="-striped -highlight"
+                    getTrProps={this.getTrProps.bind(this)}
+                />
             </div>
         )
     }

@@ -78103,7 +78103,7 @@ var _temp = function () {
 Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var _react = __webpack_require__(0);var _react2 = _interopRequireDefault(_react);
 var _reactRedux = __webpack_require__(20);
 var _redux = __webpack_require__(21);
-var _reactBootstrapTable = __webpack_require__(88);
+var _reactTable = __webpack_require__(122);var _reactTable2 = _interopRequireDefault(_reactTable);
 var _clientActions = __webpack_require__(68);
 var _wfmClientActions = __webpack_require__(120);
 
@@ -78134,8 +78134,9 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
         props) {
 
             return (
-                _react2.default.createElement(_reactBootstrapTable.ButtonGroup, null,
-                    props.showSelectedOnlyBtn,
+                _react2.default.createElement('div', { id: 'clientList-buttons', className: 'btn-group btn-group-sm' },
+                    _react2.default.createElement('a', { className: 'btn btn-primary' },
+                        _react2.default.createElement('i', { className: 'fa fa-star' }), ' Show Selected'),
                     _react2.default.createElement('a', { className: 'btn btn-primary' },
                         _react2.default.createElement('i', { className: 'fa fa-plus' }), ' New'),
                     _react2.default.createElement('a', { className: 'btn btn-primary', href: '/client/' + this.props.selectedClientIds[0] + '/edit' },
@@ -78177,19 +78178,21 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
                 this.props.setSelectedXplanClients([]);
             }
             return false;
-        } }, { key: 'trClassNameFormat', value: function trClassNameFormat(
+        } }, { key: 'getTrProps', value: function getTrProps(
 
-        rowData, rIndex) {
-            // this.props.selectClientId || rowData._id == this.props.selectClientId
-            //console.log("selectedClientIds", this.props.selectedClientIds);
+        state, rowInfo, column) {
+            if (!rowInfo) return {};
+            // '597ea4538bdccc1394fa8664'
             var selectedClientIds = this.props.selectedClientIds;
             var found = selectedClientIds.find(function (sel) {
-                return sel === rowData._id;
+                return sel === rowInfo.original._id;
             });
             if (found) {
-                return 'info';
+                return {
+                    className: '-info' };
+
             } else {
-                return '';
+                return {};
             }
         } }, { key: 'bindFormatter', value: function bindFormatter(
 
@@ -78208,34 +78211,34 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
                 onSelectAll: this.onSelectAll.bind(this),
                 selected: this.props.selectedClientIds };
 
-            var options = {
-                onRowClick: this.onRowClick.bind(this),
-                btnGroup: this.createCustomButtonGroup.bind(this) };
-
-
 
             var clients = this.props.clients;
             return (
                 _react2.default.createElement('div', null,
+                    this.createCustomButtonGroup(),
+                    _react2.default.createElement(_reactTable2.default, {
+                        data: clients,
+                        columns: [
+                        {
+                            Header: "Name",
+                            accessor: "name" },
 
-                    _react2.default.createElement(_reactBootstrapTable.BootstrapTable, { striped: true, hover: true,
-                            search: true,
-                            trClassName: this.trClassNameFormat.bind(this),
-                            selectRow: selectRow,
-                            options: options,
-                            data: clients,
-                            pagination: true },
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { isKey: true, dataField: '_id', hidden: true }, 'ID'),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'name', dataSort: true }, 'Name'),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'email', dataSort: true }, 'Email'),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'phone', dataSort: true }, 'Phone'),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'address', hidden: true }, 'Address'),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'wfmId', hidden: true }),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'xplanId', hidden: true }),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'bglId', hidden: true }),
-                        _react2.default.createElement(_reactBootstrapTable.TableHeaderColumn, { dataField: 'binds', width: '60', dataAlign: 'center',
-                                dataSort: true,
-                                dataFormat: this.bindFormatter.bind(this) }, 'Binds'))));
+                        {
+                            Header: "Email",
+                            accessor: "email" },
+
+                        {
+                            Header: "Phone",
+                            accessor: "phone" },
+
+                        {
+                            Header: "Binds",
+                            accessor: "binds" }],
+
+
+                        defaultPageSize: 5,
+                        className: '-striped -highlight',
+                        getTrProps: this.getTrProps.bind(this) })));
 
 
 

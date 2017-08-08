@@ -255,10 +255,10 @@
 .ReactTable .rt-tfoot .rt-td:last-child {
     border-right: 0
 }
-/* 
+ 
 .ReactTable.-striped .rt-tr.-odd {
     background: rgba(0, 0, 0, 0.03)
-} */
+} 
 
 .ReactTable.-highlight .rt-tbody .rt-tr.-info {
   background-color: #3498db;

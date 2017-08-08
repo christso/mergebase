@@ -2,7 +2,7 @@
 import axios from "axios";
 import {ROOT_URL} from '../locator';
 
-export function getBglClients() {
+export function getClients() {
   return function (dispatch) {
     axios.get(`${ROOT_URL}/bgl/clients`)
       .then(function (response) {

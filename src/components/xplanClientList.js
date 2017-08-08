@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Image, Row, Col, Well, Button, FormGroup, ControlLabel, FormControl, Panel, Table, Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { getClients, selectClient } from '../actions/xplanClientActions';
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
 class ClientList extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
         this.props.getClients();
-    }
-    onRowClick(row, columnIndex, rowIndex) {
-        //console.log(`You click row ID: ${row.xplanId}, column index: ${columnIndex}, row index: ${rowIndex}`);
-
     }
 
     trClassNameFormat(rowData, rIndex) {
@@ -26,30 +26,65 @@ class ClientList extends Component {
             return '';
         }
     }
+
+    getTdProps(state, rowInfo, column, instance) {
+        return {
+            onClick: (e, handleOriginal) => {
+                console.log('A Td Element was clicked!')
+                console.log('it produced this event:', e)
+                console.log('It was in this column:', column)
+                console.log('It was in this row:', rowInfo)
+                console.log('It was in this table instance:', instance)
+                if (handleOriginal) {
+                    handleOriginal()
+                }
+            }
+        }
+    }
+
+    getTrProps(state, rowInfo, column) {
+        if (!rowInfo) return {};
+
+        if (rowInfo.original._id === '597ea4538bdccc1394fa8664') {
+            return {
+                style: {
+                    background: 'green'
+                }
+            }
+        } else {
+            return {};
+        }
+    }
+
     render() {
-        const selectRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            showOnlySelected: true,
-            selected: this.props.selectedClientIds
-        };
-        const options = {
-            // onRowClick: this.onRowClick.bind(this)
-        };
 
         const clients = this.props.clients;
         return (
-            <BootstrapTable
-                trClassName={this.trClassNameFormat.bind(this)}
-                options={options}
+            <ReactTable
                 data={clients}
-                selectRow={selectRow} striped hover
-                pagination>
-                <TableHeaderColumn isKey dataField='_id'>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='phone'>Phone</TableHeaderColumn>
-            </BootstrapTable>
+                columns={[
+                    {
+                        Header: "ID",
+                        accessor: "_id"
+                    },
+                    {
+                        Header: "Name",
+                        accessor: "name"
+                    },
+                    {
+                        Header: "Email",
+                        accessor: "email"
+                    },
+                    {
+                        Header: "Phone",
+                        accessor: "phone"
+                    }
+                ]}
+                defaultPageSize={5}
+                className="-striped -highlight"
+                getTdProps={this.getTdProps.bind(this)}
+                getTrProps={this.getTrProps.bind(this)}
+            />
         )
     }
 }

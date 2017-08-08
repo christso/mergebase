@@ -8,6 +8,7 @@ import InternalClientList from './intClientList';
 import WfmClientList from './wfmClientList';
 import XplanClientList from './xplanClientList';
 import BglClientList from './bglClientList';
+import "react-table/react-table.css";
 
 const ClientListPanel = (props) => {
     return (

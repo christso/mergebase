@@ -18,7 +18,7 @@ class MergeTool extends Component {
     componentDidMount() {
         this.props.getClients();
         this.props.wfmGetClients();
-        console.log(this.props.clients);
+        // console.log(this.props.clients);
     }
 
     getTdProps(state, rowInfo, column, instance) {

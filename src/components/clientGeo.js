@@ -6,6 +6,9 @@ import GoogleMap from './googleMap';
 class Gmap extends React.Component {
 
     geoCode() {
+        const google = window.google;
+        const MarkerClusterer= window.MarkerClusterer;
+        
         const geocoder = new google.maps.Geocoder();
         var address = '333 George St Sydney NSW';
         geocoder.geocode({ 'address': address }, function (results, status) {
@@ -21,6 +24,8 @@ class Gmap extends React.Component {
     }
 
     initMap() {
+        const google = window.google;
+        const MarkerClusterer= window.MarkerClusterer;
 
         const positions = [
             { lat: -34.397, lng: 150.644 },
@@ -63,6 +68,7 @@ class Gmap extends React.Component {
     componentDidMount() {
         const { isScriptLoaded, isScriptLoadSucceed } = this.props
         if (isScriptLoaded && isScriptLoadSucceed) {
+
             this.initEditor()
         }
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getBglClients } from '../actions/bglClientActions';
+import { getClients } from '../actions/bglClientActions';
 import ReactTable from "react-table";
 
 class ClientList extends Component {
@@ -50,7 +50,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getClients: getBglClients
+        getClients: getClients
     }, dispatch)
 }
 

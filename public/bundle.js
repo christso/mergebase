@@ -32960,9 +32960,15 @@ module.exports = reductio_parameters;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.selectMergeCell = selectMergeCell;function selectMergeCell(matchName, source) {
+Object.defineProperty(exports, "__esModule", { value: true });exports.selectMergeCell = selectMergeCell;exports.
+
+
+
+
+
+toggleSelectMergeCell = toggleSelectMergeCell;function selectMergeCell(matchName, source) {return function (dispatch) {dispatch({ type: "SELECT_MERGE_CELL", payload: { matchName: matchName, source: source } });};}function toggleSelectMergeCell(matchName, source) {
   return function (dispatch) {
-    dispatch({ type: "SELECT_MERGE_CELL", payload: { matchName: matchName, source: source } });
+    dispatch({ type: "TOGGLE_SELECT_MERGE_CELL", payload: { matchName: matchName, source: source } });
   };
 }
 
@@ -81575,8 +81581,10 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
                 column.Header === el.source;
             });
 
+            var isColumnSource = ["INT", "WFM", "XPLAN"].findIndex(function (el) {return el === column.Header;}) > -1;
+
             var className = '';
-            if (["INT", "WFM", "XPLAN"].findIndex(function (el) {return el === column.Header;}) > -1) {
+            if (isColumnSource) {
                 className = '-merge-count';
             }
             className = selectedIndex > -1 ? className + ' -selected' : className;
@@ -81591,10 +81599,8 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
                     // console.log('It was in this table instance:', instance)
                     // console.log("MERGE", this.props.mergeSelection);
 
-                    if (column.Header === "INT") {
-                        _this2.props.selectMergeCell(rowInfo.row.matchName, column.Header);
-                    } else if (column.Header === "WFM") {
-                        _this2.props.selectMergeCell(rowInfo.row.matchName, column.Header);
+                    if (isColumnSource) {
+                        _this2.props.toggleSelectMergeCell(rowInfo.row.matchName, column.Header);
                     }
 
                     if (handleOriginal) {
@@ -81641,7 +81647,7 @@ function mapDispatchToProps(dispatch) {
         getClients: _clientActions.getClients,
         wfmGetClients: _wfmClientActions.getClients,
         xplanGetClients: _xplanClientActions.getClients,
-        selectMergeCell: _mergeActions.selectMergeCell },
+        toggleSelectMergeCell: _mergeActions.toggleSelectMergeCell },
     dispatch);
 }exports.default =
 
@@ -87979,10 +87985,27 @@ appReducers;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.mergeReducers = mergeReducers;function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}}function mergeReducers()
 {var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var action = arguments[1];
+    var cells = state;
     switch (action.type) {
+        case "TOGGLE_SELECT_MERGE_CELL":
+            return function toggleSelectMergeCell() {
+                var cellToDeselectIndex = cells.findIndex(function (cell) {return (
+                        cell.matchName === action.payload.matchName &&
+                        cell.source === action.payload.source);});
+                if (cellToDeselectIndex > -1) {
+                    return [].concat(_toConsumableArray(cells.slice(0, cellToDeselectIndex)), _toConsumableArray(cells.slice(cellToDeselectIndex + 1)));
+                }
+                return [].concat(_toConsumableArray(state), [action.payload]);
+            }();
         case "SELECT_MERGE_CELL":
             return [].concat(_toConsumableArray(state), [action.payload]);
         case "DESELECT_MERGE_CELL":
+            return function deselectMergeCell() {
+                var cellToDeselectIndex = cells.findIndex(function (cell) {return (
+                        cell.matchName === action.payload.matchName &&
+                        cell.source === action.payload.source);});
+                return [].concat(_toConsumableArray(cells.slice(0, cellToDeselectIndex)), _toConsumableArray(cells.slice(cellToDeselectIndex + 1)));
+            }();
         default:
             return state;}
 

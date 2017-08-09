@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
 import universe from 'universe';
 import { getClients } from '../actions/clientActions';
-import { selectMergeCell } from '../actions/mergeActions';
+import { toggleSelectMergeCell } from '../actions/mergeActions';
 import { getClients as wfmGetClients } from '../actions/wfmClientActions';
 import { getClients as xplanGetClients } from '../actions/xplanClientActions';
 import { getClientMergeList, extendClientList } from '../selectors/index';
@@ -87,12 +87,14 @@ class MergeTool extends Component {
                 && column.Header === el.source
         });
 
+        const isColumnSource = ["INT", "WFM", "XPLAN"].findIndex((el) => el === column.Header) > -1;
+
         let className = '';
-        if (["INT", "WFM", "XPLAN"].findIndex((el) => el === column.Header) > -1) {
+        if (isColumnSource) {
             className = '-merge-count';
         }
         className = selectedIndex > -1 ? className + ' -selected' : className;
-
+        
         return {
             className: className,
             onClick: (e, handleOriginal) => {
@@ -103,10 +105,8 @@ class MergeTool extends Component {
                 // console.log('It was in this table instance:', instance)
                 // console.log("MERGE", this.props.mergeSelection);
 
-                if (column.Header === "INT") {
-                    this.props.selectMergeCell(rowInfo.row.matchName, column.Header);
-                } else if (column.Header === "WFM") {
-                    this.props.selectMergeCell(rowInfo.row.matchName, column.Header);
+                if (isColumnSource) {
+                    this.props.toggleSelectMergeCell(rowInfo.row.matchName, column.Header);
                 }
 
                 if (handleOriginal) {
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch) {
         getClients: getClients,
         wfmGetClients: wfmGetClients,
         xplanGetClients: xplanGetClients,
-        selectMergeCell: selectMergeCell
+        toggleSelectMergeCell: toggleSelectMergeCell
     }, dispatch)
 }
 

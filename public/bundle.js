@@ -81575,19 +81575,21 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
 
         state, rowInfo, column, instance) {var _this2 = this;
 
-            var mergeSelection = this.props.mergeSelection;
-            var selectedIndex = mergeSelection.findIndex(function (el) {
-                return rowInfo.row.matchName === el.matchName &&
-                column.Header === el.source;
-            });
-
+            var className = '';
             var isColumnSource = ["INT", "WFM", "XPLAN"].findIndex(function (el) {return el === column.Header;}) > -1;
 
-            var className = '';
-            if (isColumnSource) {
-                className = '-merge-count';
+            if (rowInfo) {
+                var mergeSelection = this.props.mergeSelection;
+                var selectedIndex = mergeSelection.findIndex(function (el) {
+                    return rowInfo.row.matchName === el.matchName &&
+                    column.Header === el.source;
+                });
+
+                if (isColumnSource) {
+                    className = '-merge-count';
+                }
+                className = selectedIndex > -1 ? className + ' -selected' : className;
             }
-            className = selectedIndex > -1 ? className + ' -selected' : className;
 
             return {
                 className: className,
@@ -81599,11 +81601,11 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
                     // console.log('It was in this table instance:', instance)
                     // console.log("MERGE", this.props.mergeSelection);
 
-                    if (isColumnSource) {
+                    if (rowInfo && isColumnSource) {
                         _this2.props.toggleSelectMergeCell(rowInfo.row.matchName, column.Header);
                     }
 
-                    if (handleOriginal) {
+                    if (rowInfo && handleOriginal) {
                         handleOriginal();
                     }
                 } };
@@ -81614,19 +81616,15 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
 
             var clients = this.props.clients;
             return (
-                _react2.default.createElement('div', { className: 'panel' },
-                    _react2.default.createElement('div', { className: 'panel-heading' }, 'Merge Tool'),
-
-
-                    _react2.default.createElement('div', { className: 'panel-body' },
-                        _react2.default.createElement(_reactTable2.default, {
-                            data: clients,
-                            columns: columns,
-                            defaultPageSize: 10,
-                            className: '-striped -highlight',
-                            getTdProps: this.getTdProps.bind(this),
-                            pivotBy: ["matchName"] }))));
-
+                _react2.default.createElement('div', { className: 'container' },
+                    _react2.default.createElement('h1', null, 'Merge Tool'),
+                    _react2.default.createElement(_reactTable2.default, {
+                        data: clients,
+                        columns: columns,
+                        defaultPageSize: 10,
+                        className: '-striped -highlight',
+                        getTdProps: this.getTdProps.bind(this),
+                        pivotBy: ["matchName"] })));
 
 
 

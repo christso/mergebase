@@ -81,20 +81,22 @@ class MergeTool extends Component {
 
     getTdProps(state, rowInfo, column, instance) {
 
-        const mergeSelection = this.props.mergeSelection;
-        const selectedIndex = mergeSelection.findIndex((el) => {
-            return rowInfo.row.matchName === el.matchName
-                && column.Header === el.source
-        });
-
+        let className = '';
         const isColumnSource = ["INT", "WFM", "XPLAN"].findIndex((el) => el === column.Header) > -1;
 
-        let className = '';
-        if (isColumnSource) {
-            className = '-merge-count';
+        if (rowInfo) {
+            const mergeSelection = this.props.mergeSelection;
+            const selectedIndex = mergeSelection.findIndex((el) => {
+                return rowInfo.row.matchName === el.matchName
+                    && column.Header === el.source
+            });
+
+            if (isColumnSource) {
+                className = '-merge-count';
+            }
+            className = selectedIndex > -1 ? className + ' -selected' : className;
         }
-        className = selectedIndex > -1 ? className + ' -selected' : className;
-        
+
         return {
             className: className,
             onClick: (e, handleOriginal) => {
@@ -105,11 +107,11 @@ class MergeTool extends Component {
                 // console.log('It was in this table instance:', instance)
                 // console.log("MERGE", this.props.mergeSelection);
 
-                if (isColumnSource) {
+                if (rowInfo && isColumnSource) {
                     this.props.toggleSelectMergeCell(rowInfo.row.matchName, column.Header);
                 }
 
-                if (handleOriginal) {
+                if (rowInfo && handleOriginal) {
                     handleOriginal()
                 }
             }
@@ -120,20 +122,16 @@ class MergeTool extends Component {
 
         const clients = this.props.clients;
         return (
-            <div className="panel">
-                <div className="panel-heading">
-                    Merge Tool
-                </div>
-                <div className="panel-body">
-                    <ReactTable
-                        data={clients}
-                        columns={columns}
-                        defaultPageSize={10}
-                        className="-striped -highlight"
-                        getTdProps={this.getTdProps.bind(this)}
-                        pivotBy={["matchName"]}
-                    />
-                </div>
+            <div className="container">
+                <h1>Merge Tool</h1>
+                <ReactTable
+                    data={clients}
+                    columns={columns}
+                    defaultPageSize={10}
+                    className="-striped -highlight"
+                    getTdProps={this.getTdProps.bind(this)}
+                    pivotBy={["matchName"]}
+                />
             </div>
         )
     }

@@ -29,7 +29,7 @@ class ClientList extends Component {
         if (!rowInfo) return {};
         const selectedClientIds = this.props.selectedClientIds;
         const found = selectedClientIds.find(function (sel) {
-            return sel === rowInfo.original.wfmId;
+            return sel === rowInfo.original._id;
         });
         if (found) {
             return {
@@ -47,13 +47,13 @@ class ClientList extends Component {
 
                 const selectedClientIds = this.props.selectedClientIds;
                 const found = selectedClientIds.find(function (sel) {
-                    return sel === rowInfo.original.wfmId;
+                    return sel === rowInfo.original._id;
                 });
 
                 if (found) {
-                    this.props.deselectClient(rowInfo.original.wfmId);
+                    this.props.deselectClient(rowInfo.original._id);
                 } else {
-                    this.props.selectClient(rowInfo.original.wfmId);
+                    this.props.selectClient(rowInfo.original._id);
                 }
 
                 if (handleOriginal) {
@@ -73,7 +73,7 @@ class ClientList extends Component {
                 columns={[
                     {
                         Header: "ID",
-                        accessor: "wfmId"
+                        accessor: "_id"
                     },
                     {
                         Header: "Name",
@@ -102,7 +102,7 @@ class ClientList extends Component {
                             if (filter.value === "selected") {
                                 const selectedClientIds = this.props.selectedClientIds;
                                 const foundIndex = selectedClientIds.findIndex(function (sel) {
-                                    return sel === row._original.wfmId;
+                                    return sel === row._original._id;
                                 });
                                 if (foundIndex != -1) return true;
                             }

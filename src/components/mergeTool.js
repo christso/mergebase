@@ -6,8 +6,67 @@ import universe from 'universe';
 import { getClients } from '../actions/clientActions';
 import { selectMergeCell } from '../actions/mergeActions';
 import { getClients as wfmGetClients } from '../actions/wfmClientActions';
+import { getClients as xplanGetClients } from '../actions/xplanClientActions';
 import { getClientMergeList, extendClientList } from '../selectors/index';
 import ReactTable from "react-table";
+
+const columns =
+    [
+        {
+            Header: "Match",
+            columns: [
+                {
+                    Header: "Match",
+                    accessor: "matchName",
+                    aggregate: vals => vals[0]
+                }
+            ]
+        },
+        {
+            Header: "Info",
+            columns: [
+                {
+                    Header: "Name",
+                    accessor: "name",
+                    aggregate: vals => vals[0]
+                },
+                {
+                    Header: "Email",
+                    accessor: "email",
+                    aggregate: vals => vals[0]
+                },
+                {
+                    Header: "Phone",
+                    accessor: "phone",
+                    aggregate: vals => vals[0]
+                }
+            ]
+        },
+        {
+            Header: "Source",
+            columns: [
+                {
+                    Header: "INT",
+                    accessor: "intFlag",
+                    aggregate: vals => vals.reduce((previous, current) => current + previous),
+                    width: 50
+                },
+                {
+                    Header: "WFM",
+                    accessor: "wfmFlag",
+                    aggregate: vals => vals.reduce((previous, current) => current + previous),
+                    width: 50
+                },
+                {
+                    Header: "XPLAN",
+                    accessor: "xplanFlag",
+                    aggregate: vals => vals.reduce((previous, current) => current + previous),
+                    width: 50
+                }
+            ]
+        }
+    ];
+
 
 class MergeTool extends Component {
     constructor(props) {
@@ -17,30 +76,39 @@ class MergeTool extends Component {
     componentDidMount() {
         this.props.getClients();
         this.props.wfmGetClients();
-        // console.log(this.props.clients);
+        this.props.xplanGetClients();
     }
 
     getTdProps(state, rowInfo, column, instance) {
-        return {
-            onClick: (e, handleOriginal) => {
-                console.log('A Td Element was clicked!')
-                console.log('it produced this event:', e)
-                console.log('It was in this column:', column)
-                console.log('It was in this row:', rowInfo)
-                console.log('It was in this table instance:', instance)
 
-                console.log("MERGE", this.props.mergeSelection);
+        const mergeSelection = this.props.mergeSelection;
+        const selectedIndex = mergeSelection.findIndex((el) => {
+            return rowInfo.row.matchName === el.matchName
+                && column.Header === el.source
+        });
+
+        let className = '';
+        if (["INT", "WFM", "XPLAN"].findIndex((el) => el === column.Header) > -1) {
+            className = '-merge-count';
+        }
+        className = selectedIndex > -1 ? className + ' -selected' : className;
+
+        return {
+            className: className,
+            onClick: (e, handleOriginal) => {
+                // console.log('A Td Element was clicked!')
+                // console.log('it produced this event:', e)
+                // console.log('It was in this column:', column)
+                // console.log('It was in this row:', rowInfo)
+                // console.log('It was in this table instance:', instance)
+                // console.log("MERGE", this.props.mergeSelection);
+
                 if (column.Header === "INT") {
-                    this.props.selectMergeCell(rowInfo.original.name, column.Header);
+                    this.props.selectMergeCell(rowInfo.row.matchName, column.Header);
                 } else if (column.Header === "WFM") {
-                    this.props.selectMergeCell(rowInfo.original.name, column.Header);
+                    this.props.selectMergeCell(rowInfo.row.matchName, column.Header);
                 }
 
-                // IMPORTANT! React-Table uses onClick internally to trigger 
-                // events like expanding SubComponents and pivots. 
-                // By default a custom 'onClick' handler will override this functionality. 
-                // If you want to fire the original onClick handler, call the 
-                // 'handleOriginal' function. 
                 if (handleOriginal) {
                     handleOriginal()
                 }
@@ -59,51 +127,11 @@ class MergeTool extends Component {
                 <div className="panel-body">
                     <ReactTable
                         data={clients}
-                        columns={[
-                            {
-                                Header: "Name",
-                                accessor: "name"
-                            },
-                            {
-                                Header: "Email",
-                                accessor: "email"
-                            },
-                            {
-                                Header: "Phone",
-                                accessor: "phone"
-                            },
-                            {
-                                Header: "INT",
-                                accessor: "intFlag",
-                                Cell: row => (
-                                    row.value > 0 ?
-                                        <div
-                                            style={{
-                                                backgroundColor: '#85cc00'
-                                            }}>
-                                            {row.value}
-                                        </div>
-                                        : row.value
-                                )
-                            },
-                            {
-                                Header: "WFM",
-                                accessor: "wfmFlag",
-                                Cell: row => (
-                                    row.value > 0 ?
-                                        <div
-                                            style={{
-                                                backgroundColor: '#85cc00'
-                                            }}>
-                                            {row.value}
-                                        </div>
-                                        : row.value
-                                )
-                            }
-                        ]}
+                        columns={columns}
                         defaultPageSize={10}
                         className="-striped -highlight"
                         getTdProps={this.getTdProps.bind(this)}
+                        pivotBy={["matchName"]}
                     />
                 </div>
             </div>
@@ -124,6 +152,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getClients: getClients,
         wfmGetClients: wfmGetClients,
+        xplanGetClients: xplanGetClients,
         selectMergeCell: selectMergeCell
     }, dispatch)
 }

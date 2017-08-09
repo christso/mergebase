@@ -1,5 +1,5 @@
-export function selectMergeCell(name, selection) {
+export function selectMergeCell(matchName, source) {
   return function (dispatch) {
-    dispatch({ type: "SELECT_MERGE_CELL", payload: { name: name, selection: selection }});
+    dispatch({ type: "SELECT_MERGE_CELL", payload: { matchName: matchName, source: source }});
   }
 }

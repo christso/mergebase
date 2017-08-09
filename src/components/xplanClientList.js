@@ -89,7 +89,7 @@ class ClientList extends Component {
                             if (filter.value === "selected") {
                                 const selectedClientIds = this.props.selectedClientIds;
                                 const foundIndex = selectedClientIds.findIndex(function (sel) {
-                                    return sel === row._original.wfmId;
+                                    return sel === row._original._id;
                                 });
                                 if (foundIndex != -1) return true;
                             }

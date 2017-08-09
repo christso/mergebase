@@ -7,7 +7,14 @@ body {
   cursor: pointer;
 }
 
-/* React Bootstrap Table */
+
+.-merge-count {
+  text-align: center;
+}
+
+.-merge-count.-selected {
+  background-color: lightslategray;
+}
 
 #clientList-buttons {
   margin-bottom: 5px;

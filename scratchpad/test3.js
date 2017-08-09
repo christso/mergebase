@@ -1,14 +1,2 @@
-const filtered = [
-{
-    id: "bind",
-    value: "all"
-}];
-
-const newFiltered = [
-{
-    id: "bind",
-    value: "selected"
-}]
-
-const result = [...filtered, newFiltered];
-console.log("result", result);
+const index = ["INT", "WFM", "XPLAN"].findIndex(el => el === "WFM");
+console.log(index);

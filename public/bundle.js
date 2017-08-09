@@ -18259,12 +18259,12 @@ var extendWfmClientList = exports.extendWfmClientList = (0, _reselect.createSele
 [getClientList, getWfmClientList],
 function () {var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var wfmClients = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     wfmClients.forEach(function (wfmClient) {
-        var clientIndex = clients.findIndex(function (client) {return client.wfmId === wfmClient.wfmId;});
+        var clientIndex = clients.findIndex(function (client) {return client.wfmId === wfmClient._id;});
         if (clientIndex != -1) {
-            wfmClient._id = clients[clientIndex]._id;
+            wfmClient.intId = clients[clientIndex]._id;
             wfmClient.binds = 1;
         } else {
-            wfmClient._id = undefined;
+            wfmClient.intId = undefined;
             wfmClient.binds = 0;
         }
     });
@@ -18278,10 +18278,10 @@ function () {var clients = arguments.length > 0 && arguments[0] !== undefined ? 
     xplanClients.forEach(function (xplanClient) {
         var clientIndex = clients.findIndex(function (client) {return client.xplanId === xplanClient._id;});
         if (clientIndex != -1) {
-            xplanClient._id = clients[clientIndex]._id;
+            xplanClient.intId = clients[clientIndex]._id;
             xplanClient.binds = 1;
         } else {
-            xplanClient._id = undefined;
+            xplanClient.intId = undefined;
             xplanClient.binds = 0;
         }
     });
@@ -18293,21 +18293,35 @@ function () {var clients = arguments.length > 0 && arguments[0] !== undefined ? 
 
 /* Merge List */
 var getClientMergeList = exports.getClientMergeList = (0, _reselect.createSelector)(
-[getClientList, getWfmClientList],
-function () {var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var wfmClients = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    var combined = [];
+[getClientList, getWfmClientList, getXplanClientList],
+function () {var clients = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var wfmClients = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];var xplanClients = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
     clients = clients.map(function (client) {
         client.source = "INT";
+        client.intFlag = 1;
+        client.wfmFlag = 0;
+        client.xplanFlag = 0;
+        client.matchName = client.name;
         return client;
     });
     wfmClients = wfmClients.map(function (client) {
         client.source = "WFM";
+        client.intFlag = 0;
+        client.wfmFlag = 1;
+        client.xplanFlag = 0;
+        client.matchName = client.name;
         return client;
     });
-    combined = combined.concat(clients);
-    combined = combined.concat(wfmClients);
-    combined = groupByClientOnSource(combined);
-    return combined;
+    xplanClients = xplanClients.map(function (client) {
+        client.source = "XPLAN";
+        client.intFlag = 0;
+        client.wfmFlag = 0;
+        client.xplanFlag = 1;
+        client.matchName = client.name;
+        return client;
+    });
+    console.log("xplan Clients", xplanClients);
+    var combined = [];
+    return combined.concat(clients).concat(wfmClients).concat(xplanClients);
 });
 
 
@@ -32946,9 +32960,9 @@ module.exports = reductio_parameters;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.selectMergeCell = selectMergeCell;function selectMergeCell(name, selection) {
+Object.defineProperty(exports, "__esModule", { value: true });exports.selectMergeCell = selectMergeCell;function selectMergeCell(matchName, source) {
   return function (dispatch) {
-    dispatch({ type: "SELECT_MERGE_CELL", payload: { name: name, selection: selection } });
+    dispatch({ type: "SELECT_MERGE_CELL", payload: { matchName: matchName, source: source } });
   };
 }
 
@@ -78424,7 +78438,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
             if (!rowInfo) return {};
             var selectedClientIds = this.props.selectedClientIds;
             var found = selectedClientIds.find(function (sel) {
-                return sel === rowInfo.original.wfmId;
+                return sel === rowInfo.original._id;
             });
             if (found) {
                 return {
@@ -78442,13 +78456,13 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
 
                     var selectedClientIds = _this2.props.selectedClientIds;
                     var found = selectedClientIds.find(function (sel) {
-                        return sel === rowInfo.original.wfmId;
+                        return sel === rowInfo.original._id;
                     });
 
                     if (found) {
-                        _this2.props.deselectClient(rowInfo.original.wfmId);
+                        _this2.props.deselectClient(rowInfo.original._id);
                     } else {
-                        _this2.props.selectClient(rowInfo.original.wfmId);
+                        _this2.props.selectClient(rowInfo.original._id);
                     }
 
                     if (handleOriginal) {
@@ -78468,7 +78482,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
                     columns: [
                     {
                         Header: "ID",
-                        accessor: "wfmId" },
+                        accessor: "_id" },
 
                     {
                         Header: "Name",
@@ -78497,7 +78511,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
                             if (filter.value === "selected") {
                                 var selectedClientIds = _this3.props.selectedClientIds;
                                 var foundIndex = selectedClientIds.findIndex(function (sel) {
-                                    return sel === row._original.wfmId;
+                                    return sel === row._original._id;
                                 });
                                 if (foundIndex != -1) return true;
                             }
@@ -80105,7 +80119,7 @@ ClientList = function (_Component) {_inherits(ClientList, _Component);
                             if (filter.value === "selected") {
                                 var selectedClientIds = _this2.props.selectedClientIds;
                                 var foundIndex = selectedClientIds.findIndex(function (sel) {
-                                    return sel === row._original.wfmId;
+                                    return sel === row._original._id;
                                 });
                                 if (foundIndex != -1) return true;
                             }
@@ -81480,8 +81494,67 @@ var _universe = __webpack_require__(350);var _universe2 = _interopRequireDefault
 var _clientActions = __webpack_require__(87);
 var _mergeActions = __webpack_require__(354);
 var _wfmClientActions = __webpack_require__(196);
+var _xplanClientActions = __webpack_require__(872);
 var _index = __webpack_require__(200);
-var _reactTable = __webpack_require__(88);var _reactTable2 = _interopRequireDefault(_reactTable);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var
+var _reactTable = __webpack_require__(88);var _reactTable2 = _interopRequireDefault(_reactTable);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
+
+var columns =
+[
+{
+    Header: "Match",
+    columns: [
+    {
+        Header: "Match",
+        accessor: "matchName",
+        aggregate: function aggregate(vals) {return vals[0];} }] },
+
+
+
+{
+    Header: "Info",
+    columns: [
+    {
+        Header: "Name",
+        accessor: "name",
+        aggregate: function aggregate(vals) {return vals[0];} },
+
+    {
+        Header: "Email",
+        accessor: "email",
+        aggregate: function aggregate(vals) {return vals[0];} },
+
+    {
+        Header: "Phone",
+        accessor: "phone",
+        aggregate: function aggregate(vals) {return vals[0];} }] },
+
+
+
+{
+    Header: "Source",
+    columns: [
+    {
+        Header: "INT",
+        accessor: "intFlag",
+        aggregate: function aggregate(vals) {return vals.reduce(function (previous, current) {return current + previous;});},
+        width: 50 },
+
+    {
+        Header: "WFM",
+        accessor: "wfmFlag",
+        aggregate: function aggregate(vals) {return vals.reduce(function (previous, current) {return current + previous;});},
+        width: 50 },
+
+    {
+        Header: "XPLAN",
+        accessor: "xplanFlag",
+        aggregate: function aggregate(vals) {return vals.reduce(function (previous, current) {return current + previous;});},
+        width: 50 }] }];var
+
+
+
+
+
 
 MergeTool = function (_Component) {_inherits(MergeTool, _Component);
     function MergeTool(props) {_classCallCheck(this, MergeTool);return _possibleConstructorReturn(this, (MergeTool.__proto__ || Object.getPrototypeOf(MergeTool)).call(this,
@@ -81491,30 +81564,39 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
         {
             this.props.getClients();
             this.props.wfmGetClients();
-            // console.log(this.props.clients);
+            this.props.xplanGetClients();
         } }, { key: 'getTdProps', value: function getTdProps(
 
         state, rowInfo, column, instance) {var _this2 = this;
-            return {
-                onClick: function onClick(e, handleOriginal) {
-                    console.log('A Td Element was clicked!');
-                    console.log('it produced this event:', e);
-                    console.log('It was in this column:', column);
-                    console.log('It was in this row:', rowInfo);
-                    console.log('It was in this table instance:', instance);
 
-                    console.log("MERGE", _this2.props.mergeSelection);
+            var mergeSelection = this.props.mergeSelection;
+            var selectedIndex = mergeSelection.findIndex(function (el) {
+                return rowInfo.row.matchName === el.matchName &&
+                column.Header === el.source;
+            });
+
+            var className = '';
+            if (["INT", "WFM", "XPLAN"].findIndex(function (el) {return el === column.Header;}) > -1) {
+                className = '-merge-count';
+            }
+            className = selectedIndex > -1 ? className + ' -selected' : className;
+
+            return {
+                className: className,
+                onClick: function onClick(e, handleOriginal) {
+                    // console.log('A Td Element was clicked!')
+                    // console.log('it produced this event:', e)
+                    // console.log('It was in this column:', column)
+                    // console.log('It was in this row:', rowInfo)
+                    // console.log('It was in this table instance:', instance)
+                    // console.log("MERGE", this.props.mergeSelection);
+
                     if (column.Header === "INT") {
-                        _this2.props.selectMergeCell(rowInfo.original.name, column.Header);
+                        _this2.props.selectMergeCell(rowInfo.row.matchName, column.Header);
                     } else if (column.Header === "WFM") {
-                        _this2.props.selectMergeCell(rowInfo.original.name, column.Header);
+                        _this2.props.selectMergeCell(rowInfo.row.matchName, column.Header);
                     }
 
-                    // IMPORTANT! React-Table uses onClick internally to trigger 
-                    // events like expanding SubComponents and pivots. 
-                    // By default a custom 'onClick' handler will override this functionality. 
-                    // If you want to fire the original onClick handler, call the 
-                    // 'handleOriginal' function. 
                     if (handleOriginal) {
                         handleOriginal();
                     }
@@ -81533,51 +81615,11 @@ MergeTool = function (_Component) {_inherits(MergeTool, _Component);
                     _react2.default.createElement('div', { className: 'panel-body' },
                         _react2.default.createElement(_reactTable2.default, {
                             data: clients,
-                            columns: [
-                            {
-                                Header: "Name",
-                                accessor: "name" },
-
-                            {
-                                Header: "Email",
-                                accessor: "email" },
-
-                            {
-                                Header: "Phone",
-                                accessor: "phone" },
-
-                            {
-                                Header: "INT",
-                                accessor: "intFlag",
-                                Cell: function Cell(row) {return (
-                                        row.value > 0 ?
-                                        _react2.default.createElement('div', {
-                                                style: {
-                                                    backgroundColor: '#85cc00' } },
-
-                                            row.value) :
-
-                                        row.value);} },
-
-
-                            {
-                                Header: "WFM",
-                                accessor: "wfmFlag",
-                                Cell: function Cell(row) {return (
-                                        row.value > 0 ?
-                                        _react2.default.createElement('div', {
-                                                style: {
-                                                    backgroundColor: '#85cc00' } },
-
-                                            row.value) :
-
-                                        row.value);} }],
-
-
-
+                            columns: columns,
                             defaultPageSize: 10,
                             className: '-striped -highlight',
-                            getTdProps: this.getTdProps.bind(this) }))));
+                            getTdProps: this.getTdProps.bind(this),
+                            pivotBy: ["matchName"] }))));
 
 
 
@@ -81598,6 +81640,7 @@ function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         getClients: _clientActions.getClients,
         wfmGetClients: _wfmClientActions.getClients,
+        xplanGetClients: _xplanClientActions.getClients,
         selectMergeCell: _mergeActions.selectMergeCell },
     dispatch);
 }exports.default =

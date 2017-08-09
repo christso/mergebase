@@ -13,14 +13,14 @@ function getClients(dispatch) {
 
                 let mappedClients = jsResult.Response.Clients[0].Client.map(function (client) {
                     return {
+                        _id: client.ID[0],                        
                         name: client.Name[0],
                         address: client.Address[0].replace('\n', ''),
                         website: client.Website[0],
                         firstName: client.FirstName ? client.FirstName[0] : undefined,
                         lastName: client.LastName ? client.LastName[0] : undefined,
                         phone: client.Phone[0],
-                        email: client.Email ? client.Email[0] : undefined,
-                        wfmId: client.ID[0]
+                        email: client.Email ? client.Email[0] : undefined
                     };
                 });
 

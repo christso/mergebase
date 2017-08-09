@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getClients, selectClient, deselectClient } from '../actions/wfmClientActions'
+import { getClients, selectClient, deselectClient, setWfmFilterItem, setFilter } from '../actions/wfmClientActions'
 import ReactTable from "react-table";
+import { extendWfmClientList } from '../selectors/index';
+
+const makeDefaultState = () => ({
+  sorted: [],
+  page: 0,
+  pageSize: 10,
+  expanded: {},
+  resized: [],
+  filtered: []
+});
 
 class ClientList extends Component {
+    constructor() {
+        super();
+        this.state = makeDefaultState();
+    }
+
     componentDidMount() {
         this.props.getClients();
+        //this.props.updateFilter();
     }
 
     getTrProps(state, rowInfo, column) {
         if (!rowInfo) return {};
-        const selectedClients = this.props.selectedClients;
-        const found = selectedClients.find(function (sel) {
+        const selectedClientIds = this.props.selectedClientIds;
+        const found = selectedClientIds.find(function (sel) {
             return sel === rowInfo.original.wfmId;
         });
         if (found) {
@@ -29,17 +45,17 @@ class ClientList extends Component {
         return {
             onClick: (e, handleOriginal) => {
 
-                const selectedClients = this.props.selectedClients;
-                const found = selectedClients.find(function (sel) {
+                const selectedClientIds = this.props.selectedClientIds;
+                const found = selectedClientIds.find(function (sel) {
                     return sel === rowInfo.original.wfmId;
                 });
 
                 if (found) {
                     this.props.deselectClient(rowInfo.original.wfmId);
                 } else {
-                    this.props.selectClient(rowInfo.original.wfmId);                    
+                    this.props.selectClient(rowInfo.original.wfmId);
                 }
-                
+
                 if (handleOriginal) {
                     handleOriginal()
                 }
@@ -49,6 +65,8 @@ class ClientList extends Component {
 
     render() {
         const clients = this.props.clients;
+
+
         return (
             <ReactTable
                 data={clients}
@@ -82,11 +100,11 @@ class ClientList extends Component {
                                 return true;
                             }
                             if (filter.value === "selected") {
-                                const selectedClients = this.props.selectedClients;
-                                const found = selectedClients.find(function (sel) {
-                                    return sel._id === row._original._id;
+                                const selectedClientIds = this.props.selectedClientIds;
+                                const foundIndex = selectedClientIds.findIndex(function (sel) {
+                                    return sel === row._original.wfmId;
                                 });
-                                if (found) return true;
+                                if (foundIndex != -1) return true;
                             }
                             if (filter.value === "bound") {
                                 return row[filter.id] > 0;
@@ -96,22 +114,22 @@ class ClientList extends Component {
                             }
                         },
                         Filter: ({ filter, onChange }) => {
-                            // value={filter ? filter.value : "all"}
+                            const filtered = this.props.filtered;
+                            const bindFilter = filtered.find((item) => item.id === "binds");
+                            
                             return (
                                 <select
                                     onChange={event => onChange(event.target.value)}
                                     style={{ width: "100%" }}
-                                    value={filter ? filter.value : "all"}
-                                >
+                                    value={bindFilter ? bindFilter.value : "all"}
+                                >   
                                     <option value="all">Show All</option>
                                     <option value="selected">Selected</option>
                                     <option value="bound">Bound</option>
                                     <option value="unbound">Unbound</option>
                                 </select>
                             )
-                        },
-
-
+                        }
                     }
                 ]}
                 defaultPageSize={5}
@@ -125,16 +143,21 @@ class ClientList extends Component {
                     }
                     return false;
                 }}
+                filtered={this.props.filtered}
+                onFilteredChange={filtered => {
+                    this.props.setFilter(filtered);
+                    this.setState({filtered});
+                    }}
             />
         )
     }
 }
 
-
 function mapStateToProps(state) {
     return {
-        clients: state.wfmClients.clients,
-        selectedClients: state.wfmClients.selectedClients,
+        clients: extendWfmClientList(state),
+        selectedClientIds: state.wfmClients.selectedClients,
+        filtered: state.wfmClients.filtered
     };
 }
 
@@ -142,7 +165,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getClients: getClients,
         selectClient: selectClient,
-        deselectClient: deselectClient
+        deselectClient: deselectClient,
+        setFilter: setFilter
     }, dispatch)
 }
 

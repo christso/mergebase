@@ -28,6 +28,7 @@ export function toggleSelectClient(client) {
   }
 }
 
+// toggles selection of all client lists
 export function chainToggleSelectClient(client, isSelect) {
   return function (dispatch) {
     toggleSelectClient(client)(dispatch);
@@ -37,8 +38,13 @@ export function chainToggleSelectClient(client, isSelect) {
       wfmDeselectClient(client.wfmId)(dispatch);
     }
   }
+}
 
-
+// syncs selection of Bind filter across all client lists
+export function setBindFilter(filteredValue) {
+  return function (dispatch) {
+    dispatch({ type: "CLIENT_BIND_FILTER", payload: filteredValue});
+  }
 }
 
 export function selectClient(id) {

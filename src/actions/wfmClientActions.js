@@ -14,6 +14,18 @@ export function getClients() {
   }
 }
 
+export function setWfmFilterItem(id, value) {
+  return function (dispatch) {
+    dispatch({ type: "SET_CLIENT_FILTER_ITEM_WFM", payload: { id: id, value: value}})
+  } 
+}
+
+export function setFilter(filter) {
+  return function (dispatch) {
+    dispatch({ type: "SET_CLIENT_FILTER_WFM", payload: filter})
+  } 
+}
+
 export function setSelectedClients(keys) {
   return function (dispatch) {
     dispatch({ type: "SET_SELECTED_CLIENTS_WFM", payload: keys})

@@ -1,7 +1,19 @@
 export function clientReducers(state = {
     clients: [],
-    selectedClients: []
+    selectedClients: [],
+    filtered: []
 }, action) {
+    const setClientFilter = (state, action) => {
+        const currentFiltered = state.filtered;
+        const filterToUpdateIndex = currentFiltered.findIndex((el) => {
+            return el.id === action.payload.id;
+        });
+        return {
+            ...state,
+            filtered: action.payload
+        };
+    }
+
     switch (action.type) {
         case "GET_CLIENTS_XPLAN":
             return { ...state, clients: [...action.payload] };      
@@ -19,6 +31,8 @@ export function clientReducers(state = {
                 ...currentClientIds.slice(0, clientIdIndex),
                 ...currentClientIds.slice(clientIdIndex+1)
             ] };  
+        case "SET_CLIENT_FILTER_XPLAN":
+            setClientFilter(state, action);            
         default:
             return state;
     }

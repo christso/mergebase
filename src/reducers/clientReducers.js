@@ -50,6 +50,11 @@ export function clientReducers(state = {
             return deSelectClient(state, action);
         case "TOGGLE_SELECT_CLIENT":
             return toggleSelectClient(state, action);
+        case "CLIENT_BIND_FILTER":
+            return {
+                ...state,
+                bindFilter: action.payload
+            }
         case "FIND_CLIENT":
             return { ...state, foundClient: action.payload };
         case "UPDATE_CLIENT":

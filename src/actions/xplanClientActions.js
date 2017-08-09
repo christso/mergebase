@@ -14,6 +14,12 @@ export function getClients() {
   }
 }
 
+export function setFilter(filter) {
+  return function (dispatch) {
+    dispatch({ type: "SET_CLIENT_FILTER_XPLAN", payload: filter})
+  } 
+}
+
 
 export function setSelectedClients(keys) {
   return function (dispatch) {

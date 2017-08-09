@@ -51,6 +51,15 @@
             "name": "Launch Selected",
             "program": "${file}",
             "env": {}
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch ES6 Selected",
+            "runtimeExecutable": "babel-node",
+            "program": "${file}",
+            "restart": true,
+            "console": "integratedTerminal"
+        }        
     ]
 }

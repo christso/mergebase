@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux'
 import ReactTable from "react-table";
 import {
     getClients, selectClient, deselectClient, setSelectedClients,
-    toggleSelectClient, chainToggleSelectClient
+    toggleSelectClient, chainToggleSelectClient, setBindFilter
 } from '../actions/clientActions';
 import {
     selectClient as selectWfmClient,
     deselectClient as deselectWfmClient,
-    setSelectedClients as setSelectedWfmClients
+    setSelectedClients as setSelectedWfmClients,
+    setWfmFilterItem as setWfmFilterItem
 } from '../actions/wfmClientActions';
 import {
     selectClient as selectXplanClient,
@@ -39,13 +40,11 @@ class ClientList extends Component {
         const selectedClientIds = this.props.selectedClients.map((sel) => {
             return sel._id;
         })
-        console.log("edit", selectedClientIds.length > 0 ? selectedClientIds[0] : undefined);
-
+                // <a className="btn btn-primary" onClick={this.toggleSelectAll.bind(this)}>
+                //     <i className="fa fa-star"></i>
+                //     {this.state.showOnlySelected ? "  Show Selected" : "  Show All"}</a>
         return (
             <div id="clientList-buttons" className="btn-group btn-group-sm">
-                <a className="btn btn-primary" onClick={this.toggleSelectAll.bind(this)}>
-                    <i className="fa fa-star"></i>
-                    {this.state.showOnlySelected ? "  Show Selected" : "  Show All"}</a>
                 <a className="btn btn-primary">
                     <i className="fa fa-plus"></i> New</a>
                 <a className="btn btn-primary" href={'/client/' +
@@ -92,17 +91,17 @@ class ClientList extends Component {
     getTdProps(state, rowInfo, column, instance) {
         return {
             onClick: (e, handleOriginal) => {
+                if (rowInfo) {
+                    const selectedClients = this.props.selectedClients;
+                    const found = selectedClients.find(function (sel) {
+                        return sel._id === rowInfo.original._id;
+                    });
 
-                const selectedClients = this.props.selectedClients;
-                const found = selectedClients.find(function (sel) {
-                    return sel._id === rowInfo.original._id;
-                });
-
-                if (column.Header === "Binds") {
-                    this.props.chainToggleSelectClient(rowInfo.original,
-                        found ? false : true);
+                    if (column.Header === "Binds") {
+                        this.props.chainToggleSelectClient(rowInfo.original,
+                            found ? false : true);
+                    }
                 }
-
                 if (handleOriginal) {
                     handleOriginal()
                 }
@@ -144,6 +143,7 @@ class ClientList extends Component {
                                     <div>-</div>
                                     : row.value
                             ),
+                            // this executes on each row
                             filterMethod: (filter, row) => {
                                 if (filter.value === "all") {
                                     return true;
@@ -166,7 +166,11 @@ class ClientList extends Component {
                                 // value={filter ? filter.value : "all"}
                                 return (
                                     <select
-                                        onChange={event => onChange(event.target.value)}
+                                        onChange={event => {
+                                            this.props.setWfmFilterItem("binds", event.target.value);
+                                            return onChange(event.target.value)
+                                        }
+                                        }
                                         style={{ width: "100%" }}
                                         value={filter ? filter.value : "all"}
                                     >
@@ -195,7 +199,6 @@ class ClientList extends Component {
 
                 >
                     {(state, makeTable, instance) => {
-                        console.log("STATE", state);
                         return (
                             <div>
                                 {makeTable()}
@@ -234,7 +237,9 @@ function mapDispatchToProps(dispatch) {
         setSelectedWfmClients: setSelectedWfmClients,
         setSelectedXplanClients: setSelectedXplanClients,
         toggleSelectClient: toggleSelectClient,
-        chainToggleSelectClient: chainToggleSelectClient
+        chainToggleSelectClient: chainToggleSelectClient,
+        setBindFilter: setBindFilter,
+        setWfmFilterItem: setWfmFilterItem
     }, dispatch)
 }
 

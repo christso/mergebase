@@ -9922,7 +9922,7 @@ selectClient = selectClient;exports.
 
 
 
-deselectClient = deselectClient;var _axios = __webpack_require__(120);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(121);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function getClients() {return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + "/wfm/clients").then(function (response) {dispatch({ type: "GET_CLIENTS_WFM", payload: response.data });}).catch(function (err) {dispatch({ type: "GET_CLIENTS_WFM_REJECTED", payload: err });});};}function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + "/wfm/clients/" + client._id, client).then(function (response) {dispatch({ type: "UPDATE_CLIENT_WFM", payload: response.data });}).catch(function (err) {dispatch({ type: "UPDATE_CLIENT_WFM_REJECTED", payload: err });});};}function setWfmFilterItem(id, value) {return function (dispatch) {dispatch({ type: "SET_CLIENT_FILTER_ITEM_WFM", payload: { id: id, value: value } });};}function setFilter(filter) {return function (dispatch) {dispatch({ type: "SET_CLIENT_FILTER_WFM", payload: filter });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS_WFM", payload: keys });};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT_WFM", payload: id });};}function deselectClient(id) {
+deselectClient = deselectClient;var _axios = __webpack_require__(120);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(121);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function getClients() {return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + "/wfm/clients").then(function (response) {dispatch({ type: "GET_CLIENTS_WFM", payload: response.data });}).catch(function (err) {dispatch({ type: "GET_CLIENTS_WFM_REJECTED", payload: err });});};}function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + "/wfm/clients/", client).then(function (response) {dispatch({ type: "UPDATE_CLIENT_WFM", payload: client });}).catch(function (err) {dispatch({ type: "UPDATE_CLIENT_WFM_REJECTED", payload: err });});};}function setWfmFilterItem(id, value) {return function (dispatch) {dispatch({ type: "SET_CLIENT_FILTER_ITEM_WFM", payload: { id: id, value: value } });};}function setFilter(filter) {return function (dispatch) {dispatch({ type: "SET_CLIENT_FILTER_WFM", payload: filter });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS_WFM", payload: keys });};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT_WFM", payload: id });};}function deselectClient(id) {
   return function (dispatch) {
     dispatch({ type: "DESELECT_CLIENT_WFM", payload: id });
   };
@@ -48665,7 +48665,8 @@ var _reduxForm = __webpack_require__(149);
 var _reactBootstrap = __webpack_require__(82);
 var _reactRedux = __webpack_require__(20);
 var _redux = __webpack_require__(21);
-var _clientActions = __webpack_require__(67);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
+var _clientActions = __webpack_require__(67);
+var _wfmClientActions = __webpack_require__(90);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
 
 var makeDefaultState = function makeDefaultState() {return {
         showConfirmation: false };};var
@@ -48778,8 +48779,11 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
 
         values) {
             alert("Broadcast client " + JSON.stringify(values));
-            this.setState({ showConfirmation: true });
-
+            console.log("FOUND CLIENT", this.props.foundClient);
+            if (this.props.foundClient) {
+                this.setState({ showConfirmation: true });
+                this.props.updateWfmClient(this.props.foundClient);
+            }
         } }, { key: 'handleSave', value: function handleSave(
 
         values) {
@@ -48819,7 +48823,8 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         findClient: _clientActions.findClient,
-        updateClient: _clientActions.updateClient },
+        updateClient: _clientActions.updateClient,
+        updateWfmClient: _wfmClientActions.updateClient },
     dispatch);
 }
 
@@ -87910,8 +87915,9 @@ clientReducers = clientReducers;var _index = __webpack_require__(69);function _t
             var newClientsToUpdate = [].concat(_toConsumableArray(
             clientsToUpdate.slice(0, indexToUpdate)), [clientToUpdate], _toConsumableArray(clientsToUpdate.slice(indexToUpdate + 1)));
 
-            // console.log("UPDATE_CLIENT -> newClientsToUpdate", newClientsToUpdate);
-            return _extends({}, state, { clients: [].concat(_toConsumableArray(newClientsToUpdate)), updatedClient: action.payload });
+            // WARNING: This will update foundClient as well.
+            return _extends({}, state, { clients: [].concat(_toConsumableArray(newClientsToUpdate)), updatedClient: action.payload,
+                foundClient: action.payload });
         default:
             return state;}
 

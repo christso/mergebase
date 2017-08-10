@@ -3,7 +3,8 @@ import { Field, reduxForm, formValueSelector } from 'redux-form'
 import { Image, Row, Col, Well, Button, FormGroup, FormControl, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { findClient, updateClient } from '../actions/clientActions'
+import { findClient, updateClient } from '../actions/clientActions';
+import { updateClient as updateWfmClient } from '../actions/wfmClientActions';
 
 const makeDefaultState = () => ({
     showConfirmation: false
@@ -116,8 +117,11 @@ class ClientEdit extends Component {
 
     handleBroadcast(values) {
         alert("Broadcast client " + JSON.stringify(values));
-        this.setState({ showConfirmation: true });
-        
+        console.log("FOUND CLIENT", this.props.foundClient);
+        if (this.props.foundClient) {
+            this.setState({ showConfirmation: true });
+            this.props.updateWfmClient(this.props.foundClient);
+        }
     }
 
     handleSave(values) {
@@ -157,7 +161,8 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         findClient: findClient,
-        updateClient: updateClient
+        updateClient: updateClient,
+        updateWfmClient: updateWfmClient
     }, dispatch)
 }
 

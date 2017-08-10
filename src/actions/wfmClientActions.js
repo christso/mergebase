@@ -16,9 +16,9 @@ export function getClients() {
 
 export function updateClient(client) {
   return function (dispatch) {
-    axios.put(`${ROOT_URL}/wfm/clients/${client._id}`, client)
+    axios.put(`${ROOT_URL}/wfm/clients/`, client)
       .then(function (response) {
-        dispatch({ type: "UPDATE_CLIENT_WFM", payload: response.data });
+        dispatch({ type: "UPDATE_CLIENT_WFM", payload: client });
       })
       .catch(function (err) {
         dispatch({ type: "UPDATE_CLIENT_WFM_REJECTED", payload: err})

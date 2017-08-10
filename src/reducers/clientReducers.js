@@ -68,8 +68,9 @@ export function clientReducers(state = {
             const newClientsToUpdate = [
                 ...clientsToUpdate.slice(0, indexToUpdate), clientToUpdate, ...clientsToUpdate.slice(indexToUpdate + 1)
             ];
-            // console.log("UPDATE_CLIENT -> newClientsToUpdate", newClientsToUpdate);
-            return { ...state, clients: [...newClientsToUpdate], updatedClient: action.payload };
+            // WARNING: This will update foundClient as well.
+            return { ...state, clients: [...newClientsToUpdate], updatedClient: action.payload,
+                foundClient: action.payload };
         default:
             return state;
     }

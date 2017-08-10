@@ -7543,6 +7543,9 @@ Object.defineProperty(exports, "__esModule", { value: true });var _extends = Obj
 
 
 
+
+
+
 getClients = getClients;exports.
 
 
@@ -7618,16 +7621,23 @@ findClient = findClient;exports.
 
 
 
-updateClient = updateClient;var _axios = __webpack_require__(120);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(121);var _wfmClientActions = __webpack_require__(90);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // GET CLIENTS
+updateClient = updateClient;exports.
+
+
+
+
+
+
+
+
+
+
+
+broadcastClient = broadcastClient;var _axios = __webpack_require__(120);var _axios2 = _interopRequireDefault(_axios);var _locator = __webpack_require__(121);var _wfmClientActions = __webpack_require__(90);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // GET CLIENTS
 function getClients() {return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + '/clients').then(function (response) {dispatch({ type: "GET_CLIENTS", payload: response.data });}).catch(function (err) {dispatch({ type: "GET_CLIENTS_REJECTED", payload: err });});};} // used for highlighting selected row in client list
 function toggleSelectClient(client) {return function (dispatch) {dispatch({ type: "TOGGLE_SELECT_CLIENT", payload: { _id: client._id, wfmId: client.wfmId, xplanId: client.xplanId, bglId: client.bglId } });};} // toggles selection of all client lists
 function chainToggleSelectClient(client, isSelect) {return function (dispatch) {toggleSelectClient(client)(dispatch);if (isSelect) {(0, _wfmClientActions.selectClient)(client.wfmId)(dispatch);} else {(0, _wfmClientActions.deselectClient)(client.wfmId)(dispatch);}};} // syncs selection of Bind filter across all client lists
-function setBindFilter(filteredValue) {return function (dispatch) {dispatch({ type: "CLIENT_BIND_FILTER", payload: filteredValue });};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT", payload: id });};}function deselectClient(id) {return function (dispatch) {dispatch({ type: "DESELECT_CLIENT", payload: id });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys });};}function findClient(id) {var newValues = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + '/clients/' + id).then(function (response) {var data = _extends({}, response.data, newValues);dispatch({ type: "FIND_CLIENT", payload: data });}).catch(function (err) {dispatch({ type: "FIND_CLIENT_REJECTED", payload: err });});};};function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + '/clients/' + client._id, client).then(function (response) {dispatch({ type: "UPDATE_CLIENT", payload: client });
-    }).
-    catch(function (err) {
-      dispatch({ type: "UPDATE_CLIENT_REJECTED", payload: err });
-    });
-  };
+function setBindFilter(filteredValue) {return function (dispatch) {dispatch({ type: "CLIENT_BIND_FILTER", payload: filteredValue });};}function selectClient(id) {return function (dispatch) {dispatch({ type: "SELECT_CLIENT", payload: id });};}function deselectClient(id) {return function (dispatch) {dispatch({ type: "DESELECT_CLIENT", payload: id });};}function setSelectedClients(keys) {return function (dispatch) {dispatch({ type: "SET_SELECTED_CLIENTS", payload: keys });};}function findClient(id) {var newValues = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};return function (dispatch) {_axios2.default.get(_locator.ROOT_URL + '/clients/' + id).then(function (response) {var data = _extends({}, response.data, newValues);dispatch({ type: "FIND_CLIENT", payload: data });}).catch(function (err) {dispatch({ type: "FIND_CLIENT_REJECTED", payload: err });});};};function updateClient(client) {return function (dispatch) {_axios2.default.put(_locator.ROOT_URL + '/clients/' + client._id, client).then(function (response) {dispatch({ type: "UPDATE_CLIENT", payload: client });}).catch(function (err) {dispatch({ type: "UPDATE_CLIENT_REJECTED", payload: err });});};}function broadcastClient(client) {return function (dispatch) {updateClient(client)(dispatch);(0, _wfmClientActions.updateClient)(client)(dispatch);};
 }
 
 /***/ }),
@@ -48690,15 +48700,7 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
                     _react2.default.createElement('button', { type: 'submit', onClick: handleSubmit(this.handleSave.bind(this)),
                             className: 'btn btn-primary', disabled: submitting }, 'Save'),
                     _react2.default.createElement('button', { type: 'submit', onClick: handleSubmit(this.handleBroadcast.bind(this)),
-                            className: 'btn btn-primary', disabled: submitting }, 'Broadcast'),
-
-                    _react2.default.createElement('div', { 'class': 'modal fade bs-example-modal-lg', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myLargeModalLabel' },
-                        _react2.default.createElement('div', { 'class': 'modal-dialog modal-lg', role: 'document' },
-                            _react2.default.createElement('div', { 'class': 'modal-content' }, '...')))));
-
-
-
-
+                            className: 'btn btn-primary', disabled: submitting }, 'Broadcast')));
 
 
         } }, { key: 'renderEditor', value: function renderEditor()
@@ -48798,9 +48800,7 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
 
         values) {
             // console.log("FOUND CLIENT", this.props.foundClient);
-            if (this.props.foundClient) {
-                this.props.updateWfmClient(this.props.foundClient);
-            }
+            this.props.broadcastClient(values);
             this.open(_react2.default.createElement('div', null, 'Broadcasted Client'), values.name);
         } }, { key: 'handleSave', value: function handleSave(
 
@@ -48872,7 +48872,8 @@ function mapDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         findClient: _clientActions.findClient,
         updateClient: _clientActions.updateClient,
-        updateWfmClient: _wfmClientActions.updateClient },
+        updateWfmClient: _wfmClientActions.updateClient,
+        broadcastClient: _clientActions.broadcastClient },
     dispatch);
 }
 

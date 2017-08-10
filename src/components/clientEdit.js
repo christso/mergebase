@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { findClient, updateClient } from '../actions/clientActions';
+import { findClient, updateClient, broadcastClient } from '../actions/clientActions';
 import { updateClient as updateWfmClient } from '../actions/wfmClientActions';
 import { Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 
@@ -29,14 +29,6 @@ class ClientEdit extends Component {
                     className="btn btn-primary" disabled={submitting}>Save</button>
                 <button type="submit" onClick={handleSubmit(this.handleBroadcast.bind(this))}
                     className="btn btn-primary" disabled={submitting}>Broadcast</button>
-
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            ...
-                    </div>
-                    </div>
-                </div>
             </div>
         )
     }
@@ -136,9 +128,7 @@ class ClientEdit extends Component {
 
     handleBroadcast(values) {
         // console.log("FOUND CLIENT", this.props.foundClient);
-        if (this.props.foundClient) {
-            this.props.updateWfmClient(this.props.foundClient);
-        }
+        this.props.broadcastClient(values);
         this.open(<div>Broadcasted Client</div>, values.name);
     }
 
@@ -146,9 +136,9 @@ class ClientEdit extends Component {
         this.props.updateClient(values);
         this.open(<div>Saved Client</div>, values.name);
     }
-    
+
     open(title, body) {
-        this.setState({ 
+        this.setState({
             showModal: true,
             modal: {
                 title: title,
@@ -210,7 +200,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         findClient: findClient,
         updateClient: updateClient,
-        updateWfmClient: updateWfmClient
+        updateWfmClient: updateWfmClient,
+        broadcastClient: broadcastClient
     }, dispatch)
 }
 

@@ -1,6 +1,9 @@
 import axios from "axios";
 import { ROOT_URL } from '../locator';
-import { selectClient as wfmSelectClient, deselectClient as wfmDeselectClient } from './wfmClientActions';
+import { selectClient as wfmSelectClient, 
+  deselectClient as wfmDeselectClient,
+  updateClient as wfmUpdateClient
+ } from './wfmClientActions';
 
 // GET CLIENTS
 export function getClients() {
@@ -87,5 +90,12 @@ export function updateClient(client) {
       .catch(function (err) {
         dispatch({ type: "UPDATE_CLIENT_REJECTED", payload: err })
       });
+  }
+}
+
+export function broadcastClient(client) {
+  return function (dispatch) {
+    updateClient(client)(dispatch);
+    wfmUpdateClient(client)(dispatch);
   }
 }

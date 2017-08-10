@@ -21,6 +21,8 @@ export function mergeReducers(state = []
                     && cell.source === action.payload.source);
                 return [...cells.slice(0, cellToDeselectIndex), ...cells.slice(cellToDeselectIndex + 1)];
             }();
+        case "RESET_MERGE_CELLS":
+            return [];
         default:
             return state;
     }

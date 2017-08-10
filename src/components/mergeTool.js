@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { BootstrapTable, TableHeaderColumn, ButtonGroup, ShowSelectedOnlyButton } from 'react-bootstrap-table';
 import universe from 'universe';
 import { getClients } from '../actions/clientActions';
-import { toggleSelectMergeCell } from '../actions/mergeActions';
+import { toggleSelectMergeCell, resetMergeCells } from '../actions/mergeActions';
 import { getClients as wfmGetClients } from '../actions/wfmClientActions';
 import { getClients as xplanGetClients } from '../actions/xplanClientActions';
 import { getClientMergeList, extendClientList } from '../selectors/index';
@@ -67,16 +67,66 @@ const columns =
         }
     ];
 
+const makeDefaultState = () => ({
+    sorted: [],
+    page: 0,
+    pageSize: 10,
+    expanded: {},
+    resized: [],
+    filtered: [],
+    showConfirmation: false
+});
+
+const ConfirmButton = (props) => {
+    return (
+        <a className="btn btn-default btn-block" target="_blank" onClick={props.onClick} >
+            <i className="fa fa-save"></i> Confirm</a>
+    )
+}
+
+const ResetButton = (props) => {
+    console.log("ResetButton", props);
+    return (
+
+        <a className="btn btn-default btn-block" target="_blank" onClick={props.onClick} >
+            <i className="fa fa-refresh"></i> Reset</a>
+    )
+}
+
+const ConfirmationMessage = (props) => {
+    if (props.show) {
+        return (
+            <div className="success-msg"><i className="fa fa-check"></i> 
+            You have successfully confirmed the bindings!</div>
+        )
+    } else {
+        return <div></div>
+    }
+}
 
 class MergeTool extends Component {
     constructor(props) {
         super(props);
+        this.state = makeDefaultState();
+        this.resetState = this.resetState.bind(this);
+        this.handleConfirmation = this.handleConfirmation.bind(this);
     }
 
     componentDidMount() {
         this.props.getClients();
         this.props.wfmGetClients();
         this.props.xplanGetClients();
+    }
+
+    resetState() {
+        this.setState(makeDefaultState());
+        this.props.resetMergeCells
+    }
+
+    handleConfirmation() {
+        console.log("STATE", this.state);
+        this.setState(makeDefaultState());
+        this.setState({ showConfirmation: true });
     }
 
     getTdProps(state, rowInfo, column, instance) {
@@ -123,7 +173,9 @@ class MergeTool extends Component {
         const clients = this.props.clients;
         return (
             <div className="container">
-                <h1>Merge Tool</h1>
+                <h1 className="page-header">Merge Tool</h1>
+                <ResetButton onClick={this.resetState} />
+                <br />
                 <ReactTable
                     data={clients}
                     columns={columns}
@@ -132,6 +184,10 @@ class MergeTool extends Component {
                     getTdProps={this.getTdProps.bind(this)}
                     pivotBy={["matchName"]}
                 />
+                <br />
+                <ConfirmButton onClick={this.handleConfirmation} />
+                <br />
+                <ConfirmationMessage show={this.state.showConfirmation} />
             </div>
         )
     }
@@ -151,7 +207,8 @@ function mapDispatchToProps(dispatch) {
         getClients: getClients,
         wfmGetClients: wfmGetClients,
         xplanGetClients: xplanGetClients,
-        toggleSelectMergeCell: toggleSelectMergeCell
+        toggleSelectMergeCell: toggleSelectMergeCell,
+        resetMergeCells: resetMergeCells
     }, dispatch)
 }
 

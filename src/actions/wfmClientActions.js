@@ -4,7 +4,7 @@ import {ROOT_URL} from '../locator';
 
 export function getClients() {
   return function (dispatch) {
-    axios.get(`${ROOT_URL}/clients-wfm`)
+    axios.get(`${ROOT_URL}/wfm/clients`)
       .then(function (response) {
         dispatch({ type: "GET_CLIENTS_WFM", payload: response.data })
       })
@@ -12,6 +12,18 @@ export function getClients() {
         dispatch({ type: "GET_CLIENTS_WFM_REJECTED", payload: err })
       });
   }
+}
+
+export function updateClient(client) {
+  return function (dispatch) {
+    axios.put(`${ROOT_URL}/wfm/clients/${client._id}`, client)
+      .then(function (response) {
+        dispatch({ type: "UPDATE_CLIENT_WFM", payload: response.data });
+      })
+      .catch(function (err) {
+        dispatch({ type: "UPDATE_CLIENT_WFM_REJECTED", payload: err})
+      }); 
+  } 
 }
 
 export function setWfmFilterItem(id, value) {

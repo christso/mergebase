@@ -15,8 +15,8 @@ const makeDefaultState = () => ({
 });
 
 class ClientList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = makeDefaultState();
     }
 

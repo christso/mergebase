@@ -93,12 +93,21 @@ app.delete("/clients/:id", function(req, res) {
     });
 })
 
-app.get('/clients-wfm', function (req, res) {
-    wfmApi.getClients(function(apiRes, err) {
+app.get('/wfm/clients', function (req, res) {
+    wfmApi.getClients(function(err, apiRes) {
         if (err)
-            console.log(err);
+            res.status(500).send({ error: 'Failed retrieve WFM clients!' });
         res.json(apiRes); 
     });
+});
+
+app.put('/wfm/clients', function(req, res) {
+    var client = req.body;
+    wfmApi.updateClient(client, function(err, apiRes) {
+        if (err)
+            res.status(500).send({ error: 'Failed updating WFM clients!' });
+        res.json(apiRes); 
+    }); 
 });
 
 app.get('/xplan/clients', function (req, res) {

@@ -40,9 +40,9 @@ class ClientList extends Component {
         const selectedClientIds = this.props.selectedClients.map((sel) => {
             return sel._id;
         })
-                // <a className="btn btn-primary" onClick={this.toggleSelectAll.bind(this)}>
-                //     <i className="fa fa-star"></i>
-                //     {this.state.showOnlySelected ? "  Show Selected" : "  Show All"}</a>
+        // <a className="btn btn-primary" onClick={this.toggleSelectAll.bind(this)}>
+        //     <i className="fa fa-star"></i>
+        //     {this.state.showOnlySelected ? "  Show Selected" : "  Show All"}</a>
         return (
             <div id="clientList-buttons" className="btn-group btn-group-sm">
                 <a className="btn btn-primary">
@@ -96,11 +96,8 @@ class ClientList extends Component {
                     const found = selectedClients.find(function (sel) {
                         return sel._id === rowInfo.original._id;
                     });
-
-                    if (column.Header === "Binds") {
-                        this.props.chainToggleSelectClient(rowInfo.original,
-                            found ? false : true);
-                    }
+                    this.props.chainToggleSelectClient(rowInfo.original,
+                        found ? false : true);
                 }
                 if (handleOriginal) {
                     handleOriginal()

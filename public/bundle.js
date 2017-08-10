@@ -48662,24 +48662,49 @@ routes;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var _react = __webpack_require__(0);var _react2 = _interopRequireDefault(_react);
 var _reduxForm = __webpack_require__(149);
-var _reactBootstrap = __webpack_require__(82);
 var _reactRedux = __webpack_require__(20);
 var _redux = __webpack_require__(21);
 var _clientActions = __webpack_require__(67);
-var _wfmClientActions = __webpack_require__(90);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
+var _wfmClientActions = __webpack_require__(90);
+var _reactBootstrap = __webpack_require__(82);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}
 
 var makeDefaultState = function makeDefaultState() {return {
-        showConfirmation: false };};var
+        showModal: false,
+        modal: {
+            title: '',
+            body: '' } };};var
+
 
 
 ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
     function ClientEdit(props) {_classCallCheck(this, ClientEdit);var _this = _possibleConstructorReturn(this, (ClientEdit.__proto__ || Object.getPrototypeOf(ClientEdit)).call(this,
         props));
-        _this.state = makeDefaultState();return _this;
-    }_createClass(ClientEdit, [{ key: 'renderEditor', value: function renderEditor()
+        _this.state = makeDefaultState();
+        _this.renderModal.bind(_this);return _this;
+    }_createClass(ClientEdit, [{ key: 'renderButtons', value: function renderButtons()
 
         {var _props =
             this.props,handleSubmit = _props.handleSubmit,pristine = _props.pristine,reset = _props.reset,submitting = _props.submitting;
+            return (
+                _react2.default.createElement('div', { role: 'toolbar', className: 'btn-toolbar' },
+                    _react2.default.createElement('button', { type: 'submit', onClick: handleSubmit(this.handleSave.bind(this)),
+                            className: 'btn btn-primary', disabled: submitting }, 'Save'),
+                    _react2.default.createElement('button', { type: 'submit', onClick: handleSubmit(this.handleBroadcast.bind(this)),
+                            className: 'btn btn-primary', disabled: submitting }, 'Broadcast'),
+
+                    _react2.default.createElement('div', { 'class': 'modal fade bs-example-modal-lg', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myLargeModalLabel' },
+                        _react2.default.createElement('div', { 'class': 'modal-dialog modal-lg', role: 'document' },
+                            _react2.default.createElement('div', { 'class': 'modal-content' }, '...')))));
+
+
+
+
+
+
+        } }, { key: 'renderEditor', value: function renderEditor()
+
+        {var _props2 =
+            this.props,handleSubmit = _props2.handleSubmit,pristine = _props2.pristine,reset = _props2.reset,submitting = _props2.submitting;
             var client = this.props.foundClient;
             return (
                 _react2.default.createElement('div', null,
@@ -48759,13 +48784,7 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
                                         component: 'textarea' })),
 
 
-
-                                _react2.default.createElement(_reactBootstrap.ButtonToolbar, null,
-                                    _react2.default.createElement(_reactBootstrap.Button, { type: 'submit', onClick: handleSubmit(this.handleSave.bind(this)),
-                                            bsStyle: 'primary', disabled: submitting }, 'Save'),
-                                    _react2.default.createElement(_reactBootstrap.Button, { type: 'submit', onClick: handleSubmit(this.handleBroadcast.bind(this)),
-                                            bsStyle: 'primary', disabled: submitting }, 'Broadcast')))))));
-
+                                this.renderButtons())))));
 
 
 
@@ -48778,18 +48797,46 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
         } }, { key: 'handleBroadcast', value: function handleBroadcast(
 
         values) {
-            alert("Broadcast client " + JSON.stringify(values));
-            console.log("FOUND CLIENT", this.props.foundClient);
+            // console.log("FOUND CLIENT", this.props.foundClient);
             if (this.props.foundClient) {
-                this.setState({ showConfirmation: true });
                 this.props.updateWfmClient(this.props.foundClient);
             }
+            this.open(_react2.default.createElement('div', null, 'Broadcasted Client'), values.name);
         } }, { key: 'handleSave', value: function handleSave(
 
         values) {
             this.props.updateClient(values);
-            alert("Saved client " + JSON.stringify(values));
-            this.setState({ showConfirmation: true });
+            this.open(_react2.default.createElement('div', null, 'Saved Client'), values.name);
+        } }, { key: 'open', value: function open(
+
+        title, body) {
+            this.setState({
+                showModal: true,
+                modal: {
+                    title: title,
+                    body: body } });
+
+
+        } }, { key: 'close', value: function close()
+
+        {
+            this.setState({ showModal: false });
+        } }, { key: 'renderModal', value: function renderModal()
+
+        {
+            return (
+                _react2.default.createElement(_reactBootstrap.Modal, { show: this.state.showModal, onHide: this.close.bind(this) },
+                    _react2.default.createElement(_reactBootstrap.Modal.Header, { closeButton: true },
+                        _react2.default.createElement(_reactBootstrap.Modal.Title, null, this.state.modal.title)),
+
+                    _react2.default.createElement(_reactBootstrap.Modal.Body, null,
+                        this.state.modal.body),
+
+                    _react2.default.createElement(_reactBootstrap.Modal.Footer, null,
+                        _react2.default.createElement(_reactBootstrap.Button, { onClick: this.close.bind(this) }, 'Close'))));
+
+
+
         } }, { key: 'render', value: function render()
 
         {
@@ -48799,8 +48846,9 @@ ClientEdit = function (_Component) {_inherits(ClientEdit, _Component);
                 _react2.default.createElement('div', { className: 'row' },
                     _react2.default.createElement('div', { className: 'col-md-8 col-md-offset-2' },
                         _react2.default.createElement('h1', { className: 'page-header' }, client ? client.name : undefined),
-                        this.renderEditor())));
+                        this.renderEditor()),
 
+                    this.renderModal()));
 
 
         } }]);return ClientEdit;}(_react.Component);

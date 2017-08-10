@@ -1,19 +1,44 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form'
-import { Image, Row, Col, Well, Button, FormGroup, FormControl, ButtonToolbar } from 'react-bootstrap';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { findClient, updateClient } from '../actions/clientActions';
 import { updateClient as updateWfmClient } from '../actions/wfmClientActions';
+import { Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label } from 'react-bootstrap';
 
 const makeDefaultState = () => ({
-    showConfirmation: false
+    showModal: false,
+    modal: {
+        title: '',
+        body: ''
+    }
 });
 
 class ClientEdit extends Component {
     constructor(props) {
         super(props);
         this.state = makeDefaultState();
+        this.renderModal.bind(this);
+    }
+
+    renderButtons() {
+        const { handleSubmit, pristine, reset, submitting } = this.props;
+        return (
+            <div role="toolbar" className="btn-toolbar">
+                <button type="submit" onClick={handleSubmit(this.handleSave.bind(this))}
+                    className="btn btn-primary" disabled={submitting}>Save</button>
+                <button type="submit" onClick={handleSubmit(this.handleBroadcast.bind(this))}
+                    className="btn btn-primary" disabled={submitting}>Broadcast</button>
+
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            ...
+                    </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     renderEditor() {
@@ -97,13 +122,7 @@ class ClientEdit extends Component {
                                     component="textarea"
                                 />
                             </div>
-
-                            <ButtonToolbar>
-                                <Button type="submit" onClick={handleSubmit(this.handleSave.bind(this))}
-                                    bsStyle="primary" disabled={submitting}>Save</Button>
-                                <Button type="submit" onClick={handleSubmit(this.handleBroadcast.bind(this))}
-                                    bsStyle="primary" disabled={submitting}>Broadcast</Button>
-                            </ButtonToolbar>
+                            {this.renderButtons()}
                         </form>
                     </div>
                 </div>
@@ -116,18 +135,46 @@ class ClientEdit extends Component {
     }
 
     handleBroadcast(values) {
-        alert("Broadcast client " + JSON.stringify(values));
-        console.log("FOUND CLIENT", this.props.foundClient);
+        // console.log("FOUND CLIENT", this.props.foundClient);
         if (this.props.foundClient) {
-            this.setState({ showConfirmation: true });
             this.props.updateWfmClient(this.props.foundClient);
         }
+        this.open(<div>Broadcasted Client</div>, values.name);
     }
 
     handleSave(values) {
         this.props.updateClient(values);
-        alert("Saved client " + JSON.stringify(values));
-        this.setState({ showConfirmation: true });
+        this.open(<div>Saved Client</div>, values.name);
+    }
+    
+    open(title, body) {
+        this.setState({ 
+            showModal: true,
+            modal: {
+                title: title,
+                body: body
+            }
+        });
+    }
+
+    close() {
+        this.setState({ showModal: false })
+    }
+
+    renderModal() {
+        return (
+            <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{this.state.modal.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {this.state.modal.body}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.close.bind(this)}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        )
     }
 
     render() {
@@ -139,6 +186,7 @@ class ClientEdit extends Component {
                     <h1 className="page-header">{client ? client.name : undefined}</h1>
                     {this.renderEditor()}
                 </div>
+                {this.renderModal()}
             </div>
         )
     }
